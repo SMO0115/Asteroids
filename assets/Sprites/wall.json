@@ -1,0 +1,20 @@
+{"frames": [
+	{
+		"filename": "space__0008_ShieldFull.png",
+		"frame": {"x":0,"y":0,"w":11,"h":8},
+		"rotated": false,
+		"trimmed": false,
+		"spriteSourceSize": {"x":0,"y":0,"w":11,"h":8},
+		"sourceSize": {"w":11,"h":8}
+	}
+],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "wall.png\r\n",
+	"format": "RGBA8888",
+	"size": {"w":44,"h":32},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:a5c6a98dfbb93f1807fae8048a27008f:50338a193d20e2dcd08e5ed036e94a54:e65f2ed7986f0fb8a1c059771d6723c4$"
+}
+}

@@ -1,0 +1,44 @@
+{"frames": [
+
+{
+	"filename": "ProjectileC_1.png",
+	"frame": {"x":0,"y":0,"w":3,"h":6},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":3,"h":6},
+	"sourceSize": {"w":3,"h":6}
+},
+{
+	"filename": "ProjectileC_2.png",
+	"frame": {"x":0,"y":6,"w":3,"h":6},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":3,"h":6},
+	"sourceSize": {"w":3,"h":6}
+},
+{
+	"filename": "ProjectileC_3.png",
+	"frame": {"x":0,"y":12,"w":3,"h":6},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":3,"h":6},
+	"sourceSize": {"w":3,"h":6}
+},
+{
+	"filename": "ProjectileC_4.png",
+	"frame": {"x":0,"y":18,"w":3,"h":6},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":3,"h":6},
+	"sourceSize": {"w":3,"h":6}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "projectile_C.png",
+	"format": "RGBA8888",
+	"size": {"w":3,"h":24},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:112afba8636b1dcfeb902058bce5316d:8d71d39e4d155f124e8521bc0479d72f:670cbf364500ec0b9906b42d8c136910$"
+}
+}

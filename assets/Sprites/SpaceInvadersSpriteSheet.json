@@ -1,0 +1,28 @@
+{"frames": [
+
+{
+	"filename": "space__0000_A1.png",
+	"frame": {"x":0,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+},
+{
+	"filename": "space__0001_A2.png",
+	"frame": {"x":16,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "SpaceInvadersSpriteSheet.png",
+	"format": "RGBA8888",
+	"size": {"w":32,"h":16},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:7e8df1e70b8ad06e42ecacca1176ff55:191d0d8ab9776d1cb60db52d3da75723:e5054d56038a4ea97bb4c77e56f4b4d1$"
+}
+}

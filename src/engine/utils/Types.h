@@ -1,0 +1,16 @@
+//
+// Created by marcel on 9/6/25.
+//
+
+#pragma once
+
+#include <cstdint>
+
+struct Rect {
+    int x, y, w, h;
+};
+
+struct Color {
+    std::uint8_t r, g, b, a;
+};
+

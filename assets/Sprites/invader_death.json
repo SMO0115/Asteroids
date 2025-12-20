@@ -1,0 +1,20 @@
+{"frames": [
+
+{
+	"filename": "space__0009_EnemyExplosion.png",
+	"frame": {"x":0,"y":0,"w":26,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":26,"h":16},
+	"sourceSize": {"w":26,"h":16}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "invader_death.png",
+	"format": "RGBA8888",
+	"size": {"w":26,"h":16},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:ec19a83776a12c901b96a03bbe020f3c:e1fc6bb47cd43099caaddc688f70cce3:d9713d20e4f275c44a3a3d90d15140cc$"
+}
+}
