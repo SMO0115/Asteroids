@@ -7,39 +7,42 @@
 #include <SDL.h>
 #include <unordered_map>
 
-enum class Key {
-    UNKNOWN,
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    W,
-    A,
-    S,
-    D,
-    SPACE,
-    ESCAPE,
-    QUIT
-};
-
-class InputManager {
-public:
-                                        InputManager()  = default;
-                                        ~InputManager() = default;
 
 
-    void                                processInput();
-    bool                                wasKeyPressed(Key key);
-    bool                                isKeyHeld(Key key);
+namespace Engine::Input {
+    enum class Key {
+        UNKNOWN,
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT,
+        W,
+        A,
+        S,
+        D,
+        SPACE,
+        ESCAPE,
+        QUIT
+    };
 
-private:
-    Key                                 mapKey_(SDL_Keycode sdl_key);
+    class InputManager {
+    public:
+        InputManager()  = default;
+        ~InputManager() = default;
 
-private:
-    Key                                 m_last_key;
-    std::unordered_map<Key, bool>       m_current_key_states;
-    std::unordered_map<Key, bool>       m_previous_key_states;
-};
 
+        void                                processInput();
+        bool                                wasKeyPressed(Key key);
+        bool                                isKeyHeld(Key key);
+
+    private:
+        Key                                 mapKey_(SDL_Keycode sdl_key);
+
+    private:
+        Key                                 m_last_key;
+        std::unordered_map<Key, bool>       m_current_key_states;
+        std::unordered_map<Key, bool>       m_previous_key_states;
+    };
+}
 
 

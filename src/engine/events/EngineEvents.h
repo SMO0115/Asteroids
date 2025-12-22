@@ -7,21 +7,25 @@
 #include "EventBus.h"
 #include <string>
 
-class GameObject;
+
+namespace Engine::Core { class GameObject; }
 
 
-struct PlaySoundEvent {
+namespace Engine::Events {
 
-    std::string soundId;
-};
+    struct PlaySoundEvent {
 
-struct CollisionEvent {
+        std::string soundId;
+    };
 
-    GameObject *from;
-    GameObject *to;
-};
+    struct CollisionEvent {
 
-using EngineEventBus = EventBus<
-    PlaySoundEvent,
-    CollisionEvent
->;
+        Core::GameObject *from;
+        Core::GameObject *to;
+    };
+
+    using EngineEventBus = EventBus<
+        PlaySoundEvent,
+        CollisionEvent
+    >;
+}

@@ -10,14 +10,16 @@
 #include "../../../engine/events/EngineEvents.h"
 #include "../../events/GameEvents.h"
 
-class GameObject;
-class InputManager;
+namespace Engine::Core { class GameObject; }
+namespace Engine::Input { class InputManager; }
 
-class PlayerControlSystem {
 
-public:
-    PlayerControlSystem();
-    ~PlayerControlSystem();
-    void update(float deltaTime, InputManager& input_manager, GameEventBus& game_event_bus, EngineEventBus& engine_event_bus, const std::vector<std::unique_ptr<GameObject> > &game_objects);
-};
+namespace Game::Control {
+    class PlayerControlSystem {
 
+    public:
+        PlayerControlSystem();
+        ~PlayerControlSystem();
+        void update(float deltaTime, Engine::Input::InputManager& input_manager, Events::GameEventBus& game_event_bus, Engine::Events::EngineEventBus& engine_event_bus, const std::vector<std::unique_ptr<Engine::Core::GameObject> > &game_objects);
+    };
+}

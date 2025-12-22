@@ -14,64 +14,63 @@
 
 
 
-
-PlayerControlSystem::PlayerControlSystem() = default;
-PlayerControlSystem::~PlayerControlSystem() = default;
-
-
-void PlayerControlSystem::update(float deltaTime, InputManager& input_manager, GameEventBus& game_event_bus, EngineEventBus& engine_event_bus, const std::vector<std::unique_ptr<GameObject>>& game_objects) {
-
-    for (auto& object : game_objects) {
-
-        if (!object->hasComponent<PlayerComponent>()) continue;
-        if (!object->isActive()) continue;
-
-        PhysicsComponent& physics_component = object->getComponent<PhysicsComponent>();
-        TransformComponent& transform       = object->getComponent<TransformComponent>();
-        SpriteComponent& sprite_component   = object->getComponent<SpriteComponent>();
-        PlayerComponent& player_component   = object->getComponent<PlayerComponent>();
+namespace Game::Control {
+    PlayerControlSystem::PlayerControlSystem() = default;
+    PlayerControlSystem::~PlayerControlSystem() = default;
 
 
-        player_component.shoot_cooldown_timer -= deltaTime;
-        physics_component.velocity.x = 0;
+    void PlayerControlSystem::update(float deltaTime, Engine::Input::InputManager& input_manager, Events::GameEventBus& game_event_bus, Engine::Events::EngineEventBus& engine_event_bus, const std::vector<std::unique_ptr<Engine::Core::GameObject>>& game_objects) {
 
-        const int frame_left  = transform.position.x - sprite_component.sourceRect.w - 5;
-        const int frame_right = transform.position.x + sprite_component.sourceRect.w + 5;
+        for (auto& object : game_objects) {
+
+            if (!object->hasComponent<Control::PlayerComponent>()) continue;
+            if (!object->isActive()) continue;
+
+            Engine::Physics::PhysicsComponent& physics_component = object->getComponent<Engine::Physics::PhysicsComponent>();
+            Engine::Core::TransformComponent& transform       = object->getComponent<Engine::Core::TransformComponent>();
+            Engine::Graphics::SpriteComponent& sprite_component   = object->getComponent<Engine::Graphics::SpriteComponent>();
+            Control::PlayerComponent& player_component   = object->getComponent<Control::PlayerComponent>();
 
 
-        const float moveSpeed = 5.0f;
-        if (input_manager.isKeyHeld(Key::LEFT)) {
-            if (frame_left > 0) {
-                physics_component.velocity.x = -moveSpeed;
+            player_component.shoot_cooldown_timer -= deltaTime;
+            physics_component.velocity.x = 0;
+
+            const int frame_left  = transform.position.x - sprite_component.sourceRect.w - 5;
+            const int frame_right = transform.position.x + sprite_component.sourceRect.w + 5;
+
+
+            const float moveSpeed = 5.0f;
+            if (input_manager.isKeyHeld(Engine::Input::Key::LEFT)) {
+                if (frame_left > 0) {
+                    physics_component.velocity.x = -moveSpeed;
+                }
             }
-        }
-        if (input_manager.isKeyHeld(Key::RIGHT)) {
-            if (frame_right < 800) {
-                physics_component.velocity.x = moveSpeed;
+            if (input_manager.isKeyHeld(Engine::Input::Key::RIGHT)) {
+                if (frame_right < 800) {
+                    physics_component.velocity.x = moveSpeed;
+                }
             }
-        }
 
-        if (input_manager.isKeyHeld(Key::SPACE)) {
+            if (input_manager.isKeyHeld(Engine::Input::Key::SPACE)) {
 
-            if (player_component.shoot_cooldown_timer <= 0) {
+                if (player_component.shoot_cooldown_timer <= 0) {
 
-                player_component.shoot_cooldown_timer = player_component.shoot_cooldown;
+                    player_component.shoot_cooldown_timer = player_component.shoot_cooldown;
 
-                auto position = transform.position;
-                position.y += -30;
+                    auto position = transform.position;
+                    position.y += -30;
 
-                game_event_bus.publish<EmitterEvent>(
-                    static_cast<int>(EmittorState::PLAYER),
-                    CollisionLayer::PLAYER_BULLET,
-                    CollisionLayer::INVADER | CollisionLayer::WALL,
-                    position,
-                    glm::vec2{0.0f, -10.0f}
-                );
+                    game_event_bus.publish<Events::EmitterEvent>(
+                        static_cast<int>(Core::EmittorState::PLAYER),
+                        Engine::Physics::CollisionLayer::PLAYER_BULLET,
+                        Engine::Physics::CollisionLayer::INVADER | Engine::Physics::CollisionLayer::WALL,
+                        position,
+                        glm::vec2{0.0f, -10.0f}
+                    );
 
-                engine_event_bus.publish<PlaySoundEvent>("shoot");
+                    engine_event_bus.publish<Engine::Events::PlaySoundEvent>("shoot");
+                }
             }
         }
     }
 }
-
-

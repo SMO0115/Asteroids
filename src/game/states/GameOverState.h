@@ -9,17 +9,19 @@
 #include "game/core/CoreModule.h"
 
 
-class GameOverState : public IGameState {
+namespace Game::State {
+    class GameOverState : public Engine::Core::IGameState {
 
-public:
-                                                        GameOverState(Asteroids& game);
-                                                        ~GameOverState()                            override;
+    public:
+        GameOverState(Asteroids& game);
+        ~GameOverState()                            override;
 
-    std::unique_ptr<IGameState>                         handleInput(InputManager& input_manager)    override;
-    std::unique_ptr<IGameState>                         update(float deltatime, Engine& engine)     override;
-    void                                                render(RenderSystem& renderer)              override;
+        std::unique_ptr<Engine::Core::IGameState>                         handleInput(Engine::Input::InputManager& input_manager)    override;
+        std::unique_ptr<Engine::Core::IGameState>                         update(float deltatime, Engine::Application& engine)     override;
+        void                                                render(Engine::Graphics::RenderSystem& renderer)              override;
 
-private:
-    Asteroids&                                          m_game;
-    std::vector<std::unique_ptr<GameObject>>            m_pause;
-};
+    private:
+        Asteroids&                                          m_game;
+        std::vector<std::unique_ptr<Engine::Core::GameObject>>            m_pause;
+    };
+}

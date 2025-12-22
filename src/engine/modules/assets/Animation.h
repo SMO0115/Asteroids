@@ -8,12 +8,14 @@
 #include "../../utils/Types.h"
 
 
-struct Texture;
+namespace Engine::Assets {
+    struct Texture;
 
-struct  Animation {
+    struct  Animation {
 
-    Texture*                texture;
-    std::vector<Rect>       frames;
-    std::vector<float>      durations;
-    bool                    loop;
-};
+        Texture*                texture;
+        std::vector<Core::Rect>       frames;
+        std::vector<float>      durations;
+        bool                    loop;
+    };
+}

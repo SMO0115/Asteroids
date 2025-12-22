@@ -8,8 +8,10 @@
 #include "engine/core/BaseComponent.h"
 
 
-struct HealthComponent : BaseComponent {
+namespace Game::Health {
+    struct HealthComponent : Engine::Core::BaseComponent {
 
-    std::size_t     max_health;
-    std::size_t     current_health;
-};
+        std::size_t     max_health;
+        std::size_t     current_health;
+    };
+}

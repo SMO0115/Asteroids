@@ -9,26 +9,29 @@
 #include <unordered_set>
 #include <memory>
 
+#include "engine/events/EngineEvents.h"
 
-#include "../../events/EngineEvents.h"
 
-class GameObject;
-class AssetManager;
 
-class SoundSystem {
-public:
-                                                SoundSystem();
-                                                ~SoundSystem();
+namespace Engine::Core          { class GameObject; }
+namespace Engine::Assets        { class AssetManager; }
 
-    bool                                        init();
+namespace Engine::Audio {
+    class SoundSystem {
+    public:
+        SoundSystem();
+        ~SoundSystem();
 
-    void                                        playSound(const std::string& sound_id);
-    void                                        update(
-                                                    const AssetManager& asset_manager,
-                                                    EngineEventBus& event_bus,
-                                                    const std::vector<std::unique_ptr<GameObject>>& game_objects
-                                                );
+        bool                                        init();
 
-private:
-    std::unordered_set<std::string>             m_sound_queue;
-};
+        void                                        playSound(const std::string& sound_id);
+        void                                        update(
+                                                        const Assets::AssetManager&                             asset_manager,
+                                                        Events::EngineEventBus&                                 event_bus,
+                                                        const std::vector<std::unique_ptr<Core::GameObject>>&   game_objects
+                                                    );
+
+    private:
+        std::unordered_set<std::string>             m_sound_queue;
+    };
+}

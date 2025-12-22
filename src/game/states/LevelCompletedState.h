@@ -10,16 +10,18 @@
 #include "game/core/CoreModule.h"
 
 
-class LevelCompletedState : public IGameState {
+namespace Game::State {
+    class LevelCompletedState : public Engine::Core::IGameState {
 
-public:
-    LevelCompletedState(Asteroids& game);
-    ~LevelCompletedState() override;
+    public:
+        LevelCompletedState(Asteroids& game);
+        ~LevelCompletedState() override;
 
-    std::unique_ptr<IGameState> handleInput(InputManager& input_manager) override;
-    std::unique_ptr<IGameState> update(float deltatime, Engine& engine) override;
-    void render(RenderSystem& renderer) override;
-private:
-    Asteroids& m_game;
-    std::vector<std::unique_ptr<GameObject>>    m_text;
-};
+        std::unique_ptr<Engine::Core::IGameState> handleInput(Engine::Input::InputManager& input_manager) override;
+        std::unique_ptr<Engine::Core::IGameState> update(float deltatime, Engine::Application& engine) override;
+        void render(Engine::Graphics::RenderSystem& renderer) override;
+    private:
+        Asteroids& m_game;
+        std::vector<std::unique_ptr<Engine::Core::GameObject>>    m_text;
+    };
+}

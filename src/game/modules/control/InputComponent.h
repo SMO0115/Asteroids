@@ -6,6 +6,6 @@
 
 #include "engine/core/BaseComponent.h"
 
-struct InputComponent : BaseComponent {
-
-};
+namespace Game::Control {
+    struct InputComponent : Engine::Core::BaseComponent {};
+}

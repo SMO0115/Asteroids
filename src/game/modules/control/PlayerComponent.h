@@ -6,9 +6,11 @@
 
 #include "engine/core/CoreModule.h"
 
-struct PlayerComponent : public BaseComponent {
+namespace Game::Control {
+    struct PlayerComponent : public Engine::Core::BaseComponent {
 
 
-    float       shoot_cooldown          = 0.5f;
-    float       shoot_cooldown_timer    = 0.0f;
-};
+        float       shoot_cooldown          = 0.5f;
+        float       shoot_cooldown_timer    = 0.0f;
+    };
+}

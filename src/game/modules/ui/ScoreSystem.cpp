@@ -15,42 +15,44 @@
 #include "GameStateComponent.h"
 
 
-void ScoreSystem::update(float deltaTime, GameEventBus& game_event_bus, GameStateComponent &game_state) {
+namespace Game::UI {
+    void ScoreSystem::update(float deltaTime, Events::GameEventBus& game_event_bus, GameStateComponent &game_state) {
 
-    for (const auto& event : game_event_bus.getEvents<DeathEvent>()) {
+        for (const auto& event : game_event_bus.getEvents<Events::DeathEvent>()) {
 
-        if (event.object->hasComponent<PlayerComponent>()) {
+            if (event.object->hasComponent<Control::PlayerComponent>()) {
 
-            game_state.lives -= 1;
+                game_state.lives -= 1;
 
-            if (game_state.lives > 0) {
+                if (game_state.lives > 0) {
 
-                event.object->getComponent<TransformComponent>().position = glm::vec2(400, 750);;
-                event.object->getComponent<AnimationComponent>().current_state = static_cast<int>( AnimationState::IDLE );
-                event.object->setActive(true);
+                    event.object->getComponent<Engine::Core::TransformComponent>().position = glm::vec2(400, 750);;
+                    event.object->getComponent<Engine::Graphics::AnimationComponent>().current_state = static_cast<int>( Core::AnimationState::IDLE );
+                    event.object->setActive(true);
 
 
-                event.object->removeComponent<LifetimeComponent>();
+                    event.object->removeComponent<Health::LifetimeComponent>();
 
-                AnimationComponent& animation_component = event.object->getComponent<AnimationComponent>();
+                    Engine::Graphics::AnimationComponent& animation_component = event.object->getComponent<Engine::Graphics::AnimationComponent>();
 
-                ColliderComponent collider_component;
-                collider_component.bounds.w = animation_component.animations[ static_cast<int>( AnimationState::IDLE ) ]->frames[0].w;
-                collider_component.bounds.h = animation_component.animations[ static_cast<int>( AnimationState::IDLE ) ]->frames[0].h;
-                collider_component.layer = CollisionLayer::PLAYER;
-                collider_component.mask = CollisionLayer::INVADER | CollisionLayer::INVADER_BULLET;
+                    Engine::Physics::ColliderComponent collider_component;
+                    collider_component.bounds.w = animation_component.animations[ static_cast<int>( Core::AnimationState::IDLE ) ]->frames[0].w;
+                    collider_component.bounds.h = animation_component.animations[ static_cast<int>( Core::AnimationState::IDLE ) ]->frames[0].h;
+                    collider_component.layer = Engine::Physics::CollisionLayer::PLAYER;
+                    collider_component.mask = Engine::Physics::CollisionLayer::INVADER | Engine::Physics::CollisionLayer::INVADER_BULLET;
 
-                event.object->addComponent<ColliderComponent>(std::move(collider_component));
+                    event.object->addComponent<Engine::Physics::ColliderComponent>(std::move(collider_component));
 
-                event.object->getComponent<HealthComponent>().current_health = event.object->getComponent<HealthComponent>().max_health;
+                    event.object->getComponent<Health::HealthComponent>().current_health = event.object->getComponent<Health::HealthComponent>().max_health;
+                }
             }
+
+            if (event.object->hasComponent<Control::AIComponent>()) {
+
+                game_state.score += 100;
+                game_state.num_invaders--;
+            }
+
         }
-
-        if (event.object->hasComponent<AIComponent>()) {
-
-            game_state.score += 100;
-            game_state.num_invaders--;
-        }
-
     }
 }

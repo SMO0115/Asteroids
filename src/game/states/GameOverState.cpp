@@ -12,45 +12,47 @@
 
 
 
-GameOverState::GameOverState(Asteroids& game) : m_game(game) {
+namespace Game::State {
+    GameOverState::GameOverState(Asteroids& game) : m_game(game) {
 
 
-}
+    }
 
 
-GameOverState::~GameOverState() = default;
+    GameOverState::~GameOverState() = default;
 
 
-std::unique_ptr<IGameState> GameOverState::handleInput(InputManager &input_manager) {
+    std::unique_ptr<Engine::Core::IGameState> GameOverState::handleInput(Engine::Input::InputManager &input_manager) {
 
-    if ( input_manager.wasKeyPressed(Key::ESCAPE) ) return std::make_unique<RunState>(m_game);
+        if ( input_manager.wasKeyPressed(Engine::Input::Key::ESCAPE) ) return std::make_unique<RunState>(m_game);
 
-    return nullptr;
-}
+        return nullptr;
+    }
 
-std::unique_ptr<IGameState> GameOverState::update(float deltatime, Engine& engine) {
-
-
-
-    std::unique_ptr<GameObject> Pause = std::make_unique<GameObject>();
-
-    Font* font = engine.getAssetManager().getFont("pixel",72);
-    Pause->addComponent<UITextComponent>(
-        "GAME OVER",
-        font,
-        Color{255, 255, 255}, 210, 340
-        );
-    m_pause.push_back(std::move(Pause));
+    std::unique_ptr<Engine::Core::IGameState> GameOverState::update(float deltatime, Engine::Application& engine) {
 
 
-    return nullptr;
-}
 
-void GameOverState::render(RenderSystem &renderer) {
+        std::unique_ptr<Engine::Core::GameObject> Pause = std::make_unique<Engine::Core::GameObject>();
 
-    renderer.renderWorld(m_game.getGameObjects());
-    renderer.renderUI(m_game.getUIObjects());
+        Engine::Assets::Font* font = engine.getAssetManager().getFont("pixel",72);
+        Pause->addComponent<Engine::Graphics::UITextComponent>(
+            "GAME OVER",
+            font,
+            Engine::Core::Color{255, 255, 255}, 210, 340
+            );
+        m_pause.push_back(std::move(Pause));
 
-    renderer.drawRect({0, 0, 800, 800}, Color{0, 0, 0, 192});
-    renderer.renderUI(m_pause);
+
+        return nullptr;
+    }
+
+    void GameOverState::render(Engine::Graphics::RenderSystem &renderer) {
+
+        renderer.renderWorld(m_game.getGameObjects());
+        renderer.renderUI(m_game.getUIObjects());
+
+        renderer.drawRect({0, 0, 800, 800}, Engine::Core::Color{0, 0, 0, 192});
+        renderer.renderUI(m_pause);
+    }
 }

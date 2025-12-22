@@ -10,12 +10,15 @@
 #include "../../events/GameEvents.h"
 
 
-class GameObject;
+namespace Engine::Core { class GameObject; }
 
-class LifetimeSystem {
-public:
-    LifetimeSystem() = default;
-    ~LifetimeSystem() = default;
 
-    void update(float deltaTime, GameEventBus& event_bus, std::vector< std::unique_ptr<GameObject> > &game_objects);
-};
+namespace Game::Health {
+    class LifetimeSystem {
+    public:
+        LifetimeSystem() = default;
+        ~LifetimeSystem() = default;
+
+        void update(float deltaTime, Events::GameEventBus& event_bus, std::vector< std::unique_ptr<Engine::Core::GameObject> > &game_objects);
+    };
+}

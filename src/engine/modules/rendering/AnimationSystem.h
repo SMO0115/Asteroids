@@ -4,19 +4,24 @@
 
 #pragma once
 #include <memory>
+#include <vector>
 
 
-struct AnimationComponent;
-struct SpriteComponent;
+namespace Engine::Core { class GameObject; }
 
 
-class GameObject;
+namespace Engine::Graphics {
 
-class AnimationSystem {
-public:
-                                    AnimationSystem()  = default;
-                                    ~AnimationSystem() = default;
+    struct AnimationComponent;
+    struct SpriteComponent;
 
-    void                            update(float delta, const std::vector<std::unique_ptr<GameObject>>& game_objects);
-    SpriteComponent                 getSprite(AnimationComponent& anim);
-};
+
+    class AnimationSystem {
+    public:
+        AnimationSystem()  = default;
+        ~AnimationSystem() = default;
+
+        void                            update(float delta, const std::vector<std::unique_ptr<Core::GameObject>>& game_objects);
+        SpriteComponent                 getSprite(AnimationComponent& anim);
+    };
+}

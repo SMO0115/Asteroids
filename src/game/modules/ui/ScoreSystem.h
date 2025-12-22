@@ -7,16 +7,22 @@
 
 #include "../../events/GameEvents.h"
 
-class GameStateComponent;
 
-class ScoreSystem {
-public:
-    ScoreSystem() = default;
-    ~ScoreSystem() = default;
 
-    void update(
-            float deltaTime,
-            GameEventBus& game_event_bus,
-            GameStateComponent &game_state
-        );
-};
+
+namespace Game::UI {
+    class GameStateComponent;
+
+
+    class ScoreSystem {
+    public:
+        ScoreSystem() = default;
+        ~ScoreSystem() = default;
+
+        void update(
+                float deltaTime,
+                Events::GameEventBus& game_event_bus,
+                GameStateComponent &game_state
+            );
+    };
+}

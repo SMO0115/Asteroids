@@ -5,9 +5,11 @@
 #pragma once
 #include <SDL_render.h>
 
-struct Texture {
+namespace Engine::Assets {
+    struct Texture {
 
-    SDL_Texture*    texture = nullptr;
-    std::size_t     width;
-    std::size_t     height;
-};
+        SDL_Texture*    texture = nullptr;
+        std::size_t     width;
+        std::size_t     height;
+    };
+}

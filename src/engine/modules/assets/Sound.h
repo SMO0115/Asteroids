@@ -4,16 +4,14 @@
 
 struct Mix_Chunk;
 
-struct Sound {
-    ~Sound() {
-        if (m_sdl_chunk) {
-            Mix_FreeChunk(m_sdl_chunk);
+namespace Engine::Assets {
+    struct Sound {
+        ~Sound() {
+            if (m_sdl_chunk) {
+                Mix_FreeChunk(m_sdl_chunk);
+            }
         }
-    }
-    
-private:
-    friend class SoundSystem;
-    friend class AssetManager;
-
-    Mix_Chunk* m_sdl_chunk = nullptr;
-};
+        
+        Mix_Chunk* m_sdl_chunk = nullptr;
+    };
+}

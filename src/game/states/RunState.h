@@ -7,18 +7,21 @@
 
 #include "../../engine/core/IGameState.h"
 
-class Asteroids;
 
-class RunState : public IGameState {
+namespace Game { class Asteroids; }
 
-public:
-    RunState(Asteroids& game) : m_game(game){}
-    ~RunState() override;
+namespace Game::State {
+    class RunState : public Engine::Core::IGameState {
 
-    std::unique_ptr<IGameState> handleInput(InputManager& input_manager) override;
-    std::unique_ptr<IGameState> update(float deltatime, Engine& engine) override;
-    void render(RenderSystem& renderer) override;
+    public:
+        RunState(Asteroids& game) : m_game(game){}
+        ~RunState() override;
 
-private:
-    Asteroids& m_game;
-};
+        std::unique_ptr<Engine::Core::IGameState> handleInput(Engine::Input::InputManager& input_manager) override;
+        std::unique_ptr<Engine::Core::IGameState> update(float deltatime, Engine::Application& engine) override;
+        void render(Engine::Graphics::RenderSystem& renderer) override;
+
+    private:
+        Asteroids& m_game;
+    };
+}

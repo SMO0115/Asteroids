@@ -6,13 +6,15 @@
 #include <vector>
 #include <memory>
 
-class GameObject;
+namespace Engine::Core { class GameObject; }
 
-class PhysicsSystem {
+namespace Engine::Physics {
+    class PhysicsSystem {
 
-public:
-                            PhysicsSystem()  = default;
-                            ~PhysicsSystem() = default;
+    public:
+                                PhysicsSystem()  = default;
+                                ~PhysicsSystem() = default;
 
-    void                    update(float deltatime,  std::vector<std::unique_ptr<GameObject> > &game_objects);
-};
+        void                    update(float deltatime,  std::vector<std::unique_ptr<Core::GameObject> > &game_objects);
+    };
+}

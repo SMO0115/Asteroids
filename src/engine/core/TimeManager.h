@@ -5,17 +5,20 @@
 #pragma once
 #include <glm/glm.hpp>
 
-class TimeManager {
-public:
-    TimeManager() : m_frequency(0), m_lastTime(0), m_deltaTime(0.0) {};
 
-    void                            start();
-    double                          tick();
-    double                          getDeltaTime()  const   { return m_deltaTime; }
-    double                          getNow()        const;
+namespace Engine::Core {
+    class TimeManager {
+    public:
+                                        TimeManager() : m_frequency(0), m_lastTime(0), m_deltaTime(0.0) {};
 
-private:
-    glm::uint64_t                   m_frequency;
-    glm::uint64_t                   m_lastTime;
-    double                          m_deltaTime;
-};
+        void                            start();
+        double                          tick();
+        double                          getDeltaTime()  const   { return m_deltaTime; }
+        double                          getNow()        const;
+
+    private:
+        glm::uint64_t                   m_frequency;
+        glm::uint64_t                   m_lastTime;
+        double                          m_deltaTime;
+    };
+}

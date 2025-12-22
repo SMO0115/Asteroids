@@ -6,11 +6,12 @@
 
 #include <cstdint>
 
-struct Rect {
-    int x, y, w, h;
-};
+namespace Engine::Core {
+    struct Rect {
+        int x, y, w, h;
+    };
 
-struct Color {
-    std::uint8_t r, g, b, a;
-};
-
+    struct Color {
+        std::uint8_t r, g, b, a;
+    };
+}

@@ -8,29 +8,35 @@
 #include <memory>
 #include "../../events/EngineEvents.h"
 
-class GameObject;
-class TransformComponent;
-struct Rect;
 
 
-class CollisionSystem {
+namespace Engine::Core {
+    class GameObject;
+    class TransformComponent;
+    struct Rect;
+}
 
-public:
 
-                                        CollisionSystem()  = default;
-                                        ~CollisionSystem() = default;
+namespace Engine::Physics {
+    class CollisionSystem {
 
-    void                                update(
-                                            EngineEventBus&                                   event_bus,
-                                            const std::vector< std::unique_ptr<GameObject> >& game_objects
-                                        );
+    public:
 
-private:
+                                            CollisionSystem()  = default;
+                                            ~CollisionSystem() = default;
 
-    bool                                checkCollisionAABB_(
-                                            const TransformComponent& trans_a,
-                                            const TransformComponent& trans_b,
-                                            const Rect&                 obj_a,
-                                            const Rect&                 obj_b
-                                        );
-};
+        void                                update(
+                                                Events::EngineEventBus&                                 event_bus,
+                                                const std::vector< std::unique_ptr<Core::GameObject> >& game_objects
+                                            );
+
+    private:
+
+        bool                                checkCollisionAABB_(
+                                                const Core::TransformComponent& trans_a,
+                                                const Core::TransformComponent& trans_b,
+                                                const Core::Rect&                 obj_a,
+                                                const Core::Rect&                 obj_b
+                                            );
+    };
+}

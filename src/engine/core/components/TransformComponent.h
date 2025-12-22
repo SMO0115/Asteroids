@@ -6,9 +6,11 @@
 #include <glm/vec2.hpp>
 #include "../BaseComponent.h"
 
-struct TransformComponent : public BaseComponent {
+namespace Engine::Core {
+    struct TransformComponent : public BaseComponent {
 
-    glm::vec2   position;
-    float       scale       = 1;
-    float       rotation    = 0;
-};
+        glm::vec2   position;
+        float       scale       = 1;
+        float       rotation    = 0;
+    };
+}

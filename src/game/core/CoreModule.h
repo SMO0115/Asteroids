@@ -7,8 +7,7 @@
 #include "Asteroids.h"
 #include "GameTypes.h"
 
-#include "tags/Tags.h"
-#include "tags/WallComponent.h"
+#include "components/Tags.h"
 
 #include "../modules/control/PlayerComponent.h"
 #include "../modules/control/InvaderComponent.h"

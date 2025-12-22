@@ -8,12 +8,13 @@
 
 #include "../../utils/Types.h"
 
-struct Texture;
+namespace Engine::Assets { struct Texture; }
 
-struct SpriteComponent : public BaseComponent {
+namespace Engine::Graphics {
+    struct SpriteComponent : public Core::BaseComponent {
 
-    Texture*    texture;
-    Rect        sourceRect;
-
-    Color       color = {255, 255, 255, 255};
-};
+        Assets::Texture*    texture;
+        Core::Rect          sourceRect;
+        Core::Color         color = {255, 255, 255, 255};
+    };
+}

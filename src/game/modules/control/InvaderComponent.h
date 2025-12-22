@@ -7,8 +7,9 @@
 #include "engine/core/CoreModule.h"
 #include "../../core/GameTypes.h"
 
-
-struct InvaderComponent : public BaseComponent {
-    InvaderType     type;
-    int             score_value = 10;
-};
+namespace Game::Control {
+    struct InvaderComponent : public Engine::Core::BaseComponent {
+        Core::InvaderType     type;
+        int             score_value = 10;
+    };
+}

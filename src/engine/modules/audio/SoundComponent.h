@@ -10,11 +10,13 @@
 #include "engine/core/BaseComponent.h"
 
 
-struct SoundComponent : public BaseComponent {
+namespace Engine::Audio {
+    struct SoundComponent : public Core::BaseComponent {
 
-    std::map<int, std::string>      sounds;
-    int                             current_state   =  0;
-    int                             previous_state  = -1;
-    int                             channel         = -1;
-    bool                            is_looping      = false;
-};
+        std::map<int, std::string>      sounds;
+        int                             current_state   =  0;
+        int                             previous_state  = -1;
+        int                             channel         = -1;
+        bool                            is_looping      = false;
+    };
+}

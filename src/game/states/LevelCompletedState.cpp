@@ -14,45 +14,47 @@
 
 
 
-LevelCompletedState::LevelCompletedState(Asteroids& game) : m_game(game) {
+namespace Game::State {
+    LevelCompletedState::LevelCompletedState(Asteroids& game) : m_game(game) {
 
 
-}
+    }
 
 
-LevelCompletedState::~LevelCompletedState() = default;
+    LevelCompletedState::~LevelCompletedState() = default;
 
 
-std::unique_ptr<IGameState> LevelCompletedState::handleInput(InputManager &input_manager) {
+    std::unique_ptr<Engine::Core::IGameState> LevelCompletedState::handleInput(Engine::Input::InputManager &input_manager) {
 
-    if ( input_manager.wasKeyPressed(Key::ESCAPE) ) return std::make_unique<RunState>(m_game);
+        if ( input_manager.wasKeyPressed(Engine::Input::Key::ESCAPE) ) return std::make_unique<RunState>(m_game);
 
-    return nullptr;
-}
+        return nullptr;
+    }
 
-std::unique_ptr<IGameState> LevelCompletedState::update(float deltatime, Engine& engine) {
-
-
-
-    std::unique_ptr<GameObject> Pause = std::make_unique<GameObject>();
-
-    Font* font = engine.getAssetManager().getFont("pixel",72);
-    Pause->addComponent<UITextComponent>(
-        "!!! VICTORY !!!",
-        font,
-        Color{255, 255, 255}, 190, 340
-        );
-    m_text.push_back(std::move(Pause));
+    std::unique_ptr<Engine::Core::IGameState> LevelCompletedState::update(float deltatime, Engine::Application& engine) {
 
 
-    return nullptr;
-}
 
-void LevelCompletedState::render(RenderSystem &renderer) {
+        std::unique_ptr<Engine::Core::GameObject> Pause = std::make_unique<Engine::Core::GameObject>();
 
-    renderer.renderWorld(m_game.getGameObjects());
-    renderer.renderUI(m_game.getUIObjects());
+        Engine::Assets::Font* font = engine.getAssetManager().getFont("pixel",72);
+        Pause->addComponent<Engine::Graphics::UITextComponent>(
+            "!!! VICTORY !!!",
+            font,
+            Engine::Core::Color{255, 255, 255}, 190, 340
+            );
+        m_text.push_back(std::move(Pause));
 
-    renderer.drawRect({0, 0, 800, 800}, Color{0, 0, 0, 192});
-    renderer.renderUI(m_text);
+
+        return nullptr;
+    }
+
+    void LevelCompletedState::render(Engine::Graphics::RenderSystem &renderer) {
+
+        renderer.renderWorld(m_game.getGameObjects());
+        renderer.renderUI(m_game.getUIObjects());
+
+        renderer.drawRect({0, 0, 800, 800}, Engine::Core::Color{0, 0, 0, 192});
+        renderer.renderUI(m_text);
+    }
 }

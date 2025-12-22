@@ -18,35 +18,40 @@
 
 #include <iostream>
 
-void HealthSystem::update(float deltaTime, EngineEventBus &event_bus, std::vector<std::unique_ptr<GameObject> > &game_objects) {
-
-    for (const CollisionEvent& event : event_bus.getEvents<CollisionEvent>()) {
-
-        if (!event.to->hasComponent<HealthComponent>()) continue;
-        event.to->getComponent<HealthComponent>().current_health -= 100;
-
-        if (event.to->hasComponent<WallComponent>()) {
-
-            int state = static_cast<int>( event.to->getComponent<HealthComponent>().current_health / 100 );
-            std::cout<<"state: "<<state<<std::endl;
-            event.to->getComponent<AnimationComponent>().animations[0]->frames[0] = {11*(4 - state), 0, 11, 8};;
-        }
-
-        if (event.to->getComponent<HealthComponent>().current_health <= 0) {
 
 
-            if (event.to->hasComponent<EmitterComponent>()) {
-                event.to->setActive(false);
-                continue;
+
+namespace Game::Health {
+    void HealthSystem::update(float deltaTime, Engine::Events::EngineEventBus &event_bus, std::vector<std::unique_ptr<Engine::Core::GameObject> > &game_objects) {
+
+        for (const Engine::Events::CollisionEvent& event : event_bus.getEvents<Engine::Events::CollisionEvent>()) {
+
+            if (!event.to->hasComponent<HealthComponent>()) continue;
+            event.to->getComponent<Health::HealthComponent>().current_health -= 100;
+
+            if (event.to->hasComponent<Core::WallComponent>()) {
+
+                int state = static_cast<int>( event.to->getComponent<Health::HealthComponent>().current_health / 100 );
+                std::cout<<"Health: "<<state<<std::endl;
+                event.to->getComponent<Engine::Graphics::AnimationComponent>().animations[0]->frames[0] = {11*(4 - state), 0, 11, 8};;
             }
 
+            if (event.to->getComponent<Health::HealthComponent>().current_health <= 0) {
 
-            event.to->getComponent<AnimationComponent>().current_state =  static_cast<int>( AnimationState::DEATH );
 
-            event.to->removeComponent<ColliderComponent>();
-            event.to->addComponent<LifetimeComponent>(0.1);
+                if (event.to->hasComponent<Emitter::EmitterComponent>()) {
+                    event.to->setActive(false);
+                    continue;
+                }
 
-            event_bus.publish<PlaySoundEvent>("explosion");
+
+                event.to->getComponent<Engine::Graphics::AnimationComponent>().current_state =  static_cast<int>( Core::AnimationState::DEATH );
+
+                event.to->removeComponent<Engine::Physics::ColliderComponent>();
+                event.to->addComponent<Health::LifetimeComponent>(0.1);
+
+                event_bus.publish<Engine::Events::PlaySoundEvent>("explosion");
+            }
         }
     }
 }

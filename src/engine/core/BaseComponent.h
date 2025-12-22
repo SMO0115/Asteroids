@@ -5,7 +5,9 @@
 #pragma once
 
 
-class BaseComponent {
-public:
-    virtual ~BaseComponent() = default;
-};
+namespace Engine::Core {
+    class BaseComponent {
+    public:
+        virtual ~BaseComponent() = default;
+    };
+}
