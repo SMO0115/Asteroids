@@ -6,8 +6,8 @@
 
 #include <vector>
 #include <memory>
-#include "../../events/GameEvents.h"
-#include "../../../engine/events/EngineEvents.h"
+#include "game/events/GameEvents.h"
+#include "engine/events/EngineEvents.h"
 
 namespace Engine::Core { class GameObject; }
 namespace Engine::Input { class InputManager; }

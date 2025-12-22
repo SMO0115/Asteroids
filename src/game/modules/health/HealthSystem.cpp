@@ -7,7 +7,7 @@
 #include "game/core/CoreModule.h"
 #include "HealthComponent.h"
 #include "LifetimeComponent.h"
-#include "../emitter/EmitterComponent.h"
+#include "game/modules/emitter/EmitterComponent.h"
 
 
 #include "engine/core/CoreModule.h"

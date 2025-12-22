@@ -1,4 +1,4 @@
-#include "../engine/core/CoreModule.h"
+#include "engine/core/CoreModule.h"
 #include "core/CoreModule.h"
 
 

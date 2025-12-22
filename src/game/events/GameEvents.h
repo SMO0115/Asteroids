@@ -5,8 +5,8 @@
 #pragma once
 #include "glm/glm.hpp"
 
-#include "../core/GameTypes.h"
-#include "../../engine/events/EventBus.h"
+#include "game/core/GameTypes.h"
+#include "engine/events/EventBus.h"
 #include "engine/modules/physics/PhysicsModule.h"
 
 namespace Engine::Core { class GameObject; }

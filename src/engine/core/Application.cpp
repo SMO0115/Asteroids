@@ -17,8 +17,8 @@
 
 
 
-#include "../core/TimeManager.h"
-#include "../events/EventBus.h"
+#include "engine/core/TimeManager.h"
+#include "engine/events/EventBus.h"
 
 
 

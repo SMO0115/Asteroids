@@ -2,7 +2,7 @@
 // Created by marcel on 9/29/25.
 //
 
-#include "../../game/states/PauseState.h"
+#include "game/states/PauseState.h"
 #include "RunState.h"
 
 #include "engine/modules/input/InputModule.h"

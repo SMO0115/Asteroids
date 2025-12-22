@@ -2,7 +2,7 @@
 // Created by marcel on 9/29/25.
 //
 
-#include "../../game/states/LevelCompletedState.h"
+#include "game/states/LevelCompletedState.h"
 
 #include "RunState.h"
 

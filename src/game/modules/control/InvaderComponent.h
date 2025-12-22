@@ -5,7 +5,7 @@
 #pragma once
 
 #include "engine/core/CoreModule.h"
-#include "../../core/GameTypes.h"
+#include "game/core/GameTypes.h"
 
 namespace Game::Control {
     struct InvaderComponent : public Engine::Core::BaseComponent {

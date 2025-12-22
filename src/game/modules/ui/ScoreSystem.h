@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "../../events/GameEvents.h"
+#include "game/events/GameEvents.h"
 
 
 

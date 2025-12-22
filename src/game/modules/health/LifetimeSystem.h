@@ -7,7 +7,7 @@
 
 #include <vector>
 #include <memory>
-#include "../../events/GameEvents.h"
+#include "game/events/GameEvents.h"
 
 
 namespace Engine::Core { class GameObject; }

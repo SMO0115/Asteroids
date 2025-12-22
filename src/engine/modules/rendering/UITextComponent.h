@@ -6,9 +6,9 @@
 
 #include <string>
 #include <utility>
-#include "../../utils/Types.h"
-
 #include "engine/core/BaseComponent.h"
+#include "engine/utils/Types.h"
+
 
 namespace Engine::Assets { struct Font; }
 

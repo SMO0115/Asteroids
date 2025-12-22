@@ -5,7 +5,7 @@
 #pragma once
 
 #include <vector>
-#include "../../utils/Types.h"
+#include "engine/utils/Types.h"
 
 
 namespace Engine::Assets {

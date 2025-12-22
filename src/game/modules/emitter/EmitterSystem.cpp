@@ -12,8 +12,8 @@
 #include "game/modules/health/HealthModule.h"
 
 
-#include "../../../engine/events/EventBus.h"
-#include "../../events/GameEvents.h"
+#include "engine/events/EventBus.h"
+#include "game/events/GameEvents.h"
 
 
 namespace Game::Emitter {

@@ -21,14 +21,14 @@
 
 #include "GameTypes.h"
 
-#include "../modules/control/InvaderComponent.h"
-#include "../modules/control/PlayerComponent.h"
+#include "game/modules/control/InvaderComponent.h"
+#include "game/modules/control/PlayerComponent.h"
 
 #include "components/Tags.h"
 
 #include "game/events/GameEvents.h"
 
-#include "../states/RunState.h"
+#include "game/states/RunState.h"
 
 
 

@@ -5,8 +5,7 @@
 #pragma once
 
 #include "engine/core/BaseComponent.h"
-
-#include "../../utils/Types.h"
+#include "engine/utils/Types.h"
 
 namespace Engine::Assets { struct Texture; }
 
