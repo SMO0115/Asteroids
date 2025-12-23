@@ -7,11 +7,11 @@
 #include <cstdint>
 
 namespace Engine::Core {
-    struct Rect {
-        int x, y, w, h;
-    };
+struct Rect {
+    int x, y, w, h;
+};
 
-    struct Color {
-        std::uint8_t r, g, b, a;
-    };
-}
+struct Color {
+    std::uint8_t r, g, b, a;
+};
+}  // namespace Engine::Core

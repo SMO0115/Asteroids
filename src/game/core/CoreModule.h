@@ -9,5 +9,5 @@
 
 #include "components/Tags.h"
 
-#include "game/modules/control/PlayerComponent.h"
 #include "game/modules/control/InvaderComponent.h"
+#include "game/modules/control/PlayerComponent.h"

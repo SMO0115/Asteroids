@@ -4,7 +4,6 @@
 
 #pragma once
 
-
 #include "AIComponent.h"
 #include "AISystem.h"
 

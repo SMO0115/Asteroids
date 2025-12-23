@@ -7,5 +7,5 @@
 #include "engine/core/BaseComponent.h"
 
 namespace Game::Control {
-    struct InputComponent : Engine::Core::BaseComponent {};
-}
+struct InputComponent : Engine::Core::BaseComponent {};
+}  // namespace Game::Control

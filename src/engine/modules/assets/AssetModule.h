@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "Font.h"
-#include "Texture.h"
 #include "Animation.h"
+#include "Font.h"
 #include "Sound.h"
+#include "Texture.h"
 
 #include "AssetManager.h"

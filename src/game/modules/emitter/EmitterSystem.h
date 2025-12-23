@@ -3,21 +3,20 @@
 //
 
 #pragma once
-#include <vector>
 #include <memory>
+#include <vector>
 #include "game/events/GameEvents.h"
 
-namespace Engine::Core { class GameObject; }
-
+namespace Engine::Core {
+class GameObject;
+}
 
 namespace Game::Emitter {
-    class EmitterSystem {
+class EmitterSystem {
+public:
+    EmitterSystem()  = default;
+    ~EmitterSystem() = default;
 
-    public:
-
-        EmitterSystem() = default;
-        ~EmitterSystem() = default;
-
-        void update(float deltaTime, Events::GameEventBus& event_bus, std::vector<std::unique_ptr<Engine::Core::GameObject> > &game_objects);
-    };
-}
+    void update(float deltaTime, Events::GameEventBus& event_bus, std::vector<std::unique_ptr<Engine::Core::GameObject> >& game_objects);
+};
+}  // namespace Game::Emitter

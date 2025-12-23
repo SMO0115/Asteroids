@@ -4,7 +4,6 @@
 
 #pragma once
 
-
 #include "GameStateComponent.h"
 #include "ScoreSystem.h"
 #include "UISystem.h"

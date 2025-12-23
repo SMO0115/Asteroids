@@ -8,8 +8,8 @@
 #include "game/core/GameTypes.h"
 
 namespace Game::Control {
-    struct InvaderComponent : public Engine::Core::BaseComponent {
-        Core::InvaderType     type;
-        int             score_value = 10;
-    };
-}
+struct InvaderComponent : public Engine::Core::BaseComponent {
+    Core::InvaderType type;
+    int               score_value = 10;
+};
+}  // namespace Game::Control

@@ -5,28 +5,24 @@
 #pragma once
 
 #include <SDL2/SDL_ttf.h>
-#include <string>
 #include <memory>
-
+#include <string>
 
 namespace Engine::Assets {
-    struct FontDeleter {
-        void operator()(TTF_Font* font) const {
-            if (font) TTF_CloseFont(font);
-        }
-    };
+struct FontDeleter {
+    void operator()(TTF_Font* font) const {
+        if (font) TTF_CloseFont(font);
+    }
+};
 
+struct Font {
+    std::unique_ptr<TTF_Font, FontDeleter> ttf_font;
 
-    struct Font {
+    std::string file_path;
+    std::size_t font_size;
 
-        std::unique_ptr<TTF_Font, FontDeleter>  ttf_font;
+    Font(TTF_Font* raw_font, const std::string& path, int size) : ttf_font(raw_font), file_path(path), font_size(size) {}
 
-        std::string                             file_path;
-        std::size_t                             font_size;
-
-        Font(TTF_Font* raw_font, const std::string& path, int size)
-            : ttf_font(raw_font), file_path(path), font_size(size) {}
-
-        TTF_Font* get() const { return ttf_font.get(); }
-    };
-}
+    TTF_Font* get() const { return ttf_font.get(); }
+};
+}  // namespace Engine::Assets

@@ -81,17 +81,16 @@ def run():
 
 
 def format_code():
-    """Runs clang-format on all source code."""
-    print("[FMT] Formatting code...")
+    """Runs uncrustify on all source code."""
+    print("[FMT] Running Uncrustify...")
 
-    # Check if tool exists
-    if shutil.which("clang-format") is None:
-        print("[ERROR] clang-format not found! Install LLVM.")
-        print("        Linux: sudo apt install clang-format")
-        print("        Windows: It comes with Visual Studio or install LLVM")
+    # 1. Check tool
+    if shutil.which("uncrustify") is None:
+        print("[ERROR] Uncrustify not found. Install it:")
+        print("        sudo apt install uncrustify")
         return
 
-    # Find files
+    # 2. Find files
     files = []
     for root, _, filenames in os.walk("src"):
         for filename in filenames:
@@ -102,10 +101,18 @@ def format_code():
         print("[FMT] No files found.")
         return
 
-    # -i means "edit in place" (save the file)
-    cmd = f"clang-format -i -style=file {' '.join(files)}"
-    run_command(cmd)
-    print(f"[FMT] formatted {len(files)} files.")
+    # 3. Build Command
+    # -c: Config file
+    # --no-backup: Don't create .unc-backup files (we use Git for backup)
+    # --replace: Overwrite the files in place
+    cmd = f"uncrustify -c uncrustify.cfg --no-backup --replace {' '.join(files)}"
+
+    # Run silently (Uncrustify is verbose)
+    try:
+        subprocess.check_call(cmd, shell=True, stdout=subprocess.DEVNULL)
+        print(f"[FMT] Processed {len(files)} files.")
+    except subprocess.CalledProcessError:
+        print("[ERROR] Uncrustify failed.")
 
 
 def main():

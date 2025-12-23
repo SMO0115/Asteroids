@@ -4,9 +4,9 @@
 
 #pragma once
 
+#include "AnimationComponent.h"
 #include "SpriteComponent.h"
 #include "UITextComponent.h"
-#include "AnimationComponent.h"
 
 #include "AnimationSystem.h"
 #include "RenderSystem.h"

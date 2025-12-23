@@ -4,28 +4,23 @@
 
 #pragma once
 
-#include "EventBus.h"
 #include <string>
+#include "EventBus.h"
 
-
-namespace Engine::Core { class GameObject; }
-
+namespace Engine::Core {
+class GameObject;
+}
 
 namespace Engine::Events {
 
-    struct PlaySoundEvent {
+struct PlaySoundEvent {
+    std::string soundId;
+};
 
-        std::string soundId;
-    };
+struct CollisionEvent {
+    Core::GameObject* from;
+    Core::GameObject* to;
+};
 
-    struct CollisionEvent {
-
-        Core::GameObject *from;
-        Core::GameObject *to;
-    };
-
-    using EngineEventBus = EventBus<
-        PlaySoundEvent,
-        CollisionEvent
-    >;
-}
+using EngineEventBus = EventBus<PlaySoundEvent, CollisionEvent>;
+}  // namespace Engine::Events

@@ -4,26 +4,19 @@
 
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
 #include "engine/events/EngineEvents.h"
-
-
-
 
 namespace Game::UI {
 
-    class GameStateComponent;
+class GameStateComponent;
 
-    class UISystem {
-    public:
-        UISystem() = default;
-        ~UISystem() = default;
+class UISystem {
+public:
+    UISystem()  = default;
+    ~UISystem() = default;
 
-        void update(
-            float deltaTime,
-            std::vector<std::unique_ptr<Engine::Core::GameObject> > &ui_objects,
-            const GameStateComponent &game_state
-        );
-    };
-}
+    void update(float deltaTime, std::vector<std::unique_ptr<Engine::Core::GameObject> >& ui_objects, const GameStateComponent& game_state);
+};
+}  // namespace Game::UI

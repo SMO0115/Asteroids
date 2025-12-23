@@ -5,24 +5,21 @@
 #pragma once
 #include <memory>
 
-
 #include "engine/core/CoreModule.h"
 #include "game/core/CoreModule.h"
 
-
-
 namespace Game::State {
-    class PauseState : public Engine::Core::IGameState {
+class PauseState : public Engine::Core::IGameState {
+public:
+    PauseState(Asteroids& game);
+    ~PauseState() override;
 
-    public:
-        PauseState(Asteroids& game);
-        ~PauseState() override;
+    std::unique_ptr<Engine::Core::IGameState> handleInput(Engine::Input::InputManager& input_manager) override;
+    std::unique_ptr<Engine::Core::IGameState> update(float deltatime, Engine::Application& engine) override;
+    void                                      render(Engine::Graphics::RenderSystem& renderer) override;
 
-        std::unique_ptr<Engine::Core::IGameState> handleInput(Engine::Input::InputManager& input_manager) override;
-        std::unique_ptr<Engine::Core::IGameState> update(float deltatime, Engine::Application& engine) override;
-        void render(Engine::Graphics::RenderSystem& renderer) override;
-    private:
-        Asteroids& m_game;
-        std::vector<std::unique_ptr<Engine::Core::GameObject>>            m_pause;
-    };
-}
+private:
+    Asteroids&                                             m_game;
+    std::vector<std::unique_ptr<Engine::Core::GameObject>> m_pause;
+};
+}  // namespace Game::State

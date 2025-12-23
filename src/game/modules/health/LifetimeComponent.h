@@ -7,12 +7,10 @@
 
 #include "engine/core/BaseComponent.h"
 
-
 namespace Game::Health {
-    struct LifetimeComponent : public Engine::Core::BaseComponent {
+struct LifetimeComponent : public Engine::Core::BaseComponent {
+    float time_left;
 
-        float       time_left;
-
-        LifetimeComponent(float time) : time_left(time) {}
-    };
-}
+    LifetimeComponent(float time) : time_left(time) {}
+};
+}  // namespace Game::Health

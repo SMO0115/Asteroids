@@ -4,7 +4,6 @@
 
 #pragma once
 
-
 #include "HealthComponent.h"
 #include "HealthSystem.h"
 

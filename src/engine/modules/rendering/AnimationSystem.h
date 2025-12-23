@@ -6,22 +6,21 @@
 #include <memory>
 #include <vector>
 
-
-namespace Engine::Core { class GameObject; }
-
+namespace Engine::Core {
+class GameObject;
+}
 
 namespace Engine::Graphics {
 
-    struct AnimationComponent;
-    struct SpriteComponent;
+struct AnimationComponent;
+struct SpriteComponent;
 
+class AnimationSystem {
+public:
+    AnimationSystem()  = default;
+    ~AnimationSystem() = default;
 
-    class AnimationSystem {
-    public:
-        AnimationSystem()  = default;
-        ~AnimationSystem() = default;
-
-        void                            update(float delta, const std::vector<std::unique_ptr<Core::GameObject>>& game_objects);
-        SpriteComponent                 getSprite(AnimationComponent& anim);
-    };
-}
+    void            update(float delta, const std::vector<std::unique_ptr<Core::GameObject>>& game_objects);
+    SpriteComponent getSprite(AnimationComponent& anim);
+};
+}  // namespace Engine::Graphics
