@@ -4,7 +4,6 @@
 
 #include "Application.h"
 #include <iostream>
-#include <bits/stdc++.h>
 
 
 #include "engine/modules/rendering/RenderModule.h"
@@ -26,8 +25,8 @@
 namespace Engine {
     Application::Application() {
 
-        m_is_running        = 0;
-        m_quit_requested    = 0;
+        m_is_running        = false;
+        m_quit_requested    = false;
 
         m_time_manager      = std::make_unique<Core::TimeManager>();
         m_asset_manager     = std::make_unique<Assets::AssetManager>();

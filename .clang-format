@@ -1,0 +1,24 @@
+Language:        Cpp
+BasedOnStyle:    Google
+IndentWidth:     4
+ColumnLimit:     160  # Increased to allow your wide alignment
+
+# --- The Magic Alignment Settings ---
+# This aligns the variable names and assignments
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+AlignConsecutiveMacros: true
+
+# --- Pointer Alignment ---
+# You used "std::string& title" (Left) and "IGame &game" (Right).
+# Normalization forces consistency. This forces "Type& var" (Left).
+DerivePointerAlignment: false
+PointerAlignment: Left
+
+# --- Class/Struct formatting ---
+AccessModifierOffset: -4  # Pushes "public:" back to the left edge
+BreakBeforeBraces: Attach # Keeps "class Foo {" on one line
+
+# --- Include Sorting ---
+SortIncludes: true
+IncludeBlocks: Preserve # Keeps your empty lines between include groups
