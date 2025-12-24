@@ -28,12 +28,10 @@ RenderSystem::~RenderSystem() {
 }
 
 bool RenderSystem::init(const std::string& title, std::size_t width, std::size_t height) {
-
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "Failed to initialize SDL Video: " << SDL_GetError() << std::endl;
         return false;
     }
-
     m_window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
     if (!m_window) {
         std::cerr << "Failed to create window: " << SDL_GetError() << std::endl;
