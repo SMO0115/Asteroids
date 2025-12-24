@@ -1,0 +1,14 @@
+Checks: >
+  -*,
+  bugprone-*,
+  modernize-*,
+  performance-*,
+  readability-*,
+  -modernize-use-trailing-return-type,
+  -readability-identifier-length
+
+# Treat warnings as errors? (Optional: set to true to be strict)
+WarningsAsErrors: ''
+
+# Header filter regex
+HeaderFilterRegex: 'src/.*'

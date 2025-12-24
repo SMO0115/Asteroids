@@ -26,8 +26,13 @@ def run_command(command, cwd=None):
 def configure():
     if not os.path.exists(BUILD_DIR):
         os.makedirs(BUILD_DIR)
+
     print(f"[CONF] Configuring project with {CMAKE_GENERATOR}...")
-    cmd = f'cmake -S . -B {BUILD_DIR} -G "{CMAKE_GENERATOR}"'
+
+    # ADDED flag: -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    # This generates the "Map" that clang-tidy needs to understand your code.
+    cmd = f'cmake -S . -B {BUILD_DIR} -G "{CMAKE_GENERATOR}" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
+
     run_command(cmd)
 
 def build():
@@ -88,6 +93,57 @@ def format_code():
     except subprocess.CalledProcessError:
         print("[ERROR] Clang-format failed.")
 
+
+
+def analyze_code():
+    """Runs clang-tidy to find bugs and performance issues."""
+    print("[CHECK] Running Static Analysis (clang-tidy)...")
+
+    if shutil.which("clang-tidy") is None:
+        print("[ERROR] clang-tidy not found!")
+        return
+
+    # 1. We need the compile_commands.json to exist
+    compile_db = os.path.join(BUILD_DIR, "compile_commands.json")
+    if not os.path.exists(compile_db):
+        print("[WARN] compile_commands.json missing. Configuring first...")
+        configure()
+
+    # 2. Find Source Files
+    files = []
+    for root, _, filenames in os.walk("src"):
+        for filename in filenames:
+            if filename.endswith(".cpp"):
+                files.append(os.path.join(root, filename))
+
+    if not files:
+        print("[CHECK] No .cpp files found.")
+        return
+
+    # 3. Run Analysis
+    # -p points to the folder containing compile_commands.json
+    print(f"[CHECK] Analyzing {len(files)} files. This might take a moment...")
+
+    # We run it file-by-file or in a batch.
+    # Using a loop here ensures we see output as it happens.
+    passed = True
+    for f in files:
+        try:
+            # We use -quiet so it only prints if there are errors
+            cmd = f"clang-tidy -p {BUILD_DIR} --quiet {f}"
+            subprocess.check_call(cmd, shell=True)
+        except subprocess.CalledProcessError:
+            passed = False
+            print(f"[FAIL] Issues found in {f}")
+
+    if passed:
+        print("[CHECK] Analysis Complete. Code looks clean!")
+    else:
+        print("[CHECK] Analysis finished with warnings.")
+
+
+
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: python manage.py [run|build|format]")
@@ -97,6 +153,7 @@ def main():
     if action == "run": run()
     elif action == "build": build()
     elif action == "format": format_code()
+    elif action == "analyze": analyze_code()
     else: print("Unknown command")
 
 if __name__ == "__main__":
