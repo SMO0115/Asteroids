@@ -1,0 +1,34 @@
+# CMake build files
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+CTestTestfile.cmake
+cmake_install.cmake
+compile_commands.json
+
+engine/JobSystem.h
+engine/JobSystem.cpp
+
+
+# CLion specific files
+.idea/
+.idea/*
+.idea
+.plan
+
+# Fetched content from CMake
+_deps/
+
+# Executables and object files
+*.exe
+*.out
+*.so
+*.a
+*.o
+*.obj
+*.xml
+
+# Other generated files
+Makefile
+install_manifest.txt
