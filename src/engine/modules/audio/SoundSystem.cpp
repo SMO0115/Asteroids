@@ -61,7 +61,7 @@ void SoundSystem::update(const Assets::AssetManager& asset_manager, Events::Engi
 
             auto it = sound_comp.sounds.find(sound_comp.current_state);
             if (it != sound_comp.sounds.end()) {
-                playSound( it->second   );
+                playSound(it->second);
             }
             sound_comp.previous_state = sound_comp.current_state;
         }
