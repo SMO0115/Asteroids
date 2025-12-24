@@ -66,26 +66,30 @@ def run():
     run_command(f'"{exe_path}"', cwd=os.getcwd())
 
 def format_code():
-    """Runs clang-format on .cpp files ONLY."""
+    """Runs clang-format on .cpp files in src AND tests."""
     print("[FMT] Formatting logic (*.cpp)...")
 
     if shutil.which("clang-format") is None:
         print("[ERROR] clang-format not found!")
         return
 
-    # 1. Find ONLY .cpp files
+    # 1. Find .cpp files in 'src' AND 'tests'
     files = []
-    for root, _, filenames in os.walk("src"):
-        for filename in filenames:
-            if filename.endswith(".cpp"):
-                files.append(os.path.join(root, filename))
+    # We list the folders we want to scan
+    dirs_to_scan = ["src", "tests"]
+
+    for folder in dirs_to_scan:
+        if os.path.exists(folder):
+            for root, _, filenames in os.walk(folder):
+                for filename in filenames:
+                    if filename.endswith(".cpp"):
+                        files.append(os.path.join(root, filename))
 
     if not files:
         print("[FMT] No .cpp files found.")
         return
 
     # 2. Run Clang-Format
-    # -i edits files in place
     cmd = f"clang-format -i -style=file {' '.join(files)}"
     try:
         subprocess.check_call(cmd, shell=True, stdout=subprocess.DEVNULL)
