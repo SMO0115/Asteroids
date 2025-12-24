@@ -4,6 +4,7 @@
 
 #include "glm/glm.hpp"
 
+
 #include "Asteroids.h"
 
 #include "engine/core/CoreModule.h"
@@ -29,8 +30,10 @@
 
 #include "game/states/RunState.h"
 
+
 namespace Game {
 Asteroids::Asteroids() {
+
     m_player_control_system = std::make_unique<Control::PlayerControlSystem>();
     m_ai_system             = std::make_unique<Control::AISystem>();
     m_health_system         = std::make_unique<Health::HealthSystem>();
@@ -43,9 +46,12 @@ Asteroids::Asteroids() {
 
 Asteroids::~Asteroids() {}
 
+
 bool Asteroids::init(Engine::Application& engine) {
+
     m_game_session = std::make_unique<Engine::Core::GameObject>();
     m_game_session->addComponent<UI::GameStateComponent>(0, 3, 55);
+
 
     Engine::Assets::AssetManager&   asset_manager = engine.getAssetManager();
     Engine::Graphics::RenderSystem& renderer      = engine.getRenderer();
@@ -67,11 +73,13 @@ bool Asteroids::init(Engine::Application& engine) {
         asset_manager.loadTexture(renderer, "UFO", "assets/Sprites/UFO.png");
         asset_manager.loadAnimation("UFO", "assets/Sprites/UFO.json");
 
+
         asset_manager.loadTexture(renderer, "player_death", "assets/Sprites/player_death.png");
         asset_manager.loadAnimation("player_death", "assets/Sprites/player_death.json");
 
         asset_manager.loadTexture(renderer, "invader_death", "assets/Sprites/invader_death.png");
         asset_manager.loadAnimation("invader_death", "assets/Sprites/invader_death.json");
+
 
         for (int k = 0; k < 4; k++) {
             for (int i = 0; i < 4; i++) {
@@ -87,8 +95,10 @@ bool Asteroids::init(Engine::Application& engine) {
             }
         }
 
+
         asset_manager.loadTexture(renderer, "invader_death", "assets/Sprites/invader_death.png");
         asset_manager.loadAnimation("invader_death", "assets/Sprites/invader_death.json");
+
 
         // projectiles
         asset_manager.loadTexture(renderer, "missile", "assets/Sprites/missile.png");
@@ -106,6 +116,7 @@ bool Asteroids::init(Engine::Application& engine) {
         asset_manager.loadTexture(renderer, "player_missile", "assets/Sprites/player_missile.png");
         asset_manager.loadAnimation("player_missile", "assets/Sprites/player_missile.json");
 
+
         // sounds
         asset_manager.loadSound("explosion", "assets/Audio/explosion.wav");
         asset_manager.loadSound("player_shoot", "assets/Audio/shoot.wav");
@@ -117,7 +128,9 @@ bool Asteroids::init(Engine::Application& engine) {
         asset_manager.loadSound("ufo_lowpitch", "assets/Audio/ufo_lowpitch.wav");
         asset_manager.loadSound("shoot", "assets/Audio/shoot.wav");
 
+
         asset_manager.loadFont("pixel", "assets/Fonts/PixelifySans.ttf");
+
 
         // asset_manager.loadSpriteDefinitions("assets/spritesheet.json");
         //  asset_manager.loadSound("player_shoot", "assets/sounds/shoot.wav");
@@ -143,6 +156,7 @@ bool Asteroids::init(Engine::Application& engine) {
         m_ui_objects.push_back(std::move(UI_Lives));
     }
 
+
     {
         std::unique_ptr<Engine::Core::GameObject> player = std::make_unique<Engine::Core::GameObject>();
 
@@ -150,6 +164,7 @@ bool Asteroids::init(Engine::Application& engine) {
         animation_component.animations[static_cast<int>(Core::AnimationState::IDLE)]  = asset_manager.getAnimation("player");
         animation_component.animations[static_cast<int>(Core::AnimationState::DEATH)] = asset_manager.getAnimation("player_death");
         animation_component.current_state                                             = static_cast<int>(Core::AnimationState::IDLE);
+
 
         Engine::Physics::ColliderComponent collider_component;
         collider_component.bounds.w = animation_component.animations[static_cast<int>(Core::AnimationState::IDLE)]->frames[0].w;
@@ -163,6 +178,7 @@ bool Asteroids::init(Engine::Application& engine) {
         sound_component.sounds[static_cast<int>(Core::SoundState::IDLE)] = "fastinvader1";  // asset_manager.getSound("fastinvader1");
         sound_component.current_state                                    = static_cast<int>(Core::SoundState::IDLE);
         player->addComponent<Engine::Audio::SoundComponent>(std::move(sound_component));
+
 
         player->addComponent<Engine::Core::TransformComponent>();
         player->getComponent<Engine::Core::TransformComponent>().position = glm::vec2(400, 750);
@@ -179,11 +195,14 @@ bool Asteroids::init(Engine::Application& engine) {
         m_objects.push_back(std::move(player));
     }
 
+
     for (int k = 0; k < 4; k++) {
+
         glm::vec2 wall_offset(100 + k * 180, 630);
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
+
                 {
                     std::unique_ptr<Engine::Core::GameObject> wall    = std::make_unique<Engine::Core::GameObject>();
                     std::string                               wall_id = "wall_" + std::to_string(k) + "_" + std::to_string(i) + "_" + std::to_string(j);
@@ -209,6 +228,7 @@ bool Asteroids::init(Engine::Application& engine) {
                     // sound_component.current_state = static_cast<int>( Core::SoundState::IDLE );
                     // wall->addComponent<Engine::Audio::SoundComponent>(std::move(sound_component));
 
+
                     wall->addComponent<Engine::Core::TransformComponent>();
                     wall->getComponent<Engine::Core::TransformComponent>().position = wall_offset + glm::vec2(i * 11 * 2, j * 8 * 2);
                     wall->getComponent<Engine::Core::TransformComponent>().scale    = 2;
@@ -218,8 +238,10 @@ bool Asteroids::init(Engine::Application& engine) {
                     wall->getComponent<Health::HealthComponent>().max_health     = 400;
                     wall->getComponent<Health::HealthComponent>().current_health = 400;
 
+
                     m_objects.push_back(std::move(wall));
                 }
+
 
                 {
                     std::unique_ptr<Engine::Core::GameObject> wall = std::make_unique<Engine::Core::GameObject>();
@@ -246,6 +268,7 @@ bool Asteroids::init(Engine::Application& engine) {
                     // sound_component.current_state = static_cast<int>( Core::SoundState::IDLE );
                     // wall->addComponent<Engine::Audio::SoundComponent>(std::move(sound_component));
 
+
                     wall->addComponent<Engine::Core::TransformComponent>();
                     wall->getComponent<Engine::Core::TransformComponent>().position = wall_offset + glm::vec2(i * 11 * 2, j * 8 * 2);
                     wall->getComponent<Engine::Core::TransformComponent>().scale    = 2;
@@ -261,6 +284,7 @@ bool Asteroids::init(Engine::Application& engine) {
         }
     }
 
+
     std::size_t                      N             = 11;
     std::size_t                      M             = 5;
     std::size_t                      spacing       = 60;
@@ -269,7 +293,9 @@ bool Asteroids::init(Engine::Application& engine) {
                                                       Core::InvaderType::INVADER_C, Core::InvaderType::INVADER_C};
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < M; j++) {
+
             std::unique_ptr<Engine::Core::GameObject> enemy = std::make_unique<Engine::Core::GameObject>();
+
 
             Engine::Graphics::AnimationComponent animation_component;
             animation_component.animations[static_cast<int>(Core::AnimationState::IDLE)]  = asset_manager.getAnimation(s_enemy_types[j]);
@@ -284,6 +310,7 @@ bool Asteroids::init(Engine::Application& engine) {
             collider_component.mask     = Engine::Physics::CollisionLayer::PLAYER_BULLET | Engine::Physics::CollisionLayer::PLAYER;
             enemy->addComponent<Engine::Physics::ColliderComponent>(std::move(collider_component));
             enemy->addComponent<Engine::Graphics::AnimationComponent>(std::move(animation_component));
+
 
             Engine::Audio::SoundComponent sound_component;
             sound_component.sounds[static_cast<int>(Core::SoundState::IDLE)] = "fastinvader1";  // asset_manager.getSound("fastinvader1");
@@ -310,7 +337,9 @@ bool Asteroids::init(Engine::Application& engine) {
         }
     }
 
+
     for (int i = 0; i < N * M + 1; i++) {
+
         std::unique_ptr<Engine::Core::GameObject> bullet = std::make_unique<Engine::Core::GameObject>();
 
         Engine::Graphics::AnimationComponent animation_component;
@@ -323,6 +352,7 @@ bool Asteroids::init(Engine::Application& engine) {
         animation_component.current_state = static_cast<int>(Core::EmittorState::PLAYER);
         animation_component.speed         = 30.0f;
 
+
         Engine::Physics::ColliderComponent collider_component;
         collider_component.bounds.w = animation_component.animations[static_cast<int>(Core::EmittorState::PLAYER)]->frames[0].w;
         collider_component.bounds.h = animation_component.animations[static_cast<int>(Core::EmittorState::PLAYER)]->frames[0].h;
@@ -330,6 +360,7 @@ bool Asteroids::init(Engine::Application& engine) {
         collider_component.mask     = Engine::Physics::CollisionLayer::PLAYER;
         bullet->addComponent<Engine::Physics::ColliderComponent>();
         bullet->addComponent<Engine::Graphics::AnimationComponent>(std::move(animation_component));
+
 
         Engine::Audio::SoundComponent sound_component;
         sound_component.sounds[static_cast<int>(Core::SoundState::IDLE)] = "shoot";  // asset_manager.getSound("fastinvader1");
@@ -356,20 +387,26 @@ bool Asteroids::init(Engine::Application& engine) {
     return true;
 }
 
+
 void Asteroids::handleInput(Engine::Input::InputManager& input_manager) {
+
     std::unique_ptr<Engine::Core::IGameState> new_state = m_state->handleInput(input_manager);
 
     if (new_state != nullptr) {
+
         m_state->onExit();
         m_state = std::move(new_state);
         m_state->onEnter();
     }
 }
 
+
 bool Asteroids::update(float deltatime, Engine::Application& engine) {
+
     std::unique_ptr<Engine::Core::IGameState> new_state = m_state->update(deltatime, engine);
 
     if (new_state != nullptr) {
+
         m_state->onExit();
         m_state = std::move(new_state);
         m_state->onEnter();

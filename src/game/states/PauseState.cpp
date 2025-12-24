@@ -10,18 +10,24 @@
 #include "engine/modules/physics/PhysicsModule.h"
 #include "engine/modules/rendering/RenderModule.h"
 
+
 namespace Game::State {
 PauseState::PauseState(Asteroids& game) : m_game(game) {}
 
+
 PauseState::~PauseState() = default;
 
+
 std::unique_ptr<Engine::Core::IGameState> PauseState::handleInput(Engine::Input::InputManager& input_manager) {
+
     if (input_manager.wasKeyPressed(Engine::Input::Key::ESCAPE)) return std::make_unique<RunState>(m_game);
 
     return nullptr;
 }
 
 std::unique_ptr<Engine::Core::IGameState> PauseState::update(float deltatime, Engine::Application& engine) {
+
+
     std::unique_ptr<Engine::Core::GameObject> Pause = std::make_unique<Engine::Core::GameObject>();
 
     Engine::Assets::Font* font = engine.getAssetManager().getFont("pixel", 72);
@@ -32,6 +38,7 @@ std::unique_ptr<Engine::Core::IGameState> PauseState::update(float deltatime, En
 }
 
 void PauseState::render(Engine::Graphics::RenderSystem& renderer) {
+
     renderer.renderWorld(m_game.getGameObjects());
     renderer.renderUI(m_game.getUIObjects());
 

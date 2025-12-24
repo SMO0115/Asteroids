@@ -14,17 +14,21 @@
 #include "engine/core/CoreModule.h"
 #include "engine/modules/assets/AssetModule.h"
 
+
 namespace Engine::Graphics {
 RenderSystem::RenderSystem() = default;
 RenderSystem::~RenderSystem() {
+
     SDL_DestroyRenderer(m_renderer);
     SDL_DestroyWindow(m_window);
+
 
     TTF_Quit();
     SDL_Quit();
 }
 
 bool RenderSystem::init(const std::string& title, std::size_t width, std::size_t height) {
+
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "Failed to initialize SDL Video: " << SDL_GetError() << std::endl;
         return false;
@@ -46,6 +50,7 @@ bool RenderSystem::init(const std::string& title, std::size_t width, std::size_t
         std::cerr << "IMG_Init Error: " << IMG_GetError() << std::endl;
     }
 
+
     SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
 
     if (TTF_Init() == -1) {
@@ -57,6 +62,7 @@ bool RenderSystem::init(const std::string& title, std::size_t width, std::size_t
 }
 
 void RenderSystem::beginFrame() const {
+
     SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
     SDL_RenderClear(m_renderer);
 }
@@ -64,7 +70,9 @@ void RenderSystem::beginFrame() const {
 void RenderSystem::endFrame() const { SDL_RenderPresent(m_renderer); }
 
 void RenderSystem::renderUI(const std::vector<std::unique_ptr<Core::GameObject> >& ui_objects) const {
+
     for (const auto& object : ui_objects) {
+
         if (!object->isActive()) continue;
 
         UITextComponent& text = object->getComponent<UITextComponent>();
@@ -72,8 +80,11 @@ void RenderSystem::renderUI(const std::vector<std::unique_ptr<Core::GameObject> 
     }
 }
 
+
 void RenderSystem::renderWorld(const std::vector<std::unique_ptr<Core::GameObject> >& game_objects) const {
+
     for (auto& object : game_objects) {
+
         if (!object->isActive()) continue;
 
         SpriteComponent&          sprite    = object->getComponent<SpriteComponent>();
@@ -83,7 +94,10 @@ void RenderSystem::renderWorld(const std::vector<std::unique_ptr<Core::GameObjec
     }
 }
 
+
 void RenderSystem::draw(const SpriteComponent& sprite, const Core::TransformComponent& transform) const {
+
+
     if (sprite.texture == nullptr) return;
 
     SDL_Rect srcRect = {sprite.sourceRect.x, sprite.sourceRect.y, sprite.sourceRect.w, sprite.sourceRect.h};
@@ -99,18 +113,24 @@ void RenderSystem::draw(const SpriteComponent& sprite, const Core::TransformComp
     SDL_RenderCopy(m_renderer, sprite.texture->texture, &srcRect, &destRect);
 }
 
+
 void RenderSystem::drawRect(const Core::Rect& rect, const Core::Color& color) const {
+
     SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
     SDL_Rect sdl_rect = {rect.x, rect.y, rect.w, rect.h};
     SDL_RenderFillRect(m_renderer, &sdl_rect);
 }
 
+
 void RenderSystem::drawCircle(int centerX, int centerY, int outerRadius, int innerRadius, const Core::Color& color) const {
+
     const int outerRadiusSq = outerRadius * outerRadius;
     const int innerRadiusSq = innerRadius * innerRadius;
 
+
     for (int y = -outerRadius; y <= outerRadius; ++y) {
         for (int x = -outerRadius; x <= outerRadius; ++x) {
+
             int distanceSq = x * x + y * y;
 
             if (distanceSq >= innerRadiusSq && distanceSq <= outerRadiusSq) SDL_RenderDrawPoint(m_renderer, centerX + x, centerY + y);
@@ -118,12 +138,17 @@ void RenderSystem::drawCircle(int centerX, int centerY, int outerRadius, int inn
     }
 }
 
+
 void RenderSystem::drawLine(int x1, int y1, int x2, int y2, const Core::Color& color) const {
+
     SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
     SDL_RenderDrawLine(m_renderer, x1, y1, x2, y2);
 }
 
+
 void RenderSystem::drawText(const UITextComponent& text) const {
+
+
     auto font = text.font;
     if (!font) return;
 
@@ -142,7 +167,9 @@ void RenderSystem::drawText(const UITextComponent& text) const {
     SDL_DestroyTexture(text_texture);
 }
 
+
 void RenderSystem::getTextSize(const std::string& text, int* width, int* height, TTF_Font* font) const {
+
     assert(font != nullptr);
 
     TTF_SizeText(font, text.c_str(), width, height);

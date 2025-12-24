@@ -14,17 +14,23 @@
 #include "game/modules/control/ControlModul.h"
 #include "game/modules/health/HealthModule.h"
 
+
 namespace Game::UI {
 void ScoreSystem::update(float deltaTime, Events::GameEventBus& game_event_bus, GameStateComponent& game_state) {
+
     for (const auto& event : game_event_bus.getEvents<Events::DeathEvent>()) {
+
         if (event.object->hasComponent<Control::PlayerComponent>()) {
+
             game_state.lives -= 1;
 
             if (game_state.lives > 0) {
+
                 event.object->getComponent<Engine::Core::TransformComponent>().position = glm::vec2(400, 750);
                 ;
                 event.object->getComponent<Engine::Graphics::AnimationComponent>().current_state = static_cast<int>(Core::AnimationState::IDLE);
                 event.object->setActive(true);
+
 
                 event.object->removeComponent<Health::LifetimeComponent>();
 
@@ -43,6 +49,7 @@ void ScoreSystem::update(float deltaTime, Events::GameEventBus& game_event_bus, 
         }
 
         if (event.object->hasComponent<Control::AIComponent>()) {
+
             game_state.score += 100;
             game_state.num_invaders--;
         }

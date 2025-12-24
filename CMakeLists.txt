@@ -48,3 +48,6 @@ FetchContent_MakeAvailable(SDL2 SDL_ttf SDL_image SDL_mixer yyjson)
 
 add_subdirectory(src/engine)
 add_subdirectory(src/game)
+
+enable_testing()
+add_subdirectory(tests)

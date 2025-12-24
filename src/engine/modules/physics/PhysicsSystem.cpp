@@ -9,7 +9,10 @@
 
 namespace Engine::Physics {
 void PhysicsSystem::update(float deltatime, std::vector<std::unique_ptr<Core::GameObject> >& game_objects) {
+
+
     for (const auto& object : game_objects) {
+
         if (!object->hasComponent<PhysicsComponent>()) continue;
         if (!object->hasComponent<Core::TransformComponent>()) continue;
 

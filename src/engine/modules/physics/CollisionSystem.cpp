@@ -5,10 +5,12 @@
 #include <iostream>
 #include "engine/core/CoreModule.h"
 
+
 #include "ColliderComponent.h"
 #include "CollisionSystem.h"
 
 #include "engine/events/EventBus.h"
+
 
 namespace Engine::Physics {
 
@@ -19,6 +21,8 @@ struct ColliderCache {
 };
 
 void CollisionSystem::update(Events::EngineEventBus& event_bus, const std::vector<std::unique_ptr<Core::GameObject>>& game_objects) {
+
+
     std::vector<ColliderCache> active_colliders;
     active_colliders.reserve(game_objects.size());  // Prevent allocations
 
@@ -38,11 +42,14 @@ void CollisionSystem::update(Events::EngineEventBus& event_bus, const std::vecto
         }
     }
 
+
     size_t count = active_colliders.size();
     for (size_t i = 0; i < count; ++i) {
+
         ColliderCache& cache_a = active_colliders[i];
 
         for (size_t j = i + 1; j < count; ++j) {
+
             ColliderCache& cache_b = active_colliders[j];
 
             bool a_hits_b = static_cast<int>(cache_a.col->mask & cache_b.col->layer) != 0;
@@ -51,6 +58,7 @@ void CollisionSystem::update(Events::EngineEventBus& event_bus, const std::vecto
             if (!a_hits_b && !b_hits_a) continue;
 
             if (checkCollisionAABB_(*cache_a.trans, *cache_b.trans, cache_a.col->bounds, cache_b.col->bounds)) {
+
                 if (a_hits_b) event_bus.publish<Events::CollisionEvent>(cache_a.obj, cache_b.obj);
                 if (b_hits_a) event_bus.publish<Events::CollisionEvent>(cache_b.obj, cache_a.obj);
             }
@@ -58,8 +66,10 @@ void CollisionSystem::update(Events::EngineEventBus& event_bus, const std::vecto
     }
 }
 
+
 bool CollisionSystem::checkCollisionAABB_(const Core::TransformComponent& trans_a, const Core::TransformComponent& trans_b, const Core::Rect& obj_a,
                                           const Core::Rect& obj_b) {
+
     Core::Rect box_a = {
         static_cast<int>(trans_a.position.x),
         static_cast<int>(trans_a.position.y),
@@ -73,6 +83,7 @@ bool CollisionSystem::checkCollisionAABB_(const Core::TransformComponent& trans_
         static_cast<int>(trans_b.scale * obj_b.w),
         static_cast<int>(trans_b.scale * obj_b.h),
     };
+
 
     if (box_a.x - box_a.w / 2 < box_b.x + box_b.w / 2 && box_a.x + box_a.w / 2 > box_b.x - box_b.w / 2 && box_a.y - box_a.h / 2 < box_b.y + box_b.h / 2 &&
         box_a.y + box_a.h / 2 > box_b.y - box_b.h / 2)

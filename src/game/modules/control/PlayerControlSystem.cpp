@@ -2,6 +2,7 @@
 // Created by marcel on 11/8/25.
 //
 
+
 #include "PlayerControlSystem.h"
 
 #include "engine/core/CoreModule.h"
@@ -11,13 +12,17 @@
 #include "engine/modules/physics/PhysicsModule.h"
 #include "engine/modules/rendering/RenderModule.h"
 
+
 namespace Game::Control {
 PlayerControlSystem::PlayerControlSystem()  = default;
 PlayerControlSystem::~PlayerControlSystem() = default;
 
+
 void PlayerControlSystem::update(float deltaTime, Engine::Input::InputManager& input_manager, Events::GameEventBus& game_event_bus,
                                  Engine::Events::EngineEventBus& engine_event_bus, const std::vector<std::unique_ptr<Engine::Core::GameObject>>& game_objects) {
+
     for (auto& object : game_objects) {
+
         if (!object->hasComponent<Control::PlayerComponent>()) continue;
         if (!object->isActive()) continue;
 
@@ -26,11 +31,13 @@ void PlayerControlSystem::update(float deltaTime, Engine::Input::InputManager& i
         Engine::Graphics::SpriteComponent& sprite_component  = object->getComponent<Engine::Graphics::SpriteComponent>();
         Control::PlayerComponent&          player_component  = object->getComponent<Control::PlayerComponent>();
 
+
         player_component.shoot_cooldown_timer -= deltaTime;
         physics_component.velocity.x = 0;
 
         const int frame_left  = transform.position.x - sprite_component.sourceRect.w - 5;
         const int frame_right = transform.position.x + sprite_component.sourceRect.w + 5;
+
 
         const float moveSpeed = 5.0f;
         if (input_manager.isKeyHeld(Engine::Input::Key::LEFT)) {
@@ -45,7 +52,9 @@ void PlayerControlSystem::update(float deltaTime, Engine::Input::InputManager& i
         }
 
         if (input_manager.isKeyHeld(Engine::Input::Key::SPACE)) {
+
             if (player_component.shoot_cooldown_timer <= 0) {
+
                 player_component.shoot_cooldown_timer = player_component.shoot_cooldown;
 
                 auto position = transform.position;

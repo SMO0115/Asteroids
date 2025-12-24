@@ -142,7 +142,34 @@ def analyze_code():
         print("[CHECK] Analysis finished with warnings.")
 
 
+def test_project():
+    """Builds and runs the Unit Tests."""
+    print("[TEST] Building Tests...")
 
+    # 1. Ensure Configured
+    if not os.path.exists(os.path.join(BUILD_DIR, "CMakeCache.txt")):
+        configure()
+
+    # 2. Build ONLY the Test Executable (Faster than building the whole game)
+    # We use -t AsteroidsTests to target just that executable
+    cmd_build = f"cmake --build {BUILD_DIR} --config Debug --target AsteroidsTests"
+    run_command(cmd_build)
+
+    print("[TEST] Running Google Test...")
+
+    # 3. Run the Test Executable
+    if platform.system() == "Windows":
+        exe_path = os.path.join(BUILD_DIR, "tests", "Debug", "AsteroidsTests.exe")
+    else:
+        # Linux usually places it here:
+        exe_path = os.path.join(BUILD_DIR, "tests", "AsteroidsTests")
+
+    if not os.path.exists(exe_path):
+        print(f"[ERROR] Test executable not found at: {exe_path}")
+        return
+
+    # Run it!
+    run_command(f'"{exe_path}"')
 
 def main():
     if len(sys.argv) < 2:
@@ -154,6 +181,7 @@ def main():
     elif action == "build": build()
     elif action == "format": format_code()
     elif action == "analyze": analyze_code()
+    elif action == "test": test_project()
     else: print("Unknown command")
 
 if __name__ == "__main__":

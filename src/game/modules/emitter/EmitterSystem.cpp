@@ -11,13 +11,18 @@
 #include "game/modules/emitter/EmitterComponent.h"
 #include "game/modules/health/HealthModule.h"
 
+
 #include "engine/events/EventBus.h"
 #include "game/events/GameEvents.h"
 
+
 namespace Game::Emitter {
 void EmitterSystem::update(float deltaTime, Events::GameEventBus& event_bus, std::vector<std::unique_ptr<Engine::Core::GameObject> >& game_objects) {
+
+
     for (const Events::EmitterEvent& event : event_bus.getEvents<Events::EmitterEvent>()) {
         for (auto& object : game_objects) {
+
             if (object->isActive()) continue;
             if (!object->hasComponent<Emitter::EmitterComponent>()) continue;
             if (!object->hasComponent<Engine::Graphics::AnimationComponent>()) continue;
@@ -31,6 +36,7 @@ void EmitterSystem::update(float deltaTime, Events::GameEventBus& event_bus, std
             Engine::Physics::PhysicsComponent&    physics   = object->getComponent<Engine::Physics::PhysicsComponent>();
             Engine::Physics::ColliderComponent&   collider  = object->getComponent<Engine::Physics::ColliderComponent>();
             Health::HealthComponent&              health    = object->getComponent<Health::HealthComponent>();
+
 
             object->setActive(true);
 
@@ -54,7 +60,10 @@ void EmitterSystem::update(float deltaTime, Events::GameEventBus& event_bus, std
         }
     }
 
+
     for (auto& object : game_objects) {
+
+
         if (!object->isActive()) continue;
         if (!object->hasComponent<Emitter::EmitterComponent>()) continue;
 

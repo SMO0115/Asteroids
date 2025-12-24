@@ -7,9 +7,12 @@
 #include "engine/core/CoreModule.h"
 #include "game/modules/health/LifetimeComponent.h"
 
+
 namespace Game::Health {
 void LifetimeSystem::update(float deltaTime, Events::GameEventBus& event_bus, std::vector<std::unique_ptr<Engine::Core::GameObject> >& game_objects) {
+
     for (auto& object : game_objects) {
+
         if (!object->isActive()) continue;
         if (!object->hasComponent<LifetimeComponent>()) continue;
 

@@ -22,8 +22,10 @@
 
 #include "engine/modules/rendering/RenderModule.h"
 
+
 namespace Engine::Assets {
 bool AssetManager::loadTexture(Graphics::RenderSystem& renderer, const std::string& id, const std::string& path) {
+
     SDL_Surface* temp_surface = IMG_Load(path.c_str());
 
     if (temp_surface == nullptr) {
@@ -39,6 +41,7 @@ bool AssetManager::loadTexture(Graphics::RenderSystem& renderer, const std::stri
         return false;
     }
 
+
     auto engine_texture = std::make_unique<Texture>();
 
     engine_texture->texture = sdl_texture;
@@ -51,6 +54,7 @@ bool AssetManager::loadTexture(Graphics::RenderSystem& renderer, const std::stri
 }
 
 bool AssetManager::loadAnimation(const std::string& id, const std::string& path) {
+
     std::ifstream file(path);
     if (!file.is_open()) {
         std::cerr << "Error: Could not open JSON file: " << path << std::endl;
@@ -71,6 +75,7 @@ bool AssetManager::loadAnimation(const std::string& id, const std::string& path)
     yyjson_val* root   = yyjson_doc_get_root(doc);
     yyjson_val* frames = yyjson_obj_get(root, "frames");
 
+
     auto texture_it = m_textures.find(id);
     if (texture_it == m_textures.end()) {
         std::cerr << "Error: No texture found with ID: " << id << std::endl;
@@ -85,6 +90,7 @@ bool AssetManager::loadAnimation(const std::string& id, const std::string& path)
     yyjson_val* frame;
     const float DEFAULT_DURATION = 1.0f;  // Your default, e.g., 100ms
     yyjson_arr_foreach(frames, idx, max, frame) {
+
         std::string filename = yyjson_get_str(yyjson_obj_get(frame, "filename"));
 
         yyjson_val* frame_obj = yyjson_obj_get(frame, "frame");
@@ -112,7 +118,9 @@ bool AssetManager::loadAnimation(const std::string& id, const std::string& path)
     return true;
 }
 
+
 bool AssetManager::loadSound(const std::string& id, const std::string& path) {
+
     Mix_Chunk* shootSound = Mix_LoadWAV(path.c_str());
     Mix_VolumeChunk(shootSound, 5);
     if (shootSound == nullptr) {
@@ -128,7 +136,9 @@ bool AssetManager::loadSound(const std::string& id, const std::string& path) {
     return true;
 }
 
+
 Texture* AssetManager::getTexture(const std::string& id) const {
+
     auto it = m_textures.find(id);
     if (it != m_textures.end()) return it->second.get();
 
@@ -136,7 +146,9 @@ Texture* AssetManager::getTexture(const std::string& id) const {
     return nullptr;
 }
 
+
 Animation* AssetManager::getAnimation(const std::string& id) const {
+
     auto it = m_animations.find(id);
     if (it != m_animations.end()) return it->second.get();
 
@@ -144,7 +156,9 @@ Animation* AssetManager::getAnimation(const std::string& id) const {
     return nullptr;
 }
 
+
 Sound* AssetManager::getSound(const std::string& id) const {
+
     auto it = m_sounds.find(id);
     if (it != m_sounds.end()) return it->second.get();
 
@@ -152,15 +166,18 @@ Sound* AssetManager::getSound(const std::string& id) const {
     return nullptr;
 }
 
+
 void AssetManager::loadFont(const std::string& id, const std::string& path) { m_font_paths[id] = path; }
 
 Font* AssetManager::getFont(const std::string& id, std::size_t size) {
+
     std::string key = id + "_" + std::to_string(size);
 
     auto it = m_loaded_fonts.find(key);
     if (it != m_loaded_fonts.end()) {
         return it->second.get();
     }
+
 
     auto pathIt = m_font_paths.find(id);
     if (pathIt == m_font_paths.end()) {

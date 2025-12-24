@@ -4,15 +4,19 @@
 
 #include "InputManager.h"
 
+
 namespace Engine::Input {
 
 void InputManager::processInput() {
+
     m_previous_key_states = m_current_key_states;
 
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
+
         if (event.type == SDL_QUIT)
             m_current_key_states[Key::QUIT] = true;
+
 
         else if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
             Key mapped_key = mapKey_(event.key.keysym.sym);
@@ -28,6 +32,7 @@ bool InputManager::wasKeyPressed(Key key) { return m_current_key_states[key] && 
 bool InputManager::isKeyHeld(Key key) { return m_current_key_states[key]; }
 
 Key InputManager::mapKey_(SDL_Keycode sdl_key) {
+
     switch (sdl_key) {
         case SDLK_UP:
             return Key::UP;
