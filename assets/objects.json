@@ -1,0 +1,142 @@
+{
+  "assets": [
+    {
+      "id": "invader_A",
+      "texture": "assets/Sprites/invader_A.png",
+      "animation": "assets/Sprites/invader_A.json"
+    },
+    {
+      "id": "invader_B",
+      "texture": "assets/Sprites/invader_B.png",
+      "animation": "assets/Sprites/invader_B.json"
+    },
+    {
+      "id": "invader_C",
+      "texture": "assets/Sprites/invader_C.png",
+      "animation": "assets/Sprites/invader_C.json"
+    },
+    {
+      "id": "player_idle",
+      "texture": "assets/Sprites/player.png",
+      "animation": "assets/Sprites/player.json"
+    },
+    {
+      "id": "UFO",
+      "texture": "assets/Sprites/UFO.png",
+      "animation": "assets/Sprites/UFO.json"
+    },
+    {
+      "id": "player_death",
+      "texture": "assets/Sprites/player_death.png",
+      "animation": "assets/Sprites/player_death.json"
+    },
+    {
+      "id": "invader_death",
+      "texture": "assets/Sprites/invader_death.png",
+      "animation": "assets/Sprites/invader_death.json"
+    },
+    {
+      "id": "wall",
+      "texture": "assets/Sprites/wall.png",
+      "animation": "assets/Sprites/wall.json"
+    },
+    {
+      "id": "wall_destruction",
+      "texture": "assets/Sprites/destruction.png",
+      "animation": "assets/Sprites/invader_death.json"
+    },
+    {
+      "id": "missile",
+      "texture": "assets/Sprites/missile.png",
+      "animation": "assets/Sprites/missile.json"
+    },
+    {
+      "id": "projectile_A",
+      "texture": "assets/Sprites/projectile_A.png",
+      "animation": "assets/Sprites/projectile_A.json"
+    },
+    {
+      "id": "projectile_B",
+      "texture": "assets/Sprites/projectile_B.png",
+      "animation": "assets/Sprites/projectile_B.json"
+    },
+    {
+      "id": "projectile_C",
+      "texture": "assets/Sprites/projectile_C.png",
+      "animation": "assets/Sprites/projectile_C.json"
+    },
+    {
+      "id": "player_missile",
+      "texture": "assets/Sprites/player_missile.png",
+      "animation": "assets/Sprites/player_missile.json"
+    },
+    {
+      "id": "explosion",
+      "sound": "assets/Audio/explosion.wav"
+    },
+    {
+      "id": "player_shoot",
+      "sound": "assets/Audio/shoot.wav"
+    },
+    {
+      "id": "fastinvader1",
+      "sound": "assets/Audio/fastinvader1.wav"
+    },
+    {
+      "id": "fastinvader2",
+      "sound": "assets/Audio/fastinvader2.wav"
+    },
+    {
+      "id": "fastinvader3",
+      "sound": "assets/Audio/fastinvader3.wav"
+    },
+    {
+      "id": "fastinvader4",
+      "sound": "assets/Audio/fastinvader4.wav"
+    },
+    {
+      "id": "ufo_highpitch",
+      "sound": "assets/Audio/ufo_highpitch.wav"
+    },
+    {
+      "id": "ufo_lowpitch",
+      "sound": "assets/Audio/ufo_lowpitch.wav"
+    },
+    {
+      "id": "shoot",
+      "sound": "assets/Audio/shoot.wav"
+    },
+    {
+      "id": "pixel",
+      "font": "assets/Fonts/PixelifySans.ttf",
+      "size": 24
+    }
+  ],
+
+
+  "objects": [
+    {
+      "name": "Player",
+      "components": {
+
+        "Transform": {
+          "position": {
+            "x": 400,
+            "y": 750
+          },
+          "scale": 2.0,
+          "rotation": 1.0
+        },
+        "Sprite": {},
+        "Animation": {
+          "animations_ids": {
+            "0": "player_idle",
+            "1": "player_death"
+          },
+          "current_state": 0,
+          "speed": 1.0
+        }
+      }
+    }
+  ]
+}

@@ -12,7 +12,7 @@ FetchContent_MakeAvailable(googletest)
 # 2. Define the Test Executable
 add_executable(AsteroidsTests
         SanityTest.cpp
-        # Add other test files here later...
+        CollisionTest.cpp
 )
 
 # 3. Link dependencies

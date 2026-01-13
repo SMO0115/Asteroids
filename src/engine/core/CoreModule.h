@@ -14,11 +14,13 @@
 
 
 #include "glm/glm.hpp"
-#include "BaseComponent.h"
+#include "components/BaseComponent.h"
 #include "Application.h"
 #include "GameObject.h"
-#include "IGame.h"
-#include "IGameState.h"
+#include "interfaces/IGame.h"
+#include "interfaces/IGameState.h"
 #include "TimeManager.h"
+#include "ScriptManager.h"
+#include "Log.h"
 
 #include "components/TransformComponent.h"

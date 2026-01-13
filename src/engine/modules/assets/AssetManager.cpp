@@ -24,7 +24,7 @@
 
 
 namespace Engine::Assets {
-bool AssetManager::loadTexture(Graphics::RenderSystem& renderer, const std::string& id, const std::string& path) {
+bool AssetManager::loadTexture(const std::string& id, const std::string& path) {
 
     SDL_Surface* temp_surface = IMG_Load(path.c_str());
 
@@ -33,7 +33,7 @@ bool AssetManager::loadTexture(Graphics::RenderSystem& renderer, const std::stri
         return false;
     }
 
-    SDL_Texture* sdl_texture = SDL_CreateTextureFromSurface(renderer.getSDLRenderer(), temp_surface);
+    SDL_Texture* sdl_texture = SDL_CreateTextureFromSurface(m_renderer->getSDLRenderer(), temp_surface);
     SDL_FreeSurface(temp_surface);
 
     if (sdl_texture == nullptr) {

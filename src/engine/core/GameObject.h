@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <typeindex>
 #include <utility>
-#include "BaseComponent.h"
+#include "components/BaseComponent.h"
 
 
 namespace Engine::Core {

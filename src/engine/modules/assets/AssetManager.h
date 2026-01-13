@@ -23,10 +23,10 @@ struct Sound;
 
 class AssetManager {
 public:
-    AssetManager()  = default;
+    AssetManager(Graphics::RenderSystem* renderer) : m_renderer(renderer) {};
     ~AssetManager() = default;
 
-    bool loadTexture(Graphics::RenderSystem& renderer, const std::string& id, const std::string& path);
+    bool loadTexture(const std::string& id, const std::string& path);
     bool loadAnimation(const std::string& id, const std::string& path);
     bool loadSound(const std::string& id, const std::string& path);
     void loadFont(const std::string& id, const std::string& path);
@@ -37,6 +37,8 @@ public:
     Font*      getFont(const std::string& id, std::size_t size);
 
 private:
+    Graphics::RenderSystem*                                     m_renderer;
+
     std::unordered_map<std::string, std::unique_ptr<Texture>>   m_textures;
     std::unordered_map<std::string, std::unique_ptr<Animation>> m_animations;
     std::unordered_map<std::string, std::unique_ptr<Sound>>     m_sounds;

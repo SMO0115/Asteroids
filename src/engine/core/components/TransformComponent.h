@@ -4,7 +4,7 @@
 
 #pragma once
 #include <glm/vec2.hpp>
-#include "engine/core//BaseComponent.h"
+#include "BaseComponent.h"
 
 namespace Engine::Core {
     struct TransformComponent : public BaseComponent {

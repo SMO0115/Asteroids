@@ -6,7 +6,7 @@
 
 #include <glm/vec2.hpp>
 
-#include "engine/core/BaseComponent.h"
+#include "../../core/components/BaseComponent.h"
 
 namespace Engine::Physics {
 struct PhysicsComponent : public Core::BaseComponent {

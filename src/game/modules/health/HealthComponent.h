@@ -5,7 +5,7 @@
 #pragma once
 #include <cstddef>
 
-#include "engine/core/BaseComponent.h"
+#include "../../../engine/core/components/BaseComponent.h"
 
 namespace Game::Health {
 struct HealthComponent : Engine::Core::BaseComponent {

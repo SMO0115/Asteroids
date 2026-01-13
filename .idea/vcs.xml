@@ -71,6 +71,8 @@
     <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/sdl_ttf-src/external/freetype" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/sdl_ttf-src/external/freetype/subprojects/dlg" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/sdl_ttf-src/external/harfbuzz" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/sol2-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/spdlog-src" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/cmake-build-debug/_deps/yyjson-src" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/cmake-build-release/_deps/sdl2-src" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/cmake-build-release/_deps/sdl_image-src" vcs="Git" />
@@ -106,6 +108,8 @@
     <mapping directory="$PROJECT_DIR$/cmake-build-release/_deps/sdl_ttf-src/external/freetype" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/cmake-build-release/_deps/sdl_ttf-src/external/freetype/subprojects/dlg" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/cmake-build-release/_deps/sdl_ttf-src/external/harfbuzz" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-release/_deps/sol2-src" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cmake-build-release/_deps/spdlog-src" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/cmake-build-release/_deps/yyjson-src" vcs="Git" />
   </component>
 </project>

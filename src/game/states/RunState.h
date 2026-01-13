@@ -5,7 +5,7 @@
 #pragma once
 #include <memory>
 
-#include "engine/core/IGameState.h"
+#include "../../engine/core/interfaces/IGameState.h"
 
 namespace Game {
 class Asteroids;

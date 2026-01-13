@@ -13,11 +13,16 @@
 #include "engine/modules/physics/PhysicsModule.h"
 #include "engine/modules/rendering/RenderModule.h"
 
-#include "IGame.h"
+#include "interfaces/IGame.h"
+#include "Log.h"
 
 
 #include "engine/core/TimeManager.h"
+#include "engine/core/ScriptManager.h"
 #include "engine/events/EventBus.h"
+
+#include "engine/core/components/TransformComponent.h"
+
 
 
 namespace Engine {
@@ -26,17 +31,26 @@ Application::Application() {
     m_is_running     = 0;
     m_quit_requested = 0;
 
-    m_time_manager  = std::make_unique<Core::TimeManager>();
-    m_asset_manager = std::make_unique<Assets::AssetManager>();
-    m_input_manager = std::make_unique<Input::InputManager>();
-
     m_renderer         = std::make_unique<Graphics::RenderSystem>();
     m_animation_system = std::make_unique<Graphics::AnimationSystem>();
     m_sound_system     = std::make_unique<Audio::SoundSystem>();
     m_physics          = std::make_unique<Physics::PhysicsSystem>();
     m_collision_system = std::make_unique<Physics::CollisionSystem>();
 
+    m_time_manager  = std::make_unique<Core::TimeManager>();
+    m_asset_manager = std::make_unique<Assets::AssetManager>(m_renderer.get());
+    m_input_manager = std::make_unique<Input::InputManager>();
+
     m_event_bus = std::make_unique<Events::EngineEventBus>();
+
+    m_script_manager = std::make_unique<Core::ScriptManager>(*m_asset_manager);
+
+    // m_object_factory->registerComponent<Engine::Core::TransformComponent>("Transform");
+    // m_object_factory->registerComponent<Engine::Graphics::SpriteComponent>("Sprite");
+    // m_object_factory->registerComponent<Engine::Graphics::AnimationComponent>("Animation");
+    // m_object_factory->registerComponent<Engine::Graphics::UITextComponent>("UIText");
+
+    Core::Log::init();
 }
 
 Application::~Application() = default;

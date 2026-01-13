@@ -3,7 +3,7 @@
 //
 
 #pragma once
-#include "engine/core/BaseComponent.h"
+#include "../../../engine/core/components/BaseComponent.h"
 
 namespace Game::Emitter {
 struct EmitterComponent : public Engine::Core::BaseComponent {

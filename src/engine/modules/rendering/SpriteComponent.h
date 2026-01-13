@@ -4,8 +4,10 @@
 
 #pragma once
 
-#include "engine/core/BaseComponent.h"
+#include "../../core/components/BaseComponent.h"
 #include "engine/utils/Types.h"
+
+#include <string>
 
 namespace Engine::Assets {
 struct Texture;
@@ -13,8 +15,10 @@ struct Texture;
 
 namespace Engine::Graphics {
 struct SpriteComponent : public Core::BaseComponent {
-    Assets::Texture* texture;
+    std::string      texture_id;
+    Assets::Texture* texture = nullptr;
     Core::Rect       sourceRect;
     Core::Color      color = {255, 255, 255, 255};
+
 };
 }  // namespace Engine::Graphics

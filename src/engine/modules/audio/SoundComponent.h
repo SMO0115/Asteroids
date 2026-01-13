@@ -7,7 +7,7 @@
 #include <map>
 #include <string>
 
-#include "engine/core/BaseComponent.h"
+#include "../../core/components/BaseComponent.h"
 
 namespace Engine::Audio {
 struct SoundComponent : public Core::BaseComponent {

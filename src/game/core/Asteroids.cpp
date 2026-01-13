@@ -42,6 +42,7 @@ Asteroids::Asteroids() {
     m_ui_system             = std::make_unique<UI::UISystem>();
     m_emitter_system        = std::make_unique<Emitter::EmitterSystem>();
     m_event_bus             = std::make_unique<Events::GameEventBus>();
+
 }
 
 Asteroids::~Asteroids() {}
@@ -49,95 +50,19 @@ Asteroids::~Asteroids() {}
 
 bool Asteroids::init(Engine::Application& engine) {
 
+    engine.getScriptManager().runFile("assets/scripts/asset_loader.lua");
+
+
+
+
+
+
     m_game_session = std::make_unique<Engine::Core::GameObject>();
     m_game_session->addComponent<UI::GameStateComponent>(0, 3, 55);
 
 
     Engine::Assets::AssetManager&   asset_manager = engine.getAssetManager();
     Engine::Graphics::RenderSystem& renderer      = engine.getRenderer();
-
-    try {
-        // entity textures
-        asset_manager.loadTexture(renderer, "invader_A", "assets/Sprites/invader_A.png");
-        asset_manager.loadAnimation("invader_A", "assets/Sprites/invader_A.json");
-
-        asset_manager.loadTexture(renderer, "invader_B", "assets/Sprites/invader_B.png");
-        asset_manager.loadAnimation("invader_B", "assets/Sprites/invader_B.json");
-
-        asset_manager.loadTexture(renderer, "invader_C", "assets/Sprites/invader_C.png");
-        asset_manager.loadAnimation("invader_C", "assets/Sprites/invader_C.json");
-
-        asset_manager.loadTexture(renderer, "player", "assets/Sprites/player.png");
-        asset_manager.loadAnimation("player", "assets/Sprites/player.json");
-
-        asset_manager.loadTexture(renderer, "UFO", "assets/Sprites/UFO.png");
-        asset_manager.loadAnimation("UFO", "assets/Sprites/UFO.json");
-
-
-        asset_manager.loadTexture(renderer, "player_death", "assets/Sprites/player_death.png");
-        asset_manager.loadAnimation("player_death", "assets/Sprites/player_death.json");
-
-        asset_manager.loadTexture(renderer, "invader_death", "assets/Sprites/invader_death.png");
-        asset_manager.loadAnimation("invader_death", "assets/Sprites/invader_death.json");
-
-
-        for (int k = 0; k < 4; k++) {
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    std::string wall_id = "wall_" + std::to_string(k) + "_" + std::to_string(i) + "_" + std::to_string(j);
-                    asset_manager.loadTexture(renderer, wall_id, "assets/Sprites/wall.png");
-                    asset_manager.loadAnimation(wall_id, "assets/Sprites/wall.json");
-
-                    std::string wall_destruction_id = "wall_destruction_" + std::to_string(k) + "_" + std::to_string(i) + "_" + std::to_string(j);
-                    asset_manager.loadTexture(renderer, wall_destruction_id, "assets/Sprites/destruction.png");
-                    asset_manager.loadAnimation(wall_destruction_id, "assets/Sprites/invader_death.json");
-                }
-            }
-        }
-
-
-        asset_manager.loadTexture(renderer, "invader_death", "assets/Sprites/invader_death.png");
-        asset_manager.loadAnimation("invader_death", "assets/Sprites/invader_death.json");
-
-
-        // projectiles
-        asset_manager.loadTexture(renderer, "missile", "assets/Sprites/missile.png");
-        asset_manager.loadAnimation("missile", "assets/Sprites/missile.json");
-
-        asset_manager.loadTexture(renderer, "projectile_A", "assets/Sprites/projectile_A.png");
-        asset_manager.loadAnimation("projectile_A", "assets/Sprites/projectile_A.json");
-
-        asset_manager.loadTexture(renderer, "projectile_B", "assets/Sprites/projectile_B.png");
-        asset_manager.loadAnimation("projectile_B", "assets/Sprites/projectile_B.json");
-
-        asset_manager.loadTexture(renderer, "projectile_C", "assets/Sprites/projectile_C.png");
-        asset_manager.loadAnimation("projectile_C", "assets/Sprites/projectile_C.json");
-
-        asset_manager.loadTexture(renderer, "player_missile", "assets/Sprites/player_missile.png");
-        asset_manager.loadAnimation("player_missile", "assets/Sprites/player_missile.json");
-
-
-        // sounds
-        asset_manager.loadSound("explosion", "assets/Audio/explosion.wav");
-        asset_manager.loadSound("player_shoot", "assets/Audio/shoot.wav");
-        asset_manager.loadSound("fastinvader1", "assets/Audio/fastinvader1.wav");
-        asset_manager.loadSound("fastinvader2", "assets/Audio/fastinvader2.wav");
-        asset_manager.loadSound("fastinvader3", "assets/Audio/fastinvader3.wav");
-        asset_manager.loadSound("fastinvader4", "assets/Audio/fastinvader4.wav");
-        asset_manager.loadSound("ufo_highpitch", "assets/Audio/ufo_highpitch.wav");
-        asset_manager.loadSound("ufo_lowpitch", "assets/Audio/ufo_lowpitch.wav");
-        asset_manager.loadSound("shoot", "assets/Audio/shoot.wav");
-
-
-        asset_manager.loadFont("pixel", "assets/Fonts/PixelifySans.ttf");
-
-
-        // asset_manager.loadSpriteDefinitions("assets/spritesheet.json");
-        //  asset_manager.loadSound("player_shoot", "assets/sounds/shoot.wav");
-        //  asset_manager.loadSound("explosion", "assets/sounds/explosion.wav");
-    } catch (const std::exception& e) {
-        return false;
-    }
 
     {
         std::unique_ptr<Engine::Core::GameObject> UI_Score = std::make_unique<Engine::Core::GameObject>();

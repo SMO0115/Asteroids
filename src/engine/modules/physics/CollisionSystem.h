@@ -22,7 +22,7 @@ public:
 
     void update(Events::EngineEventBus& event_bus, const std::vector<std::unique_ptr<Core::GameObject> >& game_objects);
 
-private:
+
     bool checkCollisionAABB_(const Core::TransformComponent& trans_a, const Core::TransformComponent& trans_b, const Core::Rect& obj_a,
                              const Core::Rect& obj_b);
 };

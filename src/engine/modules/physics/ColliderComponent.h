@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "engine/core/BaseComponent.h"
+#include "../../core/components/BaseComponent.h"
 #include "engine/utils/Types.h"
 
 namespace Engine::Core {
