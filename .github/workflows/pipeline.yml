@@ -1,0 +1,40 @@
+name: Asteroids Engine CI
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # 2. Install Tools (Ninja, Clang, Clang-Tidy, Uncrustify)
+      - name: Install Build Tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build clang clang-tidy clang-format uncrustify python3
+
+      # 3. Install Game Dependencies (SDL2, Image, Mixer, TTF)
+      - name: Install SDL2 Deps
+        run: |
+          sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+
+      # 4. Check Formatting (Optional: Fail if code isn't formatted)
+      # We run the format script. If it changes any files, git status is dirty => Fail.
+      - name: Verify Code Formatting
+        run: |
+          python3 manage.py format
+          git diff --exit-code || (echo "Code is not formatted! Run 'python manage.py format' locally." && exit 1)
+
+      # 5. Static Analysis
+      - name: Static Analysis (Clang-Tidy)
+        run: python3 manage.py configure && python3 manage.py analyze
+
+      # 6. Build and Test
+      - name: Build and Unit Test
+        run: python3 manage.py test

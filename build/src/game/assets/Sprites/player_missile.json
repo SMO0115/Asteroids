@@ -1,0 +1,20 @@
+{"frames": [
+
+{
+	"filename": "Projectile_Player.png",
+	"frame": {"x":0,"y":0,"w":2,"h":8},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":2,"h":8},
+	"sourceSize": {"w":2,"h":8}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "player_missile.png",
+	"format": "RGBA8888",
+	"size": {"w":2,"h":8},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:040ea4c9870ee5bd22b3a7f5167149cc:2967682fdb704a60fbde9c2e947e7d17:450a96351d68b80dc5e4b3e52fd33e05$"
+}
+}

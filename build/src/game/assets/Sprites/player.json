@@ -1,0 +1,20 @@
+{"frames": [
+
+{
+	"filename": "space__0006_Player.png",
+	"frame": {"x":0,"y":0,"w":26,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":26,"h":16},
+	"sourceSize": {"w":26,"h":16}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "player.png",
+	"format": "RGBA8888",
+	"size": {"w":26,"h":16},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:6235397702f37f1677704d30f9568010:8ed00b5990aabf801a6ae7d0c6da3999:86d5339b780aedd87b35e2b7c0a7e11b$"
+}
+}

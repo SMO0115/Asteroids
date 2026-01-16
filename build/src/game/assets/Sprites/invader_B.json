@@ -1,0 +1,28 @@
+{"frames": [
+
+{
+	"filename": "space__0002_B1.png",
+	"frame": {"x":0,"y":0,"w":22,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":22,"h":16},
+	"sourceSize": {"w":22,"h":16}
+},
+{
+	"filename": "space__0003_B2.png",
+	"frame": {"x":22,"y":0,"w":22,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":22,"h":16},
+	"sourceSize": {"w":22,"h":16}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "invader_B.png",
+	"format": "RGBA8888",
+	"size": {"w":44,"h":16},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:111351350339209d22ebb751ffde7bb4:84523dd98ce0ab1c63fcc1a3acab4f2e:49782230199b478a6b8fef3d9fe6a727$"
+}
+}
