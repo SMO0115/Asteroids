@@ -61,4 +61,16 @@ end
 
 loadFont("pixel", "assets/Fonts/PixelifySans.ttf")
 
+SpawnEntity("Asteroid", {
+
+    -- The binding reads this table
+    Transform = {
+        x = 500,
+        y = 300,
+        rotation = 45.0,
+        scale = 2.5
+    }
+
+})
+
 print("[Lua] Assets loaded successfully.")

@@ -15,7 +15,7 @@
 namespace Engine::Core     { class IGame;           }
 namespace Engine::Core     { class TimeManager;     }
 namespace Engine::Core     { class ObjectFactory;   }
-namespace Engine::Core     { class ScriptManager;   }
+namespace Engine::Scripting{ class ScriptManager;   }
 namespace Engine::Graphics { class RenderSystem;    }
 namespace Engine::Graphics { class AnimationSystem; }
 namespace Engine::Audio    { class SoundSystem;     }
@@ -40,7 +40,7 @@ namespace Engine {
         bool                                                isRunning()             const   { return m_is_running;          };
 
 
-        Core::ScriptManager&                                getScriptManager()      const   { return *m_script_manager;     };
+        Scripting::ScriptManager&                           getScriptManager()      const   { return *m_script_manager;     };
 
         Core::TimeManager&                                  getTimeManager()        const   { return *m_time_manager;       };
         Assets::AssetManager&                               getAssetManager()       const   { return *m_asset_manager;      };
@@ -57,7 +57,7 @@ namespace Engine {
 
     private:
 
-        std::unique_ptr<Core::ScriptManager>                m_script_manager;
+        std::unique_ptr<Scripting::ScriptManager>           m_script_manager;
 
         std::unique_ptr<Core::TimeManager>                  m_time_manager;
         std::unique_ptr<Assets::AssetManager>               m_asset_manager;

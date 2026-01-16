@@ -14,10 +14,13 @@ namespace Engine::Core {
         virtual ~GameObject() = default;
 
         template<typename T, typename... TArgs>
-        void addComponent(TArgs&&... args) {
+        T& addComponent(TArgs&&... args) {
 
             auto newComponent = std::make_unique<T>(std::forward<TArgs>(args)...);
+            T* ptr = static_cast<T*>(newComponent.get());
             m_components[std::type_index(typeid(T))] = std::move(newComponent);
+
+            return *ptr;
         }
 
         template<typename T>

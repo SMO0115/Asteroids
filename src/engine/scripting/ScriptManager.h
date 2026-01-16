@@ -7,14 +7,15 @@
 #include <string>
 
 
-namespace Engine::Assets   { class AssetManager;    }
+namespace Engine::Scripting { class ComponentRegistry; }
+namespace Engine::Assets    { class AssetManager;      }
 
-namespace Engine::Core {
+namespace Engine::Scripting {
     class ScriptManager {
 
     public:
         ScriptManager(Assets::AssetManager &asset_manager);
-        ~ScriptManager() = default;
+        ~ScriptManager();
 
         void runFile(std::string filename);
         // void runConsole();
@@ -24,6 +25,7 @@ namespace Engine::Core {
 
     private:
 
-        sol::state m_lua;
+        std::unique_ptr<sol::state>               m_lua;
+        std::unique_ptr<ComponentRegistry>        m_component_registry;
     };
 }

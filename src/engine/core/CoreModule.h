@@ -20,7 +20,7 @@
 #include "interfaces/IGame.h"
 #include "interfaces/IGameState.h"
 #include "TimeManager.h"
-#include "ScriptManager.h"
+#include "../scripting/ScriptManager.h"
 #include "Log.h"
 
 #include "components/TransformComponent.h"

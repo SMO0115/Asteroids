@@ -4,8 +4,11 @@ file(GLOB_RECURSE ENGINE_HEADERS "*.h")
 add_library(Engine STATIC ${ENGINE_SOURCES} ${ENGINE_HEADERS}
         core/Log.cpp
         core/interfaces/ISystem.h
-        core/ScriptManager.cpp
-        core/ScriptManager.h
+        scripting/ScriptManager.cpp
+        scripting/ScriptManager.h
+        scripting/ComponentRegistry.h
+        scripting/ComponentRegistry.cpp
+        core/Scene.h
 )
 
 target_include_directories(Engine PUBLIC ${sol2_SOURCE_DIR}/include)

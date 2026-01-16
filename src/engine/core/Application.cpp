@@ -18,7 +18,7 @@
 
 
 #include "engine/core/TimeManager.h"
-#include "engine/core/ScriptManager.h"
+#include "../scripting/ScriptManager.h"
 #include "engine/events/EventBus.h"
 
 #include "engine/core/components/TransformComponent.h"
@@ -43,7 +43,7 @@ Application::Application() {
 
     m_event_bus = std::make_unique<Events::EngineEventBus>();
 
-    m_script_manager = std::make_unique<Core::ScriptManager>(*m_asset_manager);
+    m_script_manager = std::make_unique<Scripting::ScriptManager>(*m_asset_manager);
 
     // m_object_factory->registerComponent<Engine::Core::TransformComponent>("Transform");
     // m_object_factory->registerComponent<Engine::Graphics::SpriteComponent>("Sprite");
