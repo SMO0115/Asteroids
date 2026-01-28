@@ -6,6 +6,6 @@ TO DO
 + Solve WALL problem
 + UI system
 + Rendering for other states adding scenes into the renderer
-- Victory state based on mumber of killed invaders
++ Victory state based on mumber of killed invaders
 + 120 FPS for physics
 + Finish the project documentation

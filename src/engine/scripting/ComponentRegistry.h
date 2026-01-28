@@ -14,16 +14,38 @@ namespace Engine::Scripting {
 
     class ComponentRegistry {
     public:
+        // --- THE SINGLETON ACCESSOR ---
+        // This static method is the ONLY way to get the registry.
+        static ComponentRegistry& Get() {
+            static ComponentRegistry instance; // Guaranteed to be created once
+            return instance;
+        }
+
+        // Delete copy constructors to prevent accidental copies
+        ComponentRegistry(const ComponentRegistry&) = delete;
+        void operator=(const ComponentRegistry&) = delete;
+
+        // --- PUBLIC API ---
+
+        // Note: Returns bool so we can use it in static initializers!
+        bool registerComponent(const std::string& name, ComponentFactory factory) {
+            m_factories[name] = factory;
+            return true;
+        }
+
+        void addComponent(const std::string& name, Engine::Core::GameObject& obj, const sol::table& data){
+            if (m_factories.find(name) != m_factories.end()) {
+                m_factories[name](obj, data);
+            } else {
+                std::cerr << "[Script] Warning: Unknown component '" << name << "'" << std::endl;
+            }
+        }
+
+    private:
+        // Private Constructor: Ensures no one can say "new ComponentRegistry()"
         ComponentRegistry() = default;
         ~ComponentRegistry() = default;
 
-        void registerComponent(const std::string& name, ComponentFactory factory) {
-            m_factories[name] = factory;
-        }
-
-        void addComponent(const std::string& name, Engine::Core::GameObject& obj, const sol::table& data);
-
-    private:
         std::unordered_map<std::string, ComponentFactory> m_factories;
     };
 }

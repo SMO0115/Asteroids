@@ -1,48 +1,61 @@
-//
-// Created by marcel on 10/10/25.
-//
-
 #pragma once
-
-#include <memory>
+#include <vector>
 #include <string>
 #include <unordered_map>
+#include <memory>
+#include <iostream>
+#include "engine/utils/Types.h"
 
-// #include "engine/modules/rendering/AnimationComponent.h"
-
-namespace Engine::Graphics {
-class RenderSystem;
-}
+namespace Engine::Graphics { class RenderSystem; }
 
 namespace Engine::Assets {
 
-struct Font;
-struct Texture;
-struct Animation;
-struct Sound;
+    struct Font;
+    struct Texture;
+    struct Animation;
+    struct Sound;
 
-class AssetManager {
-public:
-    AssetManager(Graphics::RenderSystem* renderer) : m_renderer(renderer) {};
-    ~AssetManager() = default;
 
-    bool loadTexture(const std::string& id, const std::string& path);
-    bool loadAnimation(const std::string& id, const std::string& path);
-    bool loadSound(const std::string& id, const std::string& path);
-    void loadFont(const std::string& id, const std::string& path);
+    class AssetManager {
+    public:
+        AssetManager(Graphics::RenderSystem* renderer);
+        ~AssetManager() = default;
 
-    Texture*   getTexture(const std::string& id) const;
-    Animation* getAnimation(const std::string& id) const;
-    Sound*     getSound(const std::string& id) const;
-    Font*      getFont(const std::string& id, std::size_t size);
+        // --- 1. Load (Returns ID) ---
+        // Calling this with the same id_string twice returns the SAME numeric ID.
+        AssetID loadTexture(const std::string& name, const std::string& path);
+        AssetID loadAnimation(const std::string& name, const std::string& path);
+        AssetID loadSound(const std::string& name, const std::string& path);
+        
+        // Fonts need size to be unique resources
+        AssetID loadFont(const std::string& name, const std::string& path, int size);
 
-private:
-    Graphics::RenderSystem*                                     m_renderer;
+        // --- 2. Retrieve (Fast Array Access) ---
+        Texture* getTexture(AssetID id) const;
+        Animation* getAnimation(AssetID id) const;
+        Sound* getSound(AssetID id) const;
+        Font* getFont(AssetID id) const;
 
-    std::unordered_map<std::string, std::unique_ptr<Texture>>   m_textures;
-    std::unordered_map<std::string, std::unique_ptr<Animation>> m_animations;
-    std::unordered_map<std::string, std::unique_ptr<Sound>>     m_sounds;
-    std::unordered_map<std::string, std::string>                m_font_paths;
-    std::unordered_map<std::string, std::unique_ptr<Font>>      m_loaded_fonts;
-};
-}  // namespace Engine::Assets
+        // --- 3. Helper (String -> ID) ---
+        AssetID getTextureID(const std::string& name) const;
+        AssetID getAnimationID(const std::string& name) const;
+        AssetID getSoundID(const std::string& name) const;
+        AssetID getFontID(const std::string& name, int size) const;
+
+    private:
+        Graphics::RenderSystem* m_renderer;
+
+        // STORAGE (Contiguous memory = Fast)
+        // We use index 0 as a dummy/fallback so 0 always means "Invalid".
+        std::vector<std::unique_ptr<Texture>>   m_textures;
+        std::vector<std::unique_ptr<Animation>> m_animations;
+        std::vector<std::unique_ptr<Sound>>     m_sounds;
+        std::vector<std::unique_ptr<Font>>      m_fonts;
+
+        // LOOKUP (String -> Index)
+        std::unordered_map<std::string, AssetID> m_texture_lookup;
+        std::unordered_map<std::string, AssetID> m_animation_lookup;
+        std::unordered_map<std::string, AssetID> m_sound_lookup;
+        std::unordered_map<std::string, AssetID> m_font_lookup; // Key example: "pixel_24"
+    };
+}

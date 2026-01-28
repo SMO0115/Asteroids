@@ -9,7 +9,7 @@
 
 namespace Game::Control {
 struct InvaderComponent : public Engine::Core::BaseComponent {
-    Core::InvaderType type;
+    int               type;
     int               score_value = 10;
 };
 }  // namespace Game::Control

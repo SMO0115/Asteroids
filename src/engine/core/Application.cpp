@@ -11,10 +11,13 @@
 #include "engine/modules/audio/AudioModule.h"
 #include "engine/modules/input/InputModule.h"
 #include "engine/modules/physics/PhysicsModule.h"
-#include "engine/modules/rendering/RenderModule.h"
+#include "engine/modules/graphics/RenderModule.h"
 
 #include "interfaces/IGame.h"
 #include "Log.h"
+
+#include "Scene.h"
+#include "engine/core/GameObject.h"
 
 
 #include "engine/core/TimeManager.h"
@@ -31,6 +34,8 @@ Application::Application() {
     m_is_running     = 0;
     m_quit_requested = 0;
 
+    m_scene            = std::make_unique<Core::Scene>();
+
     m_renderer         = std::make_unique<Graphics::RenderSystem>();
     m_animation_system = std::make_unique<Graphics::AnimationSystem>();
     m_sound_system     = std::make_unique<Audio::SoundSystem>();
@@ -43,7 +48,7 @@ Application::Application() {
 
     m_event_bus = std::make_unique<Events::EngineEventBus>();
 
-    m_script_manager = std::make_unique<Scripting::ScriptManager>(*m_asset_manager);
+    m_script_manager = std::make_unique<Scripting::ScriptManager>(*this);
 
     // m_object_factory->registerComponent<Engine::Core::TransformComponent>("Transform");
     // m_object_factory->registerComponent<Engine::Graphics::SpriteComponent>("Sprite");
@@ -94,7 +99,7 @@ void Application::run(Core::IGame& game) {
         }
 
         m_renderer->beginFrame();
-        game.render(*m_renderer);
+        game.render(*this);
         m_renderer->endFrame();
 
         m_event_bus->clear();

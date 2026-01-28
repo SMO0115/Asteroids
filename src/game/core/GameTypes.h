@@ -5,19 +5,23 @@
 #pragma once
 
 namespace Game::Core {
-enum class SoundState : int { IDLE = 0, WALK, RUN, JUMP };
+    enum class SoundState : int { IDLE = 0, WALK, RUN, JUMP };
 
-enum class AnimationState : int { IDLE = 0, DEATH };
+    enum class AnimationState : int { IDLE = 0, DEATH };
 
-enum class EmittorState : int {
+    enum class EmittorState : int {
 
-    IDLE = 0,
-    INVADER_A,
-    INVADER_B,
-    INVADER_C,
-    MISSILE,
-    PLAYER
-};
+        IDLE = 0,
+        INVADER_A,
+        INVADER_B,
+        INVADER_C,
+        MISSILE,
+        PLAYER
+    };
 
-enum class InvaderType : int { INVADER_A, INVADER_B, INVADER_C };
+    enum class InvaderType : int { I = 0, INVADER_A, INVADER_B, INVADER_C };
+
+
+
+    struct Entities {};
 }  // namespace Game::Core

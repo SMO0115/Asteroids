@@ -18,6 +18,6 @@ namespace Engine::Core {
         virtual bool                        init(Application& engine)                       = 0;
         virtual void                        handleInput(Input::InputManager &input_manager) = 0;
         virtual bool                        update(float deltatime, Application& engine)    = 0;
-        virtual void                        render(Graphics::RenderSystem& renderer)        = 0;
+        virtual void                        render(Engine::Application& engine)             = 0;
     };
 }

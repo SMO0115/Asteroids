@@ -39,7 +39,7 @@ bool SoundSystem::init() {
 }
 
 
-void SoundSystem::playSound(const std::string& sound_id) { m_sound_queue.insert(sound_id); }
+void SoundSystem::playSound(const Assets::AssetID sound_id) { m_sound_queue.insert(sound_id); }
 
 
 void SoundSystem::update(const Assets::AssetManager& asset_manager, Events::EngineEventBus& event_bus,
@@ -59,16 +59,18 @@ void SoundSystem::update(const Assets::AssetManager& asset_manager, Events::Engi
                 sound_comp.channel = -1;
             }
 
-            auto it = sound_comp.sounds.find(sound_comp.current_state);
-            if (it != sound_comp.sounds.end()) {
-                playSound(it->second);
+            auto it = sound_comp.sounds_ids.find(sound_comp.current_state);
+            if (it != sound_comp.sounds_ids.end()) {
+                playSound( it->second );
             }
             sound_comp.previous_state = sound_comp.current_state;
         }
     }
 
 
-    for (const Events::PlaySoundEvent& event : event_bus.getEvents<Events::PlaySoundEvent>()) playSound(event.soundId);
+    for (const Events::PlaySoundEvent& event : event_bus.getEvents<Events::PlaySoundEvent>()) {
+        playSound( asset_manager.getSoundID( event.soundId ) );
+    }
 
     for (const auto& sound_id : m_sound_queue) {
         Assets::Sound* sound = asset_manager.getSound(sound_id);

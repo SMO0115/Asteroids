@@ -10,7 +10,7 @@
 
 #include "engine/modules/input/InputModule.h"
 #include "engine/modules/physics/PhysicsModule.h"
-#include "engine/modules/rendering/RenderModule.h"
+#include "engine/modules/graphics/RenderModule.h"
 
 
 namespace Game::Control {

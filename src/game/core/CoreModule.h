@@ -11,3 +11,4 @@
 
 #include "game/modules/control/InvaderComponent.h"
 #include "game/modules/control/PlayerComponent.h"
+#include "game/scripting/binding/ComponentBinding.cpp"

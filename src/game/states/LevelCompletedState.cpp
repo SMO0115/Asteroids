@@ -9,7 +9,7 @@
 #include "engine/modules/assets/AssetModule.h"
 #include "engine/modules/input/InputModule.h"
 #include "engine/modules/physics/PhysicsModule.h"
-#include "engine/modules/rendering/RenderModule.h"
+#include "engine/modules/graphics/RenderModule.h"
 
 
 namespace Game::State {
@@ -29,22 +29,24 @@ std::unique_ptr<Engine::Core::IGameState> LevelCompletedState::handleInput(Engin
 std::unique_ptr<Engine::Core::IGameState> LevelCompletedState::update(float deltatime, Engine::Application& engine) {
 
 
-    std::unique_ptr<Engine::Core::GameObject> Pause = std::make_unique<Engine::Core::GameObject>();
-
-    Engine::Assets::Font* font = engine.getAssetManager().getFont("pixel", 72);
-    Pause->addComponent<Engine::Graphics::UITextComponent>("!!! VICTORY !!!", font, Engine::Core::Color{255, 255, 255}, 190, 340);
-    m_text.push_back(std::move(Pause));
+    // std::unique_ptr<Engine::Core::GameObject> Pause = std::make_unique<Engine::Core::GameObject>();
+    //
+    // Engine::Assets::Font* font = engine.getAssetManager().getFont("pixel", 72);
+    // Pause->addComponent<Engine::Graphics::UITextComponent>("!!! VICTORY !!!", font, Engine::Core::Color{255, 255, 255}, 190, 340);
+    // m_text.push_back(std::move(Pause));
 
 
     return nullptr;
 }
 
-void LevelCompletedState::render(Engine::Graphics::RenderSystem& renderer) {
+void LevelCompletedState::render(Engine::Application& engine) {
 
-    renderer.renderWorld(m_game.getGameObjects());
-    renderer.renderUI(m_game.getUIObjects());
+    Engine::Graphics::RenderSystem& renderer = engine.getRenderer();
 
-    renderer.drawRect({0, 0, 800, 800}, Engine::Core::Color{0, 0, 0, 192});
-    renderer.renderUI(m_text);
+    renderer.renderWorld(m_game.getGameObjects(), engine.getAssetManager());
+    renderer.renderUI(m_game.getUIObjects(), engine.getAssetManager());
+    //
+    // renderer.drawRect({0, 0, 800, 800}, Engine::Core::Color{0, 0, 0, 192});
+    // renderer.renderUI(m_text);
 }
 }  // namespace Game::State

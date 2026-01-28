@@ -11,7 +11,7 @@ namespace Engine::Core {
     class GameObject {
     public:
         GameObject() = default;
-        virtual ~GameObject() = default;
+        ~GameObject() = default;
 
         template<typename T, typename... TArgs>
         T& addComponent(TArgs&&... args) {

@@ -13,7 +13,7 @@
 
 #include "engine/modules/audio/AudioModule.h"
 #include "engine/modules/physics/PhysicsModule.h"
-#include "engine/modules/rendering/RenderModule.h"
+#include "engine/modules/graphics/RenderModule.h"
 
 namespace Game::Control {
 void AISystem::update(float deltaTime, Engine::Events::EngineEventBus& engine_event_bus, Events::GameEventBus& game_event_bus,
@@ -76,13 +76,13 @@ void AISystem::update(float deltaTime, Engine::Events::EngineEventBus& engine_ev
         Core::EmittorState emittor_state;
         switch (invader_component.type) {
 
-            case Core::InvaderType::INVADER_A:
+            case static_cast<int>(Core::InvaderType::INVADER_A):
                 emittor_state = Core::EmittorState::INVADER_A;
                 break;
-            case Core::InvaderType::INVADER_B:
+            case static_cast<int>(Core::InvaderType::INVADER_B):
                 emittor_state = Core::EmittorState::INVADER_B;
                 break;
-            case Core::InvaderType::INVADER_C:
+            case static_cast<int>(Core::InvaderType::INVADER_C):
                 emittor_state = Core::EmittorState::INVADER_C;
                 break;
             default:

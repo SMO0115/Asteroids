@@ -6,7 +6,7 @@
 
 #include "engine/core/CoreModule.h"
 #include "engine/modules/physics/PhysicsModule.h"
-#include "engine/modules/rendering/RenderModule.h"
+#include "engine/modules/graphics/RenderModule.h"
 
 #include "game/modules/emitter/EmitterComponent.h"
 #include "game/modules/health/HealthModule.h"

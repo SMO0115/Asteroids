@@ -6151,15 +6151,15 @@ build src/engine/CMakeFiles/Engine.dir/modules/physics/PhysicsSystem.cpp.o: CXX_
   OBJECT_DIR = src/engine/CMakeFiles/Engine.dir
   OBJECT_FILE_DIR = src/engine/CMakeFiles/Engine.dir/modules/physics
 
-build src/engine/CMakeFiles/Engine.dir/modules/rendering/AnimationSystem.cpp.o: CXX_COMPILER__Engine_unscanned_ /home/marcel/CLionProjects/Asteroids/src/engine/modules/rendering/AnimationSystem.cpp || cmake_object_order_depends_target_Engine
-  DEP_FILE = src/engine/CMakeFiles/Engine.dir/modules/rendering/AnimationSystem.cpp.o.d
+build src/engine/CMakeFiles/Engine.dir/modules/graphics/AnimationSystem.cpp.o: CXX_COMPILER__Engine_unscanned_ /home/marcel/CLionProjects/Asteroids/src/engine/modules/graphics/AnimationSystem.cpp || cmake_object_order_depends_target_Engine
+  DEP_FILE = src/engine/CMakeFiles/Engine.dir/modules/graphics/AnimationSystem.cpp.o.d
   FLAGS = -std=gnu++20 -fPIC
   INCLUDES = -I/home/marcel/CLionProjects/Asteroids/src/engine/.. -I/home/marcel/CLionProjects/Asteroids/build/_deps/sdl_mixer-src/include -I/home/marcel/CLionProjects/Asteroids/build/_deps/sdl2-build/include -I/home/marcel/CLionProjects/Asteroids/build/_deps/sdl2-build/include/SDL2 -I/home/marcel/CLionProjects/Asteroids/build/_deps/sdl2-build/include-config-/SDL2 -I/home/marcel/CLionProjects/Asteroids/build/_deps/sdl_ttf-src -I/home/marcel/CLionProjects/Asteroids/build/_deps/sdl_image-src/include -I/home/marcel/CLionProjects/Asteroids/build/_deps/yyjson-src/src
   OBJECT_DIR = src/engine/CMakeFiles/Engine.dir
   OBJECT_FILE_DIR = src/engine/CMakeFiles/Engine.dir/modules/rendering
 
-build src/engine/CMakeFiles/Engine.dir/modules/rendering/RenderSystem.cpp.o: CXX_COMPILER__Engine_unscanned_ /home/marcel/CLionProjects/Asteroids/src/engine/modules/rendering/RenderSystem.cpp || cmake_object_order_depends_target_Engine
-  DEP_FILE = src/engine/CMakeFiles/Engine.dir/modules/rendering/RenderSystem.cpp.o.d
+build src/engine/CMakeFiles/Engine.dir/modules/graphics/RenderSystem.cpp.o: CXX_COMPILER__Engine_unscanned_ /home/marcel/CLionProjects/Asteroids/src/engine/modules/graphics/RenderSystem.cpp || cmake_object_order_depends_target_Engine
+  DEP_FILE = src/engine/CMakeFiles/Engine.dir/modules/graphics/RenderSystem.cpp.o.d
   FLAGS = -std=gnu++20 -fPIC
   INCLUDES = -I/home/marcel/CLionProjects/Asteroids/src/engine/.. -I/home/marcel/CLionProjects/Asteroids/build/_deps/sdl_mixer-src/include -I/home/marcel/CLionProjects/Asteroids/build/_deps/sdl2-build/include -I/home/marcel/CLionProjects/Asteroids/build/_deps/sdl2-build/include/SDL2 -I/home/marcel/CLionProjects/Asteroids/build/_deps/sdl2-build/include-config-/SDL2 -I/home/marcel/CLionProjects/Asteroids/build/_deps/sdl_ttf-src -I/home/marcel/CLionProjects/Asteroids/build/_deps/sdl_image-src/include -I/home/marcel/CLionProjects/Asteroids/build/_deps/yyjson-src/src
   OBJECT_DIR = src/engine/CMakeFiles/Engine.dir
@@ -6173,7 +6173,7 @@ build src/engine/CMakeFiles/Engine.dir/modules/rendering/RenderSystem.cpp.o: CXX
 #############################################
 # Link the static library src/engine/libEngine.a
 
-build src/engine/libEngine.a: CXX_STATIC_LIBRARY_LINKER__Engine_ src/engine/CMakeFiles/Engine.dir/core/Application.cpp.o src/engine/CMakeFiles/Engine.dir/core/TimeManager.cpp.o src/engine/CMakeFiles/Engine.dir/modules/assets/AssetManager.cpp.o src/engine/CMakeFiles/Engine.dir/modules/audio/SoundSystem.cpp.o src/engine/CMakeFiles/Engine.dir/modules/input/InputManager.cpp.o src/engine/CMakeFiles/Engine.dir/modules/physics/CollisionSystem.cpp.o src/engine/CMakeFiles/Engine.dir/modules/physics/PhysicsSystem.cpp.o src/engine/CMakeFiles/Engine.dir/modules/rendering/AnimationSystem.cpp.o src/engine/CMakeFiles/Engine.dir/modules/rendering/RenderSystem.cpp.o || _deps/sdl2-build/libSDL2-2.0.so _deps/sdl_image-build/libSDL2_image-2.0.so _deps/sdl_mixer-build/libSDL2_mixer-2.0.so _deps/sdl_ttf-build/libSDL2_ttf-2.0.so _deps/yyjson-build/libyyjson.so
+build src/engine/libEngine.a: CXX_STATIC_LIBRARY_LINKER__Engine_ src/engine/CMakeFiles/Engine.dir/core/Application.cpp.o src/engine/CMakeFiles/Engine.dir/core/TimeManager.cpp.o src/engine/CMakeFiles/Engine.dir/modules/assets/AssetManager.cpp.o src/engine/CMakeFiles/Engine.dir/modules/audio/SoundSystem.cpp.o src/engine/CMakeFiles/Engine.dir/modules/input/InputManager.cpp.o src/engine/CMakeFiles/Engine.dir/modules/physics/CollisionSystem.cpp.o src/engine/CMakeFiles/Engine.dir/modules/physics/PhysicsSystem.cpp.o src/engine/CMakeFiles/Engine.dir/modules/graphics/AnimationSystem.cpp.o src/engine/CMakeFiles/Engine.dir/modules/graphics/RenderSystem.cpp.o || _deps/sdl2-build/libSDL2-2.0.so _deps/sdl_image-build/libSDL2_image-2.0.so _deps/sdl_mixer-build/libSDL2_mixer-2.0.so _deps/sdl_ttf-build/libSDL2_ttf-2.0.so _deps/yyjson-build/libyyjson.so
   OBJECT_DIR = src/engine/CMakeFiles/Engine.dir
   POST_BUILD = :
   PRE_LINK = :

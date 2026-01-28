@@ -22,6 +22,6 @@ namespace Engine::Core {
 
         virtual std::unique_ptr<IGameState>     handleInput(Input::InputManager &input_manager) = 0;
         virtual std::unique_ptr<IGameState>     update(float deltatime, Application& engine)    = 0;
-        virtual void                            render(Graphics::RenderSystem& renderer)        = 0;
+        virtual void                            render(Engine::Application& engine)             = 0;
     };
 }

@@ -4,7 +4,7 @@
 
 #include "UISystem.h"
 
-#include "engine/modules/rendering/RenderModule.h"
+#include "engine/modules/graphics/RenderModule.h"
 #include "game/core/CoreModule.h"
 
 #include "GameStateComponent.h"

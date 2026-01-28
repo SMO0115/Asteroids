@@ -14,13 +14,13 @@
 #include "engine/events/EngineEvents.h"
 #include "engine/modules/assets/AssetModule.h"
 #include "engine/modules/physics/PhysicsModule.h"
-#include "engine/modules/rendering/RenderModule.h"
+#include "engine/modules/graphics/RenderModule.h"
 
 #include <iostream>
 
 
 namespace Game::Health {
-void HealthSystem::update(float deltaTime, Engine::Events::EngineEventBus& event_bus, std::vector<std::unique_ptr<Engine::Core::GameObject> >& game_objects) {
+void HealthSystem::update(float deltaTime, Engine::Events::EngineEventBus& event_bus, std::vector<std::unique_ptr<Engine::Core::GameObject> >& game_objects, Engine::Assets::AssetManager& assets_manager) {
 
     for (const Engine::Events::CollisionEvent& event : event_bus.getEvents<Engine::Events::CollisionEvent>()) {
 
@@ -31,8 +31,11 @@ void HealthSystem::update(float deltaTime, Engine::Events::EngineEventBus& event
 
             int state = static_cast<int>(event.to->getComponent<Health::HealthComponent>().current_health / 100);
             std::cout << "Health: " << state << std::endl;
-            event.to->getComponent<Engine::Graphics::AnimationComponent>().animations[0]->frames[0] = {11 * (4 - state), 0, 11, 8};
-            ;
+
+
+            Engine::Assets::Animation* anim = assets_manager.getAnimation( event.to->getComponent<Engine::Graphics::AnimationComponent>().animations_ids[0] );
+            anim->frames[0] = {11 * (4 - state), 0, 11, 8};
+
         }
 
         if (event.to->getComponent<Health::HealthComponent>().current_health <= 0) {

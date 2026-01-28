@@ -13,6 +13,7 @@
 
 #include "engine/core/CoreModule.h"
 #include "engine/modules/assets/AssetModule.h"
+#include "game/modules/health/HealthComponent.h"
 
 
 namespace Engine::Graphics {
@@ -67,36 +68,38 @@ void RenderSystem::beginFrame() const {
 
 void RenderSystem::endFrame() const { SDL_RenderPresent(m_renderer); }
 
-void RenderSystem::renderUI(const std::vector<std::unique_ptr<Core::GameObject> >& ui_objects) const {
+void RenderSystem::renderUI(const std::vector<std::unique_ptr<Core::GameObject> >& ui_objects, const Assets::AssetManager& asset_manager) const {
 
     for (const auto& object : ui_objects) {
 
         if (!object->isActive()) continue;
 
         UITextComponent& text = object->getComponent<UITextComponent>();
-        drawText(text);
+        drawText(text, asset_manager);
     }
 }
 
 
-void RenderSystem::renderWorld(const std::vector<std::unique_ptr<Core::GameObject> >& game_objects) const {
+void RenderSystem::renderWorld(const std::vector<std::unique_ptr<Core::GameObject> >& game_objects, const Assets::AssetManager& asset_manager) const {
 
     for (auto& object : game_objects) {
 
         if (!object->isActive()) continue;
+        if (!object->hasComponent<SpriteComponent>()) continue;
+        if (!object->hasComponent<Core::TransformComponent>()) continue;
 
         SpriteComponent&          sprite    = object->getComponent<SpriteComponent>();
         Core::TransformComponent& transform = object->getComponent<Core::TransformComponent>();
 
-        draw(sprite, transform);
+        draw(sprite, transform, asset_manager);
     }
 }
 
 
-void RenderSystem::draw(const SpriteComponent& sprite, const Core::TransformComponent& transform) const {
+void RenderSystem::draw(const SpriteComponent& sprite, const Core::TransformComponent& transform, const Assets::AssetManager& asset_manager) const {
 
 
-    if (sprite.texture == nullptr) return;
+    if (sprite.texture_id == 0) return;
 
     SDL_Rect srcRect = {sprite.sourceRect.x, sprite.sourceRect.y, sprite.sourceRect.w, sprite.sourceRect.h};
 
@@ -108,7 +111,7 @@ void RenderSystem::draw(const SpriteComponent& sprite, const Core::TransformComp
 
     SDL_Rect destRect = {destX, destY, static_cast<int>(scaledWidth), static_cast<int>(scaledHeight)};
 
-    SDL_RenderCopy(m_renderer, sprite.texture->texture, &srcRect, &destRect);
+    SDL_RenderCopy(m_renderer, asset_manager.getTexture(sprite.texture_id)->texture, &srcRect, &destRect);
 }
 
 
@@ -144,14 +147,14 @@ void RenderSystem::drawLine(int x1, int y1, int x2, int y2, const Core::Color& c
 }
 
 
-void RenderSystem::drawText(const UITextComponent& text) const {
+void RenderSystem::drawText(const UITextComponent& text,  const Assets::AssetManager& asset_manager) const {
 
 
-    auto font = text.font;
+    auto font = asset_manager.getFont( text.font_id );
     if (!font) return;
 
     SDL_Color    sdl_color    = {text.color.r, text.color.g, text.color.b, 255};
-    SDL_Surface* text_surface = TTF_RenderText_Solid(text.font->ttf_font.get(), text.text.c_str(), sdl_color);
+    SDL_Surface* text_surface = TTF_RenderText_Solid(asset_manager.getFont(text.font_id)->ttf_font.get(), text.text.c_str(), sdl_color);
     if (!text_surface) return;
 
     SDL_Texture* text_texture = SDL_CreateTextureFromSurface(m_renderer, text_surface);

@@ -15,3 +15,14 @@ namespace Engine::Core {
         int r, g, b, a;
     };
 }
+
+
+namespace Engine::Assets {
+    
+    // The Handle Type
+    using AssetID = std::uint32_t;
+    constexpr AssetID INVALID_ID = 0; // 0 is reserved for "null/missing"
+}
+
+
+using State = int;

@@ -7,7 +7,7 @@
 #include "engine/core/CoreModule.h"
 #include "engine/modules/assets/AssetModule.h"
 #include "engine/modules/physics/PhysicsModule.h"
-#include "engine/modules/rendering/RenderModule.h"
+#include "engine/modules/graphics/RenderModule.h"
 
 #include "GameStateComponent.h"
 #include "game/core/CoreModule.h"
@@ -16,7 +16,7 @@
 
 
 namespace Game::UI {
-void ScoreSystem::update(float deltaTime, Events::GameEventBus& game_event_bus, GameStateComponent& game_state) {
+void ScoreSystem::update(float deltaTime, Events::GameEventBus& game_event_bus, GameStateComponent& game_state, Engine::Assets::AssetManager& assets_manager) {
 
     for (const auto& event : game_event_bus.getEvents<Events::DeathEvent>()) {
 
@@ -37,8 +37,10 @@ void ScoreSystem::update(float deltaTime, Events::GameEventBus& game_event_bus, 
                 Engine::Graphics::AnimationComponent& animation_component = event.object->getComponent<Engine::Graphics::AnimationComponent>();
 
                 Engine::Physics::ColliderComponent collider_component;
-                collider_component.bounds.w = animation_component.animations[static_cast<int>(Core::AnimationState::IDLE)]->frames[0].w;
-                collider_component.bounds.h = animation_component.animations[static_cast<int>(Core::AnimationState::IDLE)]->frames[0].h;
+                Engine::Assets::Animation* anim = assets_manager.getAnimation( animation_component.animations_ids[static_cast<int>(Core::AnimationState::IDLE)] );
+
+                collider_component.bounds.w = anim->frames[0].w;
+                collider_component.bounds.h = anim->frames[0].h;
                 collider_component.layer    = Engine::Physics::CollisionLayer::PLAYER;
                 collider_component.mask     = Engine::Physics::CollisionLayer::INVADER | Engine::Physics::CollisionLayer::INVADER_BULLET;
 

@@ -19,7 +19,7 @@ public:
 
     std::unique_ptr<Engine::Core::IGameState> handleInput(Engine::Input::InputManager& input_manager) override;
     std::unique_ptr<Engine::Core::IGameState> update(float deltatime, Engine::Application& engine) override;
-    void                                      render(Engine::Graphics::RenderSystem& renderer) override;
+    void                                      render(Engine::Application& engine) override;
 
 private:
     Asteroids& m_game;

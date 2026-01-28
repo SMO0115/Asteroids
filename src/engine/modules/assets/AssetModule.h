@@ -10,3 +10,5 @@
 #include "Texture.h"
 
 #include "AssetManager.h"
+#include "resolveAssets.h"
+#include "engine/utils/Types.h"

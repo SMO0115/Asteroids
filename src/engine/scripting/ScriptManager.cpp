@@ -6,6 +6,7 @@
 
 #include "engine/core/Application.h"
 #include "engine/core/GameObject.h"
+#include "engine/core/Scene.h"
 #include "engine/modules/assets/AssetManager.h"
 
 #include "engine/modules/assets/Texture.h"
@@ -20,13 +21,12 @@
 
 namespace Engine::Scripting {
 
-    ScriptManager::ScriptManager(Assets::AssetManager &asset_manager) {
+    ScriptManager::ScriptManager(Engine::Application& engine) {
 
         m_lua = std::make_unique<sol::state>();
-        m_component_registry = std::make_unique<ComponentRegistry>();
-
         m_lua->open_libraries(sol::lib::base);
-        LUABinding_(asset_manager);
+
+        LUABinding_(engine);
     }
 
     ScriptManager::~ScriptManager() = default;
@@ -46,43 +46,31 @@ namespace Engine::Scripting {
     void ScriptManager::LUABinding_(Engine::Application& engine) {
 
         Assets::AssetManager& asset_manager = engine.getAssetManager();
+        Core::Scene* scene_ptr = &engine.getScene();
 
         m_lua->set_function("loadAnimation", &Assets::AssetManager::loadAnimation, &asset_manager);
         m_lua->set_function("loadTexture",   &Assets::AssetManager::loadTexture  , &asset_manager);
         m_lua->set_function("loadSound",     &Assets::AssetManager::loadSound    , &asset_manager);
         m_lua->set_function("loadFont",      &Assets::AssetManager::loadFont     , &asset_manager);
+        
 
+        m_lua->set_function("SpawnEntity", [scene_ptr](const std::string& tag, const std::string& pool_name, sol::table components) {
 
-        m_component_registry->registerComponent("Transform", [](Engine::Core::GameObject &game_object, const sol::table& t) {
+        // Use the captured pointer
+        std::unique_ptr<Core::GameObject> game_object = std::make_unique<Core::GameObject>();
 
-            Core::TransformComponent& transform = game_object.addComponent<Core::TransformComponent>();
+        // 3. Use a safe create method (defined below)
+        Pool& pool = scene_ptr->getPool(pool_name);
 
-            transform.position = glm::vec2(t.get_or("x", 0), t.get_or("y", 0));
-            transform.scale    = t.get_or("scale", 1.f);
-            transform.rotation = t.get_or("rotation", 0.f);
-        });
-
-
-
-
-
-        m_lua->set_function("SpawnEntity", [&](const std::string& tag, sol::table components) {
-
-            Core::GameObject* game_object = new Core::GameObject();
-
-            for (const auto& comp : components) {
-
-                std::string component_name = comp.first.as<std::string>();
-
-                if (comp.second.is<sol::table>()) {
-
-                    sol::table table = comp.second.as<sol::table>();
-                    m_component_registry->addComponent(component_name, *game_object, table);
-                }
+        for (const auto& comp : components) {
+            std::string component_name = comp.first.as<std::string>();
+            if (comp.second.is<sol::table>()) {
+                sol::table table = comp.second.as<sol::table>();
+                ComponentRegistry::Get().addComponent(component_name, *game_object.get(), table);
             }
+        }
 
-        });
+        pool.push_back(std::move(game_object));
+    });
     }
-
-
 }

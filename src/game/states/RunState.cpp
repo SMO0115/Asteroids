@@ -10,7 +10,7 @@
 #include "engine/modules/audio/AudioModule.h"
 #include "engine/modules/input/InputModule.h"
 #include "engine/modules/physics/PhysicsModule.h"
-#include "engine/modules/rendering/RenderModule.h"
+#include "engine/modules/graphics/RenderModule.h"
 
 #include "game/modules/control/ControlModul.h"
 #include "game/modules/emitter/EmiterModule.h"
@@ -19,54 +19,58 @@
 
 
 namespace Game::State {
-RunState::~RunState() = default;
+    RunState::~RunState() = default;
 
 
-std::unique_ptr<Engine::Core::IGameState> RunState::handleInput(Engine::Input::InputManager& input_manager) {
+    std::unique_ptr<Engine::Core::IGameState> RunState::handleInput(Engine::Input::InputManager& input_manager) {
 
-    if (input_manager.wasKeyPressed(Engine::Input::Key::ESCAPE)) return std::make_unique<PauseState>(m_game);
+        if (input_manager.wasKeyPressed(Engine::Input::Key::ESCAPE)) return std::make_unique<PauseState>(m_game);
 
-    return nullptr;
-}
-
-
-std::unique_ptr<Engine::Core::IGameState> RunState::update(float deltatime, Engine::Application& engine) {
-
-    auto&                                                   game_state   = m_game.getGameSession()->getComponent<UI::GameStateComponent>();
-    std::vector<std::unique_ptr<Engine::Core::GameObject>>& game_objects = m_game.getGameObjects();
-    std::vector<std::unique_ptr<Engine::Core::GameObject>>& ui_objects   = m_game.getUIObjects();
+        return nullptr;
+    }
 
 
-    m_game.getPlayerControlSystem().update(deltatime, engine.getInputManager(), m_game.getEventBus(), engine.getEventBus(), game_objects);
-    m_game.getAISystem().update(deltatime, engine.getEventBus(), m_game.getEventBus(), game_objects);
+    std::unique_ptr<Engine::Core::IGameState> RunState::update(float deltatime, Engine::Application& engine) {
+
+        auto& game_state   = m_game.getGameSession()->getComponent<UI::GameStateComponent>();
+        Pool& game_objects = engine.getScene().getPool("Entities"); // m_game.getGameObjects();
+        Pool& ui_objects   = m_game.getUIObjects();
 
 
-    engine.getPhysicsSystem().update(deltatime, game_objects);
+        m_game.getPlayerControlSystem().update(deltatime, engine.getInputManager(), m_game.getEventBus(), engine.getEventBus(), game_objects);
+        m_game.getAISystem().update(deltatime, engine.getEventBus(), m_game.getEventBus(), game_objects);
 
 
-    engine.getCollisionSystem().update(engine.getEventBus(), game_objects);
+        engine.getPhysicsSystem().update(deltatime, game_objects);
 
 
-    m_game.getHealthSystem().update(deltatime, engine.getEventBus(), game_objects);
-    m_game.getLifetimeSystem().update(deltatime, m_game.getEventBus(), game_objects);
-    m_game.getScoreSystem().update(deltatime, m_game.getEventBus(), game_state);
+        engine.getCollisionSystem().update(engine.getEventBus(), game_objects);
 
 
-    m_game.getEmitterSystem().update(deltatime, m_game.getEventBus(), game_objects);
-    engine.getSoundSystem().update(engine.getAssetManager(), engine.getEventBus(), game_objects);
-    engine.getAnimationSystem().update(deltatime, game_objects);
-    m_game.getUISystem().update(deltatime, ui_objects, game_state);
+        m_game.getHealthSystem().update(deltatime, engine.getEventBus(), game_objects, engine.getAssetManager());
+        m_game.getLifetimeSystem().update(deltatime, m_game.getEventBus(), game_objects);
+        m_game.getScoreSystem().update(deltatime, m_game.getEventBus(), game_state, engine.getAssetManager());
 
 
-    if (game_state.lives == 0) return std::make_unique<GameOverState>(m_game);
-    if (game_state.num_invaders == 0) return std::make_unique<LevelCompletedState>(m_game);
+        m_game.getEmitterSystem().update(deltatime, m_game.getEventBus(), game_objects);
+        engine.getSoundSystem().update(engine.getAssetManager(), engine.getEventBus(), game_objects);
+        engine.getAnimationSystem().update(deltatime, game_objects, engine.getAssetManager());
+        m_game.getUISystem().update(deltatime, ui_objects, game_state);
 
-    return nullptr;
-}
 
-void RunState::render(Engine::Graphics::RenderSystem& renderer) {
+        if (game_state.lives == 0) return std::make_unique<GameOverState>(m_game);
+        if (game_state.num_invaders == 0) return std::make_unique<LevelCompletedState>(m_game);
 
-    renderer.renderWorld(m_game.getGameObjects());
-    renderer.renderUI(m_game.getUIObjects());
-}
+        return nullptr;
+    }
+
+    void RunState::render(Engine::Application& engine) {
+
+        Engine::Graphics::RenderSystem& renderer = engine.getRenderer();
+        Engine::Core::Scene& scene = engine.getScene();
+
+
+        renderer.renderWorld(scene.getPool("Entities"), engine.getAssetManager());
+        renderer.renderUI(scene.getPool("UI"), engine.getAssetManager());
+    }
 }  // namespace Game::State

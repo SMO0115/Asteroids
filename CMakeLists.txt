@@ -94,6 +94,7 @@ FetchContent_MakeAvailable(SDL2 SDL_ttf SDL_image SDL_mixer yyjson json spdlog s
 
 add_subdirectory(src/engine)
 add_subdirectory(src/game)
+add_subdirectory(src/sandbox)
 
 enable_testing()
 add_subdirectory(tests)

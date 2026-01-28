@@ -15,7 +15,7 @@
 18	3637	1766539550159280600	src/game/CMakeFiles/Asteroids.dir/core/Asteroids.cpp.o	5a454045f83d9cb6
 19	2678	1766539549201274632	src/game/CMakeFiles/Asteroids.dir/modules/control/PlayerControlSystem.cpp.o	f38975e66efdca59
 19	2914	1766539549438276099	src/game/CMakeFiles/Asteroids.dir/modules/control/AISystem.cpp.o	3ffee061987ce90a
-28	1593	1766539399889280280	src/engine/CMakeFiles/Engine.dir/modules/rendering/AnimationSystem.cpp.o	c9e1233eadda17ae
+28	1593	1766539399889280280	src/engine/CMakeFiles/Engine.dir/modules/graphics/AnimationSystem.cpp.o	c9e1233eadda17ae
 16970	17001	1766538765391768555	_deps/sdl_mixer-build/libSDL2_mixer-2.0.so	2931bff1b7a4b58e
 20	1677	1766539420804361978	src/game/CMakeFiles/Asteroids.dir/main.cpp.o	bf6223af19993c77
 16970	17001	1766538765391768555	_deps/sdl_mixer-build/libSDL2_mixer-2.0.so.0	2931bff1b7a4b58e
@@ -643,7 +643,7 @@
 2520	4109	1766538752533398795	_deps/sdl2-build/CMakeFiles/SDL2.dir/src/video/SDL_blit_N.c.o	d844335620d63168
 8158	8301	1766538756724133870	_deps/sdl2-build/CMakeFiles/SDL2-static.dir/src/joystick/controller_type.c.o	49e36f28945141c3
 8269	8388	1766538756812128959	_deps/sdl2-build/CMakeFiles/SDL2-static.dir/src/libm/e_pow.c.o	26c9f092b6908770
-18	1209	1766539613593095354	src/engine/CMakeFiles/Engine.dir/modules/rendering/RenderSystem.cpp.o	3dea9bd15f75ab88
+18	1209	1766539613593095354	src/engine/CMakeFiles/Engine.dir/modules/graphics/RenderSystem.cpp.o	3dea9bd15f75ab88
 3251	4136	1766538752560396845	_deps/sdl2-build/CMakeFiles/SDL2.dir/src/video/SDL_shape.c.o	fe6bfe815be8f5f1
 2410	4229	1766539550753284420	src/game/CMakeFiles/Asteroids.dir/states/PauseState.cpp.o	40acee9d73eae2b7
 11538	11765	1766538760188962937	_deps/sdl2-build/CMakeFiles/SDL2-static.dir/src/audio/alsa/SDL_alsa_audio.c.o	dd23445ebc63650d
@@ -817,8 +817,8 @@
 23	1551	1766542314695674231	src/engine/CMakeFiles/Engine.dir/modules/physics/PhysicsSystem.cpp.o	aeb4b7e01f87f86c
 24	1572	1766542314719674578	tests/CMakeFiles/AsteroidsTests.dir/SanityTest.cpp.o	4678bb398ca3dc78
 23	1670	1766542314816675980	src/engine/CMakeFiles/Engine.dir/modules/physics/CollisionSystem.cpp.o	bf5b546940afd9e
-23	2109	1766542315257682468	src/engine/CMakeFiles/Engine.dir/modules/rendering/RenderSystem.cpp.o	3dea9bd15f75ab88
-23	2128	1766542315274682721	src/engine/CMakeFiles/Engine.dir/modules/rendering/AnimationSystem.cpp.o	c9e1233eadda17ae
+23	2109	1766542315257682468	src/engine/CMakeFiles/Engine.dir/modules/graphics/RenderSystem.cpp.o	3dea9bd15f75ab88
+23	2128	1766542315274682721	src/engine/CMakeFiles/Engine.dir/modules/graphics/AnimationSystem.cpp.o	c9e1233eadda17ae
 22	2188	1766542315334683616	src/engine/CMakeFiles/Engine.dir/modules/audio/SoundSystem.cpp.o	74b2c62685f02260
 22	2348	1766542315493685986	src/engine/CMakeFiles/Engine.dir/modules/assets/AssetManager.cpp.o	464e2a6fa3caa1cc
 22	3572	1766542316718704569	src/engine/CMakeFiles/Engine.dir/core/Application.cpp.o	36b6a28cfa7f71f5

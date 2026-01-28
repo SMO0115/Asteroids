@@ -12,10 +12,11 @@
 struct SDL_Window;
 struct SDL_Renderer;
 
-namespace Engine::Core { class GameObject; }
-namespace Engine::Core { class TransformComponent; }
-namespace Engine::Core { struct Rect; }
-namespace Engine::Core { struct Color; }
+namespace Engine::Core   { class GameObject; }
+namespace Engine::Core   { class TransformComponent; }
+namespace Engine::Core   { struct Rect; }
+namespace Engine::Core   { struct Color; }
+namespace Engine::Assets { class AssetManager; }
 
 
 namespace Engine::Graphics {
@@ -33,14 +34,16 @@ namespace Engine::Graphics {
         void                                beginFrame()                                                                                        const; // Clears the screen
         void                                endFrame()                                                                                          const; // Presents the rendered frame
 
-        void                                renderUI( const std::vector<std::unique_ptr<Core::GameObject>> &ui_objects )                        const;
-        void                                renderWorld( const std::vector<std::unique_ptr<Core::GameObject>> &game_objects )                   const;
+        void                                renderWorld( const std::vector<std::unique_ptr<Core::GameObject>>   &game_objects,
+                                                         const Assets::AssetManager                             &asset_manager )                const;
+        void                                renderUI(    const std::vector<std::unique_ptr<Core::GameObject>>   &ui_objects,
+                                                         const Assets::AssetManager                             &asset_manager )                const;
 
-        void                                draw(const SpriteComponent& sprite, const Core::TransformComponent& transform)                      const;
+        void                                draw(const SpriteComponent& sprite, const Core::TransformComponent& transform, const Assets::AssetManager& asset_manager)                      const;
         void                                drawRect(const Core::Rect& rect, const Core::Color& color)                                          const;
         void                                drawCircle(int centerX, int centerY, int outerRadius, int innerRadius, const Core::Color& color)    const;
         void                                drawLine(int x1, int y1, int x2, int y2, const Core::Color& color)                                  const;
-        void                                drawText(const UITextComponent& text)                                                               const;
+        void                                drawText(const UITextComponent& text,  const Assets::AssetManager& asset_manager)                   const;
         void                                getTextSize(const std::string& text, int* width, int* height, TTF_Font *font)                       const;
 
         SDL_Renderer*                       getSDLRenderer() const { return m_renderer; }

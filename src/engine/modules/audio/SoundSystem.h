@@ -26,11 +26,11 @@ public:
 
     bool init();
 
-    void playSound(const std::string& sound_id);
+    void playSound(const Assets::AssetID sound_id);
     void update(const Assets::AssetManager& asset_manager, Events::EngineEventBus& event_bus,
                 const std::vector<std::unique_ptr<Core::GameObject>>& game_objects);
 
 private:
-    std::unordered_set<std::string> m_sound_queue;
+    std::unordered_set<Assets::AssetID> m_sound_queue;
 };
 }  // namespace Engine::Audio

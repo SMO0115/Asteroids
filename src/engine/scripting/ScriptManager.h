@@ -7,6 +7,7 @@
 #include <string>
 
 
+namespace Engine            { class Application;       }
 namespace Engine::Scripting { class ComponentRegistry; }
 namespace Engine::Assets    { class AssetManager;      }
 
@@ -14,18 +15,17 @@ namespace Engine::Scripting {
     class ScriptManager {
 
     public:
-        ScriptManager(Assets::AssetManager &asset_manager);
+        ScriptManager(Engine::Application& engine);
         ~ScriptManager();
 
         void runFile(std::string filename);
         // void runConsole();
 
     private:
-        void LUABinding_(Assets::AssetManager &asset_manager);
+        void LUABinding_(Engine::Application& engine);
 
     private:
 
         std::unique_ptr<sol::state>               m_lua;
-        std::unique_ptr<ComponentRegistry>        m_component_registry;
     };
 }

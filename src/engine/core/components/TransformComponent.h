@@ -7,6 +7,7 @@
 #include "BaseComponent.h"
 
 namespace Engine::Core {
+
     struct TransformComponent : public BaseComponent {
 
         glm::vec2   position    = glm::vec2(0.f, 0.f);

@@ -7,8 +7,11 @@ add_library(Engine STATIC ${ENGINE_SOURCES} ${ENGINE_HEADERS}
         scripting/ScriptManager.cpp
         scripting/ScriptManager.h
         scripting/ComponentRegistry.h
-        scripting/ComponentRegistry.cpp
         core/Scene.h
+        scripting/bindings/ComponentBinding.cpp
+        modules/assets/resolveAssets.cpp
+        modules/assets/resolveAssets.h
+        scripting/StateRegistry.h
 )
 
 target_include_directories(Engine PUBLIC ${sol2_SOURCE_DIR}/include)

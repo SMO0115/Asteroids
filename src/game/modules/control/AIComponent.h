@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "../../../engine/core/components/BaseComponent.h"
+#include "engine/core/components/BaseComponent.h"
 
 namespace Game::Control {
 struct AIComponent : public Engine::Core::BaseComponent {

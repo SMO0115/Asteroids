@@ -16,6 +16,8 @@ engine/JobSystem.cpp
 .idea/*
 .idea
 .plan
+.sandbox/
+.sandbox/*
 
 # Fetched content from CMake
 _deps/
