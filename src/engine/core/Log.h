@@ -1,10 +1,8 @@
 #pragma once
 
-#include <memory>
 // We still include spdlog in release so we can log errors,
 // but we might want to strip it entirely for a "Final Master" build.
-#include "spdlog/spdlog.h"
-#include "spdlog/fmt/ostr.h"
+#include "pch.h"
 
 namespace Engine::Core {
 

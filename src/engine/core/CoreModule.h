@@ -4,24 +4,17 @@
 
 #pragma once
 
-#include <map>
-#include <unordered_map>
-#include <vector>
-#include <array>
-#include <string>
-#include <memory>
-#include <iostream>
+#include "pch.h"
 
-
-#include "glm/glm.hpp"
 #include "components/BaseComponent.h"
 #include "Application.h"
 #include "GameObject.h"
+#include "Context.h"
 #include "Scene.h"
 #include "interfaces/IGame.h"
 #include "interfaces/IGameState.h"
 #include "TimeManager.h"
-#include "../scripting/ScriptManager.h"
+#include "engine/scripting/ScriptManager.h"
 #include "Log.h"
 
 #include "components/TransformComponent.h"

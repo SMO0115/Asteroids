@@ -7,9 +7,8 @@
 
 #include "../../engine/core/interfaces/IGameState.h"
 
-namespace Game {
-class Asteroids;
-}
+namespace Engine::Core { class Context; class IGameState; }
+namespace Game { class Asteroids; }
 
 namespace Game::State {
 class RunState : public Engine::Core::IGameState {
@@ -18,8 +17,8 @@ public:
     ~RunState() override;
 
     std::unique_ptr<Engine::Core::IGameState> handleInput(Engine::Input::InputManager& input_manager) override;
-    std::unique_ptr<Engine::Core::IGameState> update(float deltatime, Engine::Application& engine) override;
-    void                                      render(Engine::Application& engine) override;
+    std::unique_ptr<Engine::Core::IGameState> update(float deltatime, Engine::Core::Context& ctx) override;
+    void                                      render(Engine::Core::Context& ctx) override;
 
 private:
     Asteroids& m_game;

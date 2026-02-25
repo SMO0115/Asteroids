@@ -5,62 +5,64 @@
 #include "ScriptManager.h"
 
 #include "engine/core/Application.h"
+#include "engine/core/Context.h"
 #include "engine/core/GameObject.h"
 #include "engine/core/Scene.h"
 #include "engine/modules/assets/AssetManager.h"
 
-#include "engine/modules/assets/Texture.h"
 #include "engine/modules/assets/Animation.h"
-#include "engine/modules/assets/Sound.h"
 #include "engine/modules/assets/Font.h"
+#include "engine/modules/assets/Sound.h"
+#include "engine/modules/assets/Texture.h"
 
-#include "engine/scripting/ComponentRegistry.h"
 #include "engine/core/components/TransformComponent.h"
-
+#include "engine/scripting/ComponentRegistry.h"
+#include "engine/scripting/SceneRegistry.h"
 
 
 namespace Engine::Scripting {
 
-    ScriptManager::ScriptManager(Engine::Application& engine) {
+ScriptManager::ScriptManager(Engine::Core::Context& ctx) {
 
-        m_lua = std::make_unique<sol::state>();
-        m_lua->open_libraries(sol::lib::base);
+    m_lua = std::make_unique<sol::state>();
+    m_lua->open_libraries(sol::lib::base);
 
-        LUABinding_(engine);
+    LUABinding_(ctx);
+}
+
+ScriptManager::~ScriptManager() = default;
+
+void ScriptManager::runFile(std::string filename) {
+
+    try {
+        // Note: CMake copies "assets" to the executable folder
+        m_lua->script_file(filename);
+    } catch (const sol::error& e) {
+        std::cerr << "Lua Error: " << e.what() << std::endl;
+        return;
     }
+}
 
-    ScriptManager::~ScriptManager() = default;
+void ScriptManager::LUABinding_(Engine::Core::Context& ctx) {
 
-    void ScriptManager::runFile(std::string filename) {
+    Assets::AssetManager& asset_manager = ctx.get<Engine::Assets::AssetManager>();
+    Core::Scene*          scene_ptr     = &ctx.get<Engine::Core::Scene>();
 
-        try {
-            // Note: CMake copies "assets" to the executable folder
-            m_lua->script_file(filename);
-        }
-        catch (const sol::error& e) {
-            std::cerr << "Lua Error: " << e.what() << std::endl;
-            return;
-        }
-    }
+    m_lua->set_function("loadAnimation", &Assets::AssetManager::loadAnimation, &asset_manager);
+    m_lua->set_function("loadTexture", &Assets::AssetManager::loadTexture, &asset_manager);
+    m_lua->set_function("loadSound", &Assets::AssetManager::loadSound, &asset_manager);
+    m_lua->set_function("loadFont", &Assets::AssetManager::loadFont, &asset_manager);
 
-    void ScriptManager::LUABinding_(Engine::Application& engine) {
 
-        Assets::AssetManager& asset_manager = engine.getAssetManager();
-        Core::Scene* scene_ptr = &engine.getScene();
-
-        m_lua->set_function("loadAnimation", &Assets::AssetManager::loadAnimation, &asset_manager);
-        m_lua->set_function("loadTexture",   &Assets::AssetManager::loadTexture  , &asset_manager);
-        m_lua->set_function("loadSound",     &Assets::AssetManager::loadSound    , &asset_manager);
-        m_lua->set_function("loadFont",      &Assets::AssetManager::loadFont     , &asset_manager);
-        
-
-        m_lua->set_function("SpawnEntity", [scene_ptr](const std::string& tag, const std::string& pool_name, sol::table components) {
-
+    m_lua->set_function("SpawnEntity", [scene_ptr](const std::string& tag, const std::string& pool_name, sol::table components) {
         // Use the captured pointer
         std::unique_ptr<Core::GameObject> game_object = std::make_unique<Core::GameObject>();
 
-        // 3. Use a safe create method (defined below)
-        Pool& pool = scene_ptr->getPool(pool_name);
+
+        std::size_t pool_id = SceneRegistry::Get().getSceneID(pool_name);
+
+
+        Core::Pool& pool = scene_ptr->getPool(pool_id);
 
         for (const auto& comp : components) {
             std::string component_name = comp.first.as<std::string>();
@@ -72,5 +74,5 @@ namespace Engine::Scripting {
 
         pool.push_back(std::move(game_object));
     });
-    }
 }
+}  // namespace Engine::Scripting

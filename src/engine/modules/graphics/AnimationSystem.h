@@ -7,22 +7,16 @@
 #include <vector>
 
 namespace Engine::Assets { class AssetManager; }
+namespace Engine::Core { class Context; }
+namespace Engine::Graphics { struct AnimationComponent; struct SpriteComponent; }
 
-namespace Engine::Core {
-    class GameObject;
-    }
-
-    namespace Engine::Graphics {
-
-    struct AnimationComponent;
-    struct SpriteComponent;
-
+namespace Engine::Graphics {
     class AnimationSystem {
     public:
         AnimationSystem()  = default;
         ~AnimationSystem() = default;
 
-        void            update(float delta, const std::vector<std::unique_ptr<Core::GameObject>>& game_objects, const Assets::AssetManager& asset_manager);
+        void            update(Engine::Core::Context& ctx);
         SpriteComponent getSprite(AnimationComponent& anim);
     };
 }  // namespace Engine::Graphics

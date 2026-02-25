@@ -1,6 +1,7 @@
 file(GLOB_RECURSE GAME_SOURCES "*.cpp")
 file(GLOB_RECURSE GAME_HEADERS "*.h")
 
+
 add_executable(Asteroids
         main.cpp
         ${GAME_SOURCES}

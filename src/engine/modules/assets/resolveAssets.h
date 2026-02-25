@@ -4,9 +4,9 @@
 
 #pragma once
 
-namespace Engine { class Application; }
+namespace Engine::Core { class Context; }
 
 namespace Engine::Assets {
 
-    void resolveAssets(Engine::Application& ctx);
+    void resolveAssets(Engine::Core::Context& ctx);
 }

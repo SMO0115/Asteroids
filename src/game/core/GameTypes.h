@@ -4,24 +4,64 @@
 
 #pragma once
 
+#include <cstddef> // for std::size_t
+
 namespace Game::Core {
-    enum class SoundState : int { IDLE = 0, WALK, RUN, JUMP };
 
-    enum class AnimationState : int { IDLE = 0, DEATH };
+    // 1. Sound State
+    namespace SoundState {
+        enum State : int {
+            IDLE = 0,
+            WALK,
+            RUN,
+            JUMP
+        };
+    }
 
-    enum class EmittorState : int {
+    // 2. Animation State
+    namespace AnimationState {
+        enum State : int {
+            IDLE = 0,
+            DEATH,
+            RUN
+        };
+    }
 
-        IDLE = 0,
-        INVADER_A,
-        INVADER_B,
-        INVADER_C,
-        MISSILE,
-        PLAYER
-    };
+    // 3. Emittor State
+    namespace EmittorState {
+        enum State : int {
+            IDLE = 0,
+            INVADER_A,
+            INVADER_B,
+            INVADER_C,
+            MISSILE,
+            PLAYER
+        };
+    }
 
-    enum class InvaderType : int { I = 0, INVADER_A, INVADER_B, INVADER_C };
+    // 4. Invader Type
+    namespace InvaderType {
+        enum Type : int {
+            I = 0,
+            INVADER_A,
+            INVADER_B,
+            INVADER_C
+        };
+    }
 
+    // 5. Game Pools (The most important one for your Scene)
+    namespace GamePools {
+        enum ID : std::size_t {
+            DEFAULT = 0,
+            STATIC,
+            PLAYER,
+            ENEMIES,
+            BULLETS,
+            UI,
 
+            COUNT // Automatically 5, used for array sizing
+        };
+    }
 
     struct Entities {};
 }  // namespace Game::Core

@@ -6,10 +6,10 @@
 
 #include <memory>
 
-namespace Engine            { class Application; }
+namespace Engine            { class Application;  }
 namespace Engine::Input     { class InputManager; }
 namespace Engine::Graphics  { class RenderSystem; }
-
+namespace Engine::Core      { class Context;      }
 
 
 namespace Engine::Core {
@@ -21,7 +21,7 @@ namespace Engine::Core {
         virtual void                            onExit()  {}
 
         virtual std::unique_ptr<IGameState>     handleInput(Input::InputManager &input_manager) = 0;
-        virtual std::unique_ptr<IGameState>     update(float deltatime, Application& engine)    = 0;
-        virtual void                            render(Engine::Application& engine)             = 0;
+        virtual std::unique_ptr<IGameState>     update(float deltatime, Context& ctx)    = 0;
+        virtual void                            render(Engine::Core::Context& ctx)             = 0;
     };
 }

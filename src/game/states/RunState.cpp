@@ -3,74 +3,55 @@
 //
 
 #include "RunState.h"
-#include "GameOverState.h"
-#include "LevelCompletedState.h"
 #include "PauseState.h"
 
-#include "engine/modules/audio/AudioModule.h"
+#include "engine/core/CoreModule.h"
+#include "engine/modules/assets/AssetManager.h"
+#include "engine/modules/graphics/AnimationSystem.h"
+#include "engine/modules/graphics/RenderSystem.h"
 #include "engine/modules/input/InputModule.h"
-#include "engine/modules/physics/PhysicsModule.h"
-#include "engine/modules/graphics/RenderModule.h"
+#include "game/core/screenWrapper.h"
 
-#include "game/modules/control/ControlModul.h"
-#include "game/modules/emitter/EmiterModule.h"
-#include "game/modules/health/HealthModule.h"
-#include "game/modules/ui/UIModule.h"
+#include "game/modules/player/PlayerModule.h"
 
 
 namespace Game::State {
-    RunState::~RunState() = default;
+RunState::~RunState() = default;
 
 
-    std::unique_ptr<Engine::Core::IGameState> RunState::handleInput(Engine::Input::InputManager& input_manager) {
+std::unique_ptr<Engine::Core::IGameState> RunState::handleInput(Engine::Input::InputManager& input_manager) {
 
-        if (input_manager.wasKeyPressed(Engine::Input::Key::ESCAPE)) return std::make_unique<PauseState>(m_game);
+    if (input_manager.wasKeyPressed(Engine::Input::Key::ESCAPE)) return std::make_unique<PauseState>(m_game);
 
-        return nullptr;
-    }
-
-
-    std::unique_ptr<Engine::Core::IGameState> RunState::update(float deltatime, Engine::Application& engine) {
-
-        auto& game_state   = m_game.getGameSession()->getComponent<UI::GameStateComponent>();
-        Pool& game_objects = engine.getScene().getPool("Entities"); // m_game.getGameObjects();
-        Pool& ui_objects   = m_game.getUIObjects();
+    return nullptr;
+}
 
 
-        m_game.getPlayerControlSystem().update(deltatime, engine.getInputManager(), m_game.getEventBus(), engine.getEventBus(), game_objects);
-        m_game.getAISystem().update(deltatime, engine.getEventBus(), m_game.getEventBus(), game_objects);
+std::unique_ptr<Engine::Core::IGameState> RunState::update(float deltatime, Engine::Core::Context& ctx) {
+
+    auto game_objects = ctx.get<Engine::Core::Scene>().getAll();  //.getPool(Game::Core::GamePools::ENEMIES);
+
+    Game::Core::screenWrapper(ctx);
+
+    ctx.get<Game::Player::PlayerSystem>().update(ctx);
+    ctx.get<Engine::Physics::PhysicsSystem>().update(ctx);
+    ctx.get<Engine::Graphics::AnimationSystem>().update(ctx);
+
+    return nullptr;
+}
+
+void RunState::render(Engine::Core::Context& ctx) {
+
+    Engine::Graphics::RenderSystem& renderer      = ctx.get<Engine::Graphics::RenderSystem>();
+    Engine::Core::Scene&            scene         = ctx.get<Engine::Core::Scene>();
+    Engine::Assets::AssetManager&   asset_manager = ctx.get<Engine::Assets::AssetManager>();
 
 
-        engine.getPhysicsSystem().update(deltatime, game_objects);
+    auto& a = scene.getPool(Game::Core::GamePools::PLAYER);
+    auto& b = scene.getPool(Game::Core::GamePools::ENEMIES);
 
-
-        engine.getCollisionSystem().update(engine.getEventBus(), game_objects);
-
-
-        m_game.getHealthSystem().update(deltatime, engine.getEventBus(), game_objects, engine.getAssetManager());
-        m_game.getLifetimeSystem().update(deltatime, m_game.getEventBus(), game_objects);
-        m_game.getScoreSystem().update(deltatime, m_game.getEventBus(), game_state, engine.getAssetManager());
-
-
-        m_game.getEmitterSystem().update(deltatime, m_game.getEventBus(), game_objects);
-        engine.getSoundSystem().update(engine.getAssetManager(), engine.getEventBus(), game_objects);
-        engine.getAnimationSystem().update(deltatime, game_objects, engine.getAssetManager());
-        m_game.getUISystem().update(deltatime, ui_objects, game_state);
-
-
-        if (game_state.lives == 0) return std::make_unique<GameOverState>(m_game);
-        if (game_state.num_invaders == 0) return std::make_unique<LevelCompletedState>(m_game);
-
-        return nullptr;
-    }
-
-    void RunState::render(Engine::Application& engine) {
-
-        Engine::Graphics::RenderSystem& renderer = engine.getRenderer();
-        Engine::Core::Scene& scene = engine.getScene();
-
-
-        renderer.renderWorld(scene.getPool("Entities"), engine.getAssetManager());
-        renderer.renderUI(scene.getPool("UI"), engine.getAssetManager());
-    }
+    renderer.renderWorld(scene.getPool(Game::Core::GamePools::PLAYER), asset_manager);
+    renderer.renderWorld(scene.getPool(Game::Core::GamePools::ENEMIES), asset_manager);
+    renderer.renderUI(scene.getPool(Game::Core::GamePools::UI), asset_manager);
+}
 }  // namespace Game::State

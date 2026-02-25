@@ -2,10 +2,7 @@
 // Created by marcel on 11/8/25.
 //
 
-#include <iostream>
-
-#include "SDL.h"
-#include "SDL_mixer.h"
+#include "engine/core/pch.h"
 
 #include "engine/core/CoreModule.h"
 
@@ -42,14 +39,17 @@ bool SoundSystem::init() {
 void SoundSystem::playSound(const Assets::AssetID sound_id) { m_sound_queue.insert(sound_id); }
 
 
-void SoundSystem::update(const Assets::AssetManager& asset_manager, Events::EngineEventBus& event_bus,
-                         const std::vector<std::unique_ptr<Core::GameObject>>& game_objects) {
+void SoundSystem::update(Core::Context& ctx) {
 
 
-    for (const auto& object : game_objects) {
+    auto                  game_objects  = ctx.get<Engine::Core::Scene>().getAll();
+    Events::EventBus&     event_bus     = ctx.get<Events::EventBus>();
+    Assets::AssetManager& asset_manager = ctx.get<Engine::Assets::AssetManager>();
 
-        if (!object->hasComponent<SoundComponent>()) continue;
-        auto& sound_comp = object->getComponent<SoundComponent>();
+    for (auto& object : game_objects) {
+
+        if (!object.hasComponent<SoundComponent>()) continue;
+        auto& sound_comp = object.getComponent<SoundComponent>();
 
 
         if (sound_comp.current_state != sound_comp.previous_state) {
@@ -61,15 +61,15 @@ void SoundSystem::update(const Assets::AssetManager& asset_manager, Events::Engi
 
             auto it = sound_comp.sounds_ids.find(sound_comp.current_state);
             if (it != sound_comp.sounds_ids.end()) {
-                playSound( it->second );
+                playSound(it->second);
             }
             sound_comp.previous_state = sound_comp.current_state;
         }
     }
 
 
-    for (const Events::PlaySoundEvent& event : event_bus.getEvents<Events::PlaySoundEvent>()) {
-        playSound( asset_manager.getSoundID( event.soundId ) );
+    for (const Events::PlaySoundEvent& event : event_bus.get<Events::PlaySoundEvent>()) {
+        playSound(asset_manager.getSoundID(event.soundId));
     }
 
     for (const auto& sound_id : m_sound_queue) {

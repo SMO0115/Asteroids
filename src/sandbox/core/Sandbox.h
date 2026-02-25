@@ -30,13 +30,12 @@ namespace Game {
         Sandbox();
         ~Sandbox() override;
 
-        bool init(Engine::Application& engine) override;
+        bool init(Engine::Core::Context& ctx) override;
         void handleInput(Engine::Input::InputManager& input_manager) override;
-        bool update(float deltatime, Engine::Application& engine) override;
-        void render(Engine::Application& engine) override;
+        bool update(float deltatime, Engine::Core::Context& ctx) override;
+        void render(Engine::Core::Context& ctx) override;
 
     private:
 
-        std::unique_ptr<Events::GameEventBus>   m_event_bus;
     };
 }  // namespace Game

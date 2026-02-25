@@ -11,12 +11,8 @@
 
 #include "engine/events/EngineEvents.h"
 
-namespace Engine::Core {
-class GameObject;
-}
-namespace Engine::Assets {
-class AssetManager;
-}
+namespace Engine::Core { class GameObject; }
+namespace Engine::Assets { class AssetManager; }
 
 namespace Engine::Audio {
 class SoundSystem {
@@ -27,8 +23,7 @@ public:
     bool init();
 
     void playSound(const Assets::AssetID sound_id);
-    void update(const Assets::AssetManager& asset_manager, Events::EngineEventBus& event_bus,
-                const std::vector<std::unique_ptr<Core::GameObject>>& game_objects);
+    void update(Core::Context& ctx);
 
 private:
     std::unordered_set<Assets::AssetID> m_sound_queue;

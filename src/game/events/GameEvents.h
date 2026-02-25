@@ -26,5 +26,4 @@ struct DeathEvent {
     Engine::Core::GameObject* object;
 };
 
-using GameEventBus = Engine::Events::EventBus<EmitterEvent, DeathEvent>;
 }  // namespace Game::Events

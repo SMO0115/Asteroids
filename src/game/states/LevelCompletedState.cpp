@@ -7,9 +7,9 @@
 #include "RunState.h"
 
 #include "engine/modules/assets/AssetModule.h"
+#include "engine/modules/graphics/RenderModule.h"
 #include "engine/modules/input/InputModule.h"
 #include "engine/modules/physics/PhysicsModule.h"
-#include "engine/modules/graphics/RenderModule.h"
 
 
 namespace Game::State {
@@ -26,7 +26,7 @@ std::unique_ptr<Engine::Core::IGameState> LevelCompletedState::handleInput(Engin
     return nullptr;
 }
 
-std::unique_ptr<Engine::Core::IGameState> LevelCompletedState::update(float deltatime, Engine::Application& engine) {
+std::unique_ptr<Engine::Core::IGameState> LevelCompletedState::update(float deltatime, Engine::Core::Context& ctx) {
 
 
     // std::unique_ptr<Engine::Core::GameObject> Pause = std::make_unique<Engine::Core::GameObject>();
@@ -39,13 +39,13 @@ std::unique_ptr<Engine::Core::IGameState> LevelCompletedState::update(float delt
     return nullptr;
 }
 
-void LevelCompletedState::render(Engine::Application& engine) {
+void LevelCompletedState::render(Engine::Core::Context& ctx) {
 
-    Engine::Graphics::RenderSystem& renderer = engine.getRenderer();
-
-    renderer.renderWorld(m_game.getGameObjects(), engine.getAssetManager());
-    renderer.renderUI(m_game.getUIObjects(), engine.getAssetManager());
+    // Engine::Graphics::RenderSystem& renderer = engine.getRenderer();
     //
+    // renderer.renderWorld(m_game.getGameObjects(), engine.getAssetManager());
+    // renderer.renderUI(m_game.getUIObjects(), engine.getAssetManager());
+    // //
     // renderer.drawRect({0, 0, 800, 800}, Engine::Core::Color{0, 0, 0, 192});
     // renderer.renderUI(m_text);
 }

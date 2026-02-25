@@ -11,9 +11,11 @@
 namespace Engine::Physics {
 struct PhysicsComponent : public Core::BaseComponent {
     glm::vec2 velocity;
-    glm::vec2 angularVelocity;
     glm::vec2 acceleration;
-    glm::vec2 angularDamping;
+    float damping;
+    float angularVelocity;
+    float angularAcceleration;
+    float angularDamping;
     float     mass;
 };
 }  // namespace Engine::Physics

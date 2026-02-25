@@ -7,22 +7,20 @@
 #include <string>
 
 
-namespace Engine            { class Application;       }
-namespace Engine::Scripting { class ComponentRegistry; }
-namespace Engine::Assets    { class AssetManager;      }
+namespace Engine::Core      { class Context;           }
 
 namespace Engine::Scripting {
     class ScriptManager {
 
     public:
-        ScriptManager(Engine::Application& engine);
+        ScriptManager(Engine::Core::Context& ctx);
         ~ScriptManager();
 
         void runFile(std::string filename);
         // void runConsole();
 
     private:
-        void LUABinding_(Engine::Application& engine);
+        void LUABinding_(Engine::Core::Context& ctx);
 
     private:
 

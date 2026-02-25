@@ -22,5 +22,4 @@ struct CollisionEvent {
     Core::GameObject* to;
 };
 
-using EngineEventBus = EventBus<PlaySoundEvent, CollisionEvent>;
 }  // namespace Engine::Events

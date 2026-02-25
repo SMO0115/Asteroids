@@ -4,20 +4,18 @@
 
 #pragma once
 
-namespace Engine            { class Application; }
-namespace Engine::Input     { class InputManager; }
-namespace Engine::Graphics  { class RenderSystem; }
-
+namespace Engine::Input     { class InputManager;   }
+namespace Engine::Core      { class Context;        }
 
 namespace Engine::Core {
     class IGame {
 
     public:
-        virtual                             ~IGame()                                        = default;
+        virtual                             ~IGame()                                                = default;
 
-        virtual bool                        init(Application& engine)                       = 0;
-        virtual void                        handleInput(Input::InputManager &input_manager) = 0;
-        virtual bool                        update(float deltatime, Application& engine)    = 0;
-        virtual void                        render(Engine::Application& engine)             = 0;
+        virtual bool                        init(Engine::Core::Context& ctx)                        = 0;
+        virtual void                        handleInput(Input::InputManager &input_manager)         = 0;
+        virtual bool                        update(float deltatime, Engine::Core::Context& engine)  = 0;
+        virtual void                        render(Engine::Core::Context& ctx)                      = 0;
     };
 }

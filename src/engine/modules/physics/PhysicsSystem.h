@@ -7,7 +7,7 @@
 #include <vector>
 
 namespace Engine::Core {
-class GameObject;
+class Context;
 }
 
 namespace Engine::Physics {
@@ -16,6 +16,6 @@ public:
     PhysicsSystem()  = default;
     ~PhysicsSystem() = default;
 
-    void update(float deltatime, std::vector<std::unique_ptr<Core::GameObject> >& game_objects);
+    void update(Engine::Core::Context& ctx);
 };
 }  // namespace Engine::Physics

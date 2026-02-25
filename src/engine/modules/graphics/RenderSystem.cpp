@@ -2,18 +2,14 @@
 // Created by marcel on 8/21/25.
 //
 
+#include "engine/core/pch.h"
+
 #include "RenderSystem.h"
-#include <SDL_ttf.h>
-#include <cassert>
-#include <iostream>
-#include "SDL.h"
-#include "SDL_image.h"
 #include "SpriteComponent.h"
 #include "UITextComponent.h"
 
 #include "engine/core/CoreModule.h"
 #include "engine/modules/assets/AssetModule.h"
-#include "game/modules/health/HealthComponent.h"
 
 
 namespace Engine::Graphics {
@@ -39,7 +35,15 @@ bool RenderSystem::init(const std::string& title, std::size_t width, std::size_t
         return false;
     }
 
-    m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
+    // m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
+    m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+    SDL_RendererInfo info;
+    SDL_GetRendererInfo(m_renderer, &info);
+    std::cout << "[Renderer] Name: " << info.name << std::endl;
+    std::cout << "[Renderer] Accelerated: " << ((info.flags & SDL_RENDERER_ACCELERATED) ? "Yes" : "No") << std::endl;
+
+
     if (!m_renderer) {
         std::cerr << "Failed to create renderer: " << SDL_GetError() << std::endl;
         return false;
@@ -98,7 +102,6 @@ void RenderSystem::renderWorld(const std::vector<std::unique_ptr<Core::GameObjec
 
 void RenderSystem::draw(const SpriteComponent& sprite, const Core::TransformComponent& transform, const Assets::AssetManager& asset_manager) const {
 
-
     if (sprite.texture_id == 0) return;
 
     SDL_Rect srcRect = {sprite.sourceRect.x, sprite.sourceRect.y, sprite.sourceRect.w, sprite.sourceRect.h};
@@ -111,7 +114,12 @@ void RenderSystem::draw(const SpriteComponent& sprite, const Core::TransformComp
 
     SDL_Rect destRect = {destX, destY, static_cast<int>(scaledWidth), static_cast<int>(scaledHeight)};
 
-    SDL_RenderCopy(m_renderer, asset_manager.getTexture(sprite.texture_id)->texture, &srcRect, &destRect);
+
+    SDL_RenderCopyEx(m_renderer, asset_manager.getTexture(sprite.texture_id)->texture, &srcRect, &destRect,
+                     static_cast<double>(transform.rotation),  // Angle in degrees
+                     nullptr,                                  // Center of rotation: NULL defaults to the center of destRect
+                     SDL_FLIP_NONE                             // Flip: SDL_FLIP_HORIZONTAL, SDL_FLIP_VERTICAL, or SDL_FLIP_NONE
+    );
 }
 
 
@@ -147,10 +155,10 @@ void RenderSystem::drawLine(int x1, int y1, int x2, int y2, const Core::Color& c
 }
 
 
-void RenderSystem::drawText(const UITextComponent& text,  const Assets::AssetManager& asset_manager) const {
+void RenderSystem::drawText(const UITextComponent& text, const Assets::AssetManager& asset_manager) const {
 
 
-    auto font = asset_manager.getFont( text.font_id );
+    auto font = asset_manager.getFont(text.font_id);
     if (!font) return;
 
     SDL_Color    sdl_color    = {text.color.r, text.color.g, text.color.b, 255};
