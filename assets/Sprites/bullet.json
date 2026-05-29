@@ -1,0 +1,12 @@
+{"frames": [
+
+  {
+    "filename": "assets/Sprites/asteroids.png",
+    "frame":  {"x":448,"y":288,"w":32,"h":32},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":448,"y":288,"w":32,"h":32},
+    "sourceSize": {"w":32,"h":32}
+  }
+]
+}

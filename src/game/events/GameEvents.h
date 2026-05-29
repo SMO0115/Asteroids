@@ -16,8 +16,8 @@ class GameObject;
 namespace Game::Events {
 struct EmitterEvent {
     int                             emitter_animation_id;
-    Engine::Physics::CollisionLayer layer;
-    Engine::Physics::CollisionLayer mask;
+    Engine::Core::CollisionLayer layer;
+    Engine::Core::CollisionLayer mask;
     glm::vec2                       position;
     glm::vec2                       velocity;
 };

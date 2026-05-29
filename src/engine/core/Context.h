@@ -57,6 +57,7 @@ namespace Engine::Core {
         template<typename T>
         T& get() {
             size_t id = getServiceID<T>();
+
             assert(id < m_services.size() && m_services[id] != nullptr && "Service not registered!");
 
             return *static_cast<T*>(m_services[id].get());

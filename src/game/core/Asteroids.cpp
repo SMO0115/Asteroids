@@ -48,9 +48,9 @@ bool Asteroids::init(Engine::Core::Context& ctx) {
 }
 
 
-void Asteroids::handleInput(Engine::Input::InputManager& input_manager) {
+void Asteroids::handleInput(Engine::Core::Context& ctx) {
 
-    std::unique_ptr<Engine::Core::IGameState> new_state = m_state->handleInput(input_manager);
+    std::unique_ptr<Engine::Core::IGameState> new_state = m_state->handleInput(ctx);
 
     if (new_state != nullptr) {
 

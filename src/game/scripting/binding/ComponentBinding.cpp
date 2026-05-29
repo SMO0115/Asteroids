@@ -142,6 +142,13 @@ using namespace Engine::Scripting;
 // });
 
 
+
+static bool s_alive_registered  = ComponentRegistry::Get().registerComponent("IsAliveTag",
+    [](Engine::Core::GameObject& obj, const sol::table&) {
+        obj.addComponent<Game::Core::IsAliveTag>();
+});
+
+
 // =================================================================================
 // 8. STATE REGISTRATION (Game Specifics)
 // =================================================================================
@@ -177,7 +184,7 @@ static bool s_invader_states = StateRegistry::Get().registerBatch(
     "InvaderType", {{"A", Game::Core::InvaderType::INVADER_A}, {"B", Game::Core::InvaderType::INVADER_B}, {"C", Game::Core::InvaderType::INVADER_C}});
 
 // --- COLLISION LAYERS ---
-using namespace Engine::Physics;
+using namespace Engine::Core;
 static bool s_collision_layers = StateRegistry::Get().registerBatch("CollisionLayer", {{"NONE", (int)CollisionLayer::NONE},
                                                                                        {"PLAYER", (int)CollisionLayer::PLAYER},
                                                                                        {"INVADER", (int)CollisionLayer::INVADER},
@@ -199,5 +206,5 @@ static bool bindPools() {
     return true;
 }
 
-using namespace Engine::Physics;
+using namespace Engine::Core;
 static bool s_pools_layers = bindPools();

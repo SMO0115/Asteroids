@@ -41,7 +41,7 @@ bool Sandbox::init(Engine::Core::Context& ctx) {
 }
 
 
-void Sandbox::handleInput(Engine::Input::InputManager& input_manager) {}
+void Sandbox::handleInput(Engine::Core::Context& ctx) {}
 
 
 bool Sandbox::update(float deltatime, Engine::Core::Context& ctx) {

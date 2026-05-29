@@ -10,6 +10,7 @@
 #include "engine/modules/graphics/AnimationSystem.h"
 #include "engine/modules/graphics/RenderSystem.h"
 #include "engine/modules/input/InputModule.h"
+#include "engine/modules/physics/PhysicsSystem.h"
 #include "game/core/screenWrapper.h"
 
 #include "game/modules/player/PlayerModule.h"
@@ -19,7 +20,9 @@ namespace Game::State {
 RunState::~RunState() = default;
 
 
-std::unique_ptr<Engine::Core::IGameState> RunState::handleInput(Engine::Input::InputManager& input_manager) {
+std::unique_ptr<Engine::Core::IGameState> RunState::handleInput(Engine::Core::Context& ctx) {
+
+    Engine::Input::InputManager& input_manager = ctx.get<Engine::Input::InputManager>();
 
     if (input_manager.wasKeyPressed(Engine::Input::Key::ESCAPE)) return std::make_unique<PauseState>(m_game);
 
@@ -52,6 +55,7 @@ void RunState::render(Engine::Core::Context& ctx) {
 
     renderer.renderWorld(scene.getPool(Game::Core::GamePools::PLAYER), asset_manager);
     renderer.renderWorld(scene.getPool(Game::Core::GamePools::ENEMIES), asset_manager);
+    renderer.renderWorld(scene.getPool(Game::Core::GamePools::BULLETS), asset_manager);
     renderer.renderUI(scene.getPool(Game::Core::GamePools::UI), asset_manager);
 }
 }  // namespace Game::State

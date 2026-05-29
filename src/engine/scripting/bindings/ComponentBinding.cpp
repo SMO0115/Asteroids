@@ -5,6 +5,7 @@
 #include <iostream>
 #include <unordered_map>
 
+#include "engine/core/components/LifeComponent.h"
 #include "engine/core/components/TransformComponent.h"
 #include "engine/modules/audio/SoundComponent.h"
 #include "engine/modules/graphics/AnimationComponent.h"
@@ -14,6 +15,7 @@
 #include "engine/modules/physics/PhysicsComponent.h"
 
 #include "engine/core/GameObject.h"
+#include "engine/core/components/LifeComponent.h"
 #include "engine/scripting/ComponentRegistry.h"
 #include "engine/scripting/SceneRegistry.h"
 #include "engine/scripting/StateRegistry.h"
@@ -21,6 +23,17 @@
 #include "game/core/GameTypes.h"
 
 using namespace Engine::Scripting;
+
+// =================================================================================
+// 1. LIFE
+// =================================================================================
+static bool s_life_registered = ComponentRegistry::Get().registerComponent("Life", [](Engine::Core::GameObject& obj, const sol::table& t) {
+    auto& life    = obj.addComponent<Engine::Core::LifeComponent>();
+
+    life.current_health = t.get_or("currentHealth", 0.f);
+    life.max_health     = t.get_or("maxHealth", 0.f);
+    life.life_time      = t.get_or("lifeTime", 0.f);
+});
 
 // =================================================================================
 // 1. TRANSFORM
@@ -69,7 +82,7 @@ static bool s_sound_registered = ComponentRegistry::Get().registerComponent("Sou
 // =================================================================================
 static bool s_collider_registered =
     Engine::Scripting::ComponentRegistry::Get().registerComponent("Collider", [](Engine::Core::GameObject& obj, const sol::table& t) {
-        auto& collider = obj.addComponent<Engine::Physics::ColliderComponent>();
+        auto& collider = obj.addComponent<Engine::Core::ColliderComponent>();
 
         // 1. Bounds
         if (sol::optional<sol::table> bounds = t["bounds"]) {
@@ -103,7 +116,7 @@ static bool s_collider_registered =
         };
 
         // 3. Assign (Cast int back to Enum)
-        using LayerType = Engine::Physics::CollisionLayer;
+        using LayerType = Engine::Core::CollisionLayer;
 
         if (t["layer"].valid()) collider.layer = static_cast<LayerType>(parseMask(t["layer"]));
 

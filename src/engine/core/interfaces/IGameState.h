@@ -20,8 +20,8 @@ namespace Engine::Core {
         virtual void                            onEnter() {}
         virtual void                            onExit()  {}
 
-        virtual std::unique_ptr<IGameState>     handleInput(Input::InputManager &input_manager) = 0;
+        virtual std::unique_ptr<IGameState>     handleInput(Engine::Core::Context& ctx)  = 0;
         virtual std::unique_ptr<IGameState>     update(float deltatime, Context& ctx)    = 0;
-        virtual void                            render(Engine::Core::Context& ctx)             = 0;
+        virtual void                            render(Engine::Core::Context& ctx)       = 0;
     };
 }

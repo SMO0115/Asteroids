@@ -16,7 +16,7 @@ public:
     RunState(Asteroids& game) : m_game(game) {}
     ~RunState() override;
 
-    std::unique_ptr<Engine::Core::IGameState> handleInput(Engine::Input::InputManager& input_manager) override;
+    std::unique_ptr<Engine::Core::IGameState> handleInput(Engine::Core::Context& ctx) override;
     std::unique_ptr<Engine::Core::IGameState> update(float deltatime, Engine::Core::Context& ctx) override;
     void                                      render(Engine::Core::Context& ctx) override;
 

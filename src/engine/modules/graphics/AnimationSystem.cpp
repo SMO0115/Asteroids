@@ -40,12 +40,13 @@ void AnimationSystem::update(Engine::Core::Context& ctx) {
         if (anim.speed > 0.0f) {
             anim.current_duration += deltatime * anim.speed;
 
-            if (anim.current_duration > current_anim->durations[anim.current_frame]) {
-                anim.current_duration = 0;
+            if (anim.current_duration >= current_anim->durations[ anim.current_frame ]) {
+                anim.current_duration = 0.0f;
                 anim.current_frame++;
-                if (anim.current_frame >= current_anim->frames.size()) {
-                    anim.current_frame = 0;
-                }
+                anim.current_frame %= current_anim->frames.size();
+                // if (anim.current_frame >= current_anim->frames.size()) {
+                //     anim.current_frame = 0;
+                // }
             }
         }
 

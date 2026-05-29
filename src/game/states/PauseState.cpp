@@ -18,7 +18,9 @@ PauseState::PauseState(Asteroids& game) : m_game(game) {}
 PauseState::~PauseState() = default;
 
 
-std::unique_ptr<Engine::Core::IGameState> PauseState::handleInput(Engine::Input::InputManager& input_manager) {
+std::unique_ptr<Engine::Core::IGameState> PauseState::handleInput(Engine::Core::Context& ctx) {
+
+    Engine::Input::InputManager& input_manager = ctx.get<Engine::Input::InputManager>();
 
     if (input_manager.wasKeyPressed(Engine::Input::Key::ESCAPE)) return std::make_unique<RunState>(m_game);
 

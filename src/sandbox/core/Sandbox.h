@@ -31,7 +31,7 @@ namespace Game {
         ~Sandbox() override;
 
         bool init(Engine::Core::Context& ctx) override;
-        void handleInput(Engine::Input::InputManager& input_manager) override;
+        void handleInput(Engine::Core::Context& ctx) override;
         bool update(float deltatime, Engine::Core::Context& ctx) override;
         void render(Engine::Core::Context& ctx) override;
 

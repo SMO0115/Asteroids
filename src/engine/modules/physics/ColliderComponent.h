@@ -11,7 +11,7 @@ namespace Engine::Core {
 class GameObject;
 }
 
-namespace Engine::Physics {
+namespace Engine::Core {
     enum class CollisionLayer : int {
 
         NONE           = 0,

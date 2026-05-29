@@ -14,8 +14,9 @@ namespace Engine::Core {
         virtual                             ~IGame()                                                = default;
 
         virtual bool                        init(Engine::Core::Context& ctx)                        = 0;
-        virtual void                        handleInput(Input::InputManager &input_manager)         = 0;
+        virtual void                        handleInput(Engine::Core::Context& ctx)                 = 0;
         virtual bool                        update(float deltatime, Engine::Core::Context& engine)  = 0;
         virtual void                        render(Engine::Core::Context& ctx)                      = 0;
     };
 }
+

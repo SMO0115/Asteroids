@@ -7,7 +7,14 @@
     "trimmed": false,
     "spriteSourceSize": {"x":192,"y":256,"w":96,"h":64},
     "sourceSize": {"w":96,"h":64}
+  },
+  {
+    "filename": "assets/Sprites/asteroids.png",
+    "frame": {"x":192,"y":256,"w":96,"h":64},
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": {"x":192,"y":256,"w":96,"h":64},
+    "sourceSize": {"w":96,"h":64}
   }
-
   ]
 }

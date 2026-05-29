@@ -42,7 +42,7 @@ Application::Application() {
     m_context->registerService<Graphics::AnimationSystem>();
     m_context->registerService<Audio::SoundSystem>();
     m_context->registerService<Physics::PhysicsSystem>();
-    m_context->registerService<Physics::CollisionSystem>();
+    m_context->registerService<Core::CollisionSystem>();
     m_context->registerService<Assets::AssetManager>(&m_context->get<Graphics::RenderSystem>());
     m_context->registerService<Events::EventBus>();
     m_context->registerService<Scripting::ScriptManager>(*m_context);
@@ -86,7 +86,7 @@ void Application::run(Core::IGame& game) {
         accumulator += frameTime;
 
         input_manager.processInput();
-        game.handleInput(input_manager);
+        game.handleInput(*m_context);
         if (input_manager.isKeyHeld(Input::Key::QUIT)) m_is_running = false;
 
 

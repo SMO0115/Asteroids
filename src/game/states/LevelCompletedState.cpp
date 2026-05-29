@@ -19,7 +19,9 @@ LevelCompletedState::LevelCompletedState(Asteroids& game) : m_game(game) {}
 LevelCompletedState::~LevelCompletedState() = default;
 
 
-std::unique_ptr<Engine::Core::IGameState> LevelCompletedState::handleInput(Engine::Input::InputManager& input_manager) {
+std::unique_ptr<Engine::Core::IGameState> LevelCompletedState::handleInput(Engine::Core::Context& ctx) {
+
+    Engine::Input::InputManager& input_manager = ctx.get<Engine::Input::InputManager>();
 
     if (input_manager.wasKeyPressed(Engine::Input::Key::ESCAPE)) return std::make_unique<RunState>(m_game);
 

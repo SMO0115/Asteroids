@@ -54,11 +54,11 @@ void ScriptManager::LUABinding_(Engine::Core::Context& ctx) {
     m_lua->set_function("loadFont", &Assets::AssetManager::loadFont, &asset_manager);
 
 
-    m_lua->set_function("SpawnEntity", [scene_ptr](const std::string& tag, const std::string& pool_name, sol::table components) {
+    m_lua->set_function("SpawnEntity", [scene_ptr](const std::string& tag, const std::string& pool_name, const bool is_active, sol::table components) {
         // Use the captured pointer
         std::unique_ptr<Core::GameObject> game_object = std::make_unique<Core::GameObject>();
 
-
+        game_object->setActive(is_active);
         std::size_t pool_id = SceneRegistry::Get().getSceneID(pool_name);
 
 

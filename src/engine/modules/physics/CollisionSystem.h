@@ -10,7 +10,7 @@
 
 namespace Engine::Core { class GameObject; class TransformComponent; struct Rect; class Context; }  // namespace Engine::Core
 
-namespace Engine::Physics {
+namespace Engine::Core {
     class CollisionSystem {
     public:
         CollisionSystem()  = default;

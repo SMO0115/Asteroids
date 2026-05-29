@@ -9,5 +9,6 @@
 namespace Game::Core {
 struct ScoreDisplayTag : Engine::Core::BaseComponent {};
 struct LivesDisplayTag : Engine::Core::BaseComponent {};
-struct WallComponent : Engine::Core::BaseComponent {};
+struct WallComponent   : Engine::Core::BaseComponent {};
+struct IsAliveTag      : Engine::Core::BaseComponent {};
 }  // namespace Game::Core

@@ -1,7 +1,12 @@
 file(GLOB_RECURSE ENGINE_SOURCES "*.cpp")
 file(GLOB_RECURSE ENGINE_HEADERS "*.h")
 
-add_library(Engine STATIC ${ENGINE_SOURCES} ${ENGINE_HEADERS})
+add_library(Engine STATIC ${ENGINE_SOURCES} ${ENGINE_HEADERS}
+        core/components/LifeComponent.h
+        core/modules/LifeSystem.cpp
+        core/modules/LifeSystem.h
+        core/modules/LifeModule.h
+)
 
 target_precompile_headers(Engine PRIVATE core/pch.h)
 

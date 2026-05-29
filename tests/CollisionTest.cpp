@@ -9,7 +9,7 @@ using namespace Engine;
 
 class CollisionTest : public ::testing::Test {
 protected:
-    Physics::CollisionSystem collisionSystem;
+    Core::CollisionSystem collisionSystem;
 
     // --- THE WRAPPER METHOD ---
     // Since 'CollisionTest' is the friend, IT can call the private function.

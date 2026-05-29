@@ -7,7 +7,7 @@
 #include "engine/core/CoreModule.h"
 #include "engine/events/EventBus.h"
 
-namespace Engine::Physics {
+namespace Engine::Core {
 
 struct ColliderCache {
     Core::GameObject*         obj;
