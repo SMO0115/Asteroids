@@ -1,0 +1,44 @@
+{"frames": [
+
+{
+	"filename": "destruction1.png",
+	"frame": {"x":0,"y":0,"w":11,"h":8},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":11,"h":8},
+	"sourceSize": {"w":11,"h":8}
+},
+{
+	"filename": "destruction2.png",
+	"frame": {"x":11,"y":0,"w":11,"h":8},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":11,"h":8},
+	"sourceSize": {"w":11,"h":8}
+},
+{
+	"filename": "destruction3.png",
+	"frame": {"x":22,"y":0,"w":11,"h":8},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":11,"h":8},
+	"sourceSize": {"w":11,"h":8}
+},
+{
+	"filename": "destruction4.png",
+	"frame": {"x":33,"y":0,"w":11,"h":8},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":11,"h":8},
+	"sourceSize": {"w":11,"h":8}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "destruction.png\r\n",
+	"format": "RGBA8888",
+	"size": {"w":44,"h":8},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:7c9a9140f776a38e0bfda9591e7b6a17:ddb6c610c99ee5f896c1f2427088b1f9:bbdaa1a924b7a45f9a8312732da4882a$"
+}
+}

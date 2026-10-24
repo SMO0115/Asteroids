@@ -1,0 +1,20 @@
+{"frames": [
+
+{
+	"filename": "space__0007_UFO.png",
+	"frame": {"x":0,"y":0,"w":48,"h":21},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":21},
+	"sourceSize": {"w":48,"h":21}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "UFO.png",
+	"format": "RGBA8888",
+	"size": {"w":48,"h":21},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:76ccbe4eb174b3512d4c8fe572946d65:e6d9cf64e382707c2da1350886ca169c:52430e38fe88fcd396a9a3a58387cf3e$"
+}
+}

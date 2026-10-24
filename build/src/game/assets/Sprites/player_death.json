@@ -1,0 +1,20 @@
+{"frames": [
+
+{
+	"filename": "space__0010_PlayerExplosion.png",
+	"frame": {"x":0,"y":0,"w":30,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":30,"h":16},
+	"sourceSize": {"w":30,"h":16}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "player_death.png",
+	"format": "RGBA8888",
+	"size": {"w":30,"h":16},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:bbc528b14a57cb6c7a8a44c8b58215fe:88ade1461c72c7e07bdfc632bfe081d0:83d8f9ba10b9e072725fb91c9bcf0e36$"
+}
+}

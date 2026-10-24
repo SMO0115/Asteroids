@@ -1,0 +1,5 @@
+if(EXISTS "/home/marcel/CLionProjects/Asteroids/build/tests/AsteroidsTests[1]_tests.cmake")
+  include("/home/marcel/CLionProjects/Asteroids/build/tests/AsteroidsTests[1]_tests.cmake")
+else()
+  add_test(AsteroidsTests_NOT_BUILT AsteroidsTests_NOT_BUILT)
+endif()
