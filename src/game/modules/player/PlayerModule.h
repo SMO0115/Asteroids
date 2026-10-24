@@ -5,3 +5,4 @@
 #pragma once
 
 #include "game/modules/player/PlayerSystem.h"
+#include "game/modules/player/ShipComponent.h"

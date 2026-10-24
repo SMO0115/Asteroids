@@ -1,11 +1,16 @@
 #include "engine/modules/assets/AssetManager.h"
 
-#include "engine/core/pch.h"
+#include <SDL_image.h>
+#include <SDL_mixer.h>
+#include <SDL_ttf.h>
+#include <yyjson.h>
 
 #include "engine/modules/assets/Animation.h"
 #include "engine/modules/assets/Font.h"
 #include "engine/modules/assets/Sound.h"
 #include "engine/modules/assets/Texture.h"
+
+#include "engine/core/Log.h"
 
 #include "engine/modules/graphics/RenderModule.h"
 
@@ -22,12 +27,19 @@ AssetManager::AssetManager(Graphics::RenderSystem* renderer) : m_renderer(render
 
 AssetID AssetManager::loadTexture(const std::string& name, const std::string& path) {
 
-    // if (m_texture_lookup.contains(name)) return m_texture_lookup[name];
-    if (m_texture_lookup.contains(path)) return m_texture_lookup[path];
+    if (m_texture_lookup.contains(name)) return m_texture_lookup[name];
+
+    // Same file already loaded under another name (an animation JSON asks for it by its path):
+    // share it instead of uploading the image to the GPU twice
+    if (m_texture_path_lookup.contains(path)) {
+        AssetID id             = m_texture_path_lookup[path];
+        m_texture_lookup[name] = id;
+        return id;
+    }
 
     SDL_Surface* temp_surface = IMG_Load(path.c_str());
     if (temp_surface == nullptr) {
-        std::cerr << "[AssetManager] Failed to load image: " << path << " | " << IMG_GetError() << std::endl;
+        ENGINE_ERROR("[AssetManager] Failed to load image: {} | {}", path, IMG_GetError());
         return INVALID_ID;
     }
 
@@ -38,18 +50,19 @@ AssetID AssetManager::loadTexture(const std::string& name, const std::string& pa
     SDL_FreeSurface(temp_surface);
 
     if (sdl_texture == nullptr) {
-        std::cerr << "[AssetManager] Failed to create texture: " << SDL_GetError() << std::endl;
+        ENGINE_ERROR("[AssetManager] Failed to create texture: {}", SDL_GetError());
         return INVALID_ID;
     }
 
-    auto engine_texture     = std::make_unique<Texture>();
-    engine_texture->texture = sdl_texture;
-    engine_texture->width   = w;
-    engine_texture->height  = h;
+    auto engine_texture = std::make_unique<Texture>();
+    engine_texture->texture.reset(sdl_texture);
+    engine_texture->width  = static_cast<std::size_t>(w);
+    engine_texture->height = static_cast<std::size_t>(h);
 
     AssetID newId = static_cast<AssetID>(m_textures.size());
     m_textures.push_back(std::move(engine_texture));
-    m_texture_lookup[path] = newId;
+    m_texture_lookup[name]      = newId;
+    m_texture_path_lookup[path] = newId;
 
     return newId;
 }
@@ -72,7 +85,7 @@ AssetID AssetManager::loadAnimation(const std::string& name, const std::string& 
 
     std::ifstream file(path);
     if (!file.is_open()) {
-        std::cerr << "[AssetManager] Error: Could not open JSON: " << path << std::endl;
+        ENGINE_ERROR("[AssetManager] Could not open JSON: {}", path);
         return INVALID_ID;
     }
 
@@ -82,7 +95,7 @@ AssetID AssetManager::loadAnimation(const std::string& name, const std::string& 
 
     yyjson_doc* doc = yyjson_read(fileContent.data(), fileContent.length(), 0);
     if (!doc) {
-        std::cerr << "[AssetManager] Error: Failed to parse JSON." << std::endl;
+        ENGINE_ERROR("[AssetManager] Failed to parse JSON: {}", path);
         return INVALID_ID;
     }
 
@@ -90,19 +103,23 @@ AssetID AssetManager::loadAnimation(const std::string& name, const std::string& 
     yyjson_val* frames = yyjson_obj_get(root, "frames");
 
 
-    auto animation = std::make_unique<Animation>();
-    // animation->texture_id   = getTextureID(name);
+    auto animation  = std::make_unique<Animation>();
     animation->loop = true;
 
     size_t      idx, max;
     yyjson_val* frame;
-    const float DEFAULT_DURATION = 1.0f/90.0f;  // Changed to 0.1s (typical 10fps)
+    const float DEFAULT_DURATION = 0.1f;  // seconds per frame (10 fps) when the JSON has no "duration"
 
     yyjson_arr_foreach(frames, idx, max, frame) {
 
-        yyjson_val* filename_val   = yyjson_obj_get(frame, "filename");
-        const char* filename_c_str = yyjson_get_str(filename_val);
-        animation->texture_id      = getTextureID(std::string(filename_c_str));
+        // yyjson_get_str returns nullptr when "filename" is missing, and std::string(nullptr) crashes
+        const char* filename_c_str = yyjson_get_str(yyjson_obj_get(frame, "filename"));
+        if (filename_c_str == nullptr) {
+            ENGINE_WARN("[AssetManager] Frame without \"filename\" in {}", path);
+        } else {
+            // The JSON names its sprite sheet by path: load it (or get the cached one) under that path
+            animation->texture_id = loadTexture(filename_c_str, filename_c_str);
+        }
 
 
         yyjson_val* frame_obj = yyjson_obj_get(frame, "frame");
@@ -113,8 +130,9 @@ AssetID AssetManager::loadAnimation(const std::string& name, const std::string& 
 
         float       duration     = DEFAULT_DURATION;
         yyjson_val* duration_val = yyjson_obj_get(frame, "duration");
-        if (duration_val && yyjson_is_real(duration_val)) {
-            duration = (float)yyjson_get_real(duration_val) / 1000.0f;  // Assuming JSON is in ms
+        // is_num, not is_real: Aseprite writes whole milliseconds ("duration": 100), which is an int in JSON
+        if (duration_val && yyjson_is_num(duration_val)) {
+            duration = static_cast<float>(yyjson_get_num(duration_val)) / 1000.0f;  // JSON is in ms
         }
 
         animation->frames.push_back({x, y, w, h});
@@ -145,13 +163,13 @@ AssetID AssetManager::loadSound(const std::string& name, const std::string& path
 
     Mix_Chunk* chunk = Mix_LoadWAV(path.c_str());
     if (!chunk) {
-        std::cerr << "[AssetManager] Failed to load sound: " << Mix_GetError() << std::endl;
+        ENGINE_ERROR("[AssetManager] Failed to load sound: {}", Mix_GetError());
         return INVALID_ID;
     }
     Mix_VolumeChunk(chunk, 10);  // Default volume
 
-    auto sound         = std::make_unique<Sound>();
-    sound->m_sdl_chunk = chunk;
+    auto sound = std::make_unique<Sound>();
+    sound->m_sdl_chunk.reset(chunk);
 
     AssetID newId = static_cast<AssetID>(m_sounds.size());
     m_sounds.push_back(std::move(sound));
@@ -179,7 +197,7 @@ AssetID AssetManager::loadFont(const std::string& name, const std::string& path,
 
     TTF_Font* raw_font = TTF_OpenFont(path.c_str(), size);
     if (!raw_font) {
-        std::cerr << "[AssetManager] Error loading font '" << path << "': " << TTF_GetError() << std::endl;
+        ENGINE_ERROR("[AssetManager] Failed to load font '{}': {}", path, TTF_GetError());
         return INVALID_ID;
     }
 

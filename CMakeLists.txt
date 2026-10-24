@@ -1,14 +1,29 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.25)  # 3.25+: SYSTEM option for FetchContent
 
 # IMPORTANT: Added 'C' to LANGUAGES for Lua compilation
 project(AsteroidsWorkspace VERSION 1.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=incompatible-pointer-types")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-template-body")
+
+option(ASTEROIDS_SANITIZE "Build our own targets with AddressSanitizer + UndefinedBehaviorSanitizer" OFF)
 
 add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
+
+# Warnings (and optionally sanitizers) for OUR targets only. Third-party code is fetched
+# with SYSTEM below, so its headers don't flood the output with warnings we can't fix.
+function(asteroids_target_options target)
+    if(MSVC)
+        target_compile_options(${target} PRIVATE /W4)
+    else()
+        target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic -Wshadow -Wconversion)
+    endif()
+
+    if(ASTEROIDS_SANITIZE)
+        target_compile_options(${target} PRIVATE -fsanitize=address,undefined -fno-omit-frame-pointer)
+        target_link_options(${target} PRIVATE -fsanitize=address,undefined)
+    endif()
+endfunction()
 
 include(FetchContent)
 
@@ -17,83 +32,106 @@ FetchContent_Declare(
         SDL2
         GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
         GIT_TAG release-2.30.3
+        SYSTEM
 )
 
 FetchContent_Declare(
         SDL_ttf
         GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
         GIT_TAG release-2.22.0
+        SYSTEM
 )
 
 FetchContent_Declare(
         SDL_image
         GIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git
         GIT_TAG release-2.8.2
+        SYSTEM
 )
 
 FetchContent_Declare(
         SDL_mixer
         GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer.git
         GIT_TAG release-2.8.0
+        SYSTEM
 )
 
 FetchContent_Declare(
         yyjson
         GIT_REPOSITORY https://github.com/ibireme/yyjson.git
         GIT_TAG 0.9.0
-)
-
-FetchContent_Declare(
-        json
-        GIT_REPOSITORY https://github.com/nlohmann/json.git
-        GIT_TAG        v3.12.0
+        SYSTEM
 )
 
 FetchContent_Declare(
         spdlog
         GIT_REPOSITORY https://github.com/gabime/spdlog.git
         GIT_TAG        v1.12.0
+        SYSTEM
 )
 
-# --- NEW: LUA 5.4 SETUP ---
-# Lua does not have a CMake file, so we fetch it and build the library manually
+# --- LUA 5.4 SETUP ---
+# Lua does not have a CMake file: MakeAvailable only downloads it, and we build the library manually
 FetchContent_Declare(
         lua_source
         URL https://www.lua.org/ftp/lua-5.4.6.tar.gz
         DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 
-FetchContent_GetProperties(lua_source)
-if(NOT lua_source_POPULATED)
-    FetchContent_Populate(lua_source)
-
-    # 1. Gather all C files
-    file(GLOB LUA_SOURCES "${lua_source_SOURCE_DIR}/src/*.c")
-
-    # 2. Remove the standalone interpreter (lua.c) and compiler (luac.c)
-    # We only want the library code, not their main() functions
-    list(FILTER LUA_SOURCES EXCLUDE REGEX "lua\\.c")
-    list(FILTER LUA_SOURCES EXCLUDE REGEX "luac\\.c")
-
-    # 3. Create the library target
-    add_library(lua_lib STATIC ${LUA_SOURCES})
-
-    # 4. Allow including "lua.h"
-    target_include_directories(lua_lib PUBLIC "${lua_source_SOURCE_DIR}/src")
-
-    # 5. Linux specific: Lua needs 'dl' library for loading modules
-    if(UNIX AND NOT APPLE)
-        target_link_libraries(lua_lib PUBLIC dl)
-    endif()
-endif()
-
 FetchContent_Declare(
         sol2
         GIT_REPOSITORY https://github.com/ThePhD/sol2.git
         GIT_TAG        v3.3.0
+        SYSTEM
 )
 
-FetchContent_MakeAvailable(SDL2 SDL_ttf SDL_image SDL_mixer yyjson json spdlog sol2)
+# We only play WAV files. These SDL_mixer codecs need extra system libraries
+# (a clean CI machine doesn't have them), so don't build them.
+set(SDL2MIXER_OPUS    OFF CACHE BOOL "" FORCE)
+set(SDL2MIXER_MOD     OFF CACHE BOOL "" FORCE)
+set(SDL2MIXER_MIDI    OFF CACHE BOOL "" FORCE)
+set(SDL2MIXER_WAVPACK OFF CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(lua_source)
+
+# 1. Gather all C files
+file(GLOB LUA_SOURCES "${lua_source_SOURCE_DIR}/src/*.c")
+
+# 2. Remove the standalone interpreter (lua.c) and compiler (luac.c)
+# We only want the library code, not their main() functions
+list(FILTER LUA_SOURCES EXCLUDE REGEX "lua\\.c")
+list(FILTER LUA_SOURCES EXCLUDE REGEX "luac\\.c")
+
+# 3. Create the library target
+add_library(lua_lib STATIC ${LUA_SOURCES})
+
+# 4. Allow including "lua.h"
+target_include_directories(lua_lib SYSTEM PUBLIC "${lua_source_SOURCE_DIR}/src")
+
+# 5. Linux specific: Lua needs 'dl' library for loading modules
+if(UNIX AND NOT APPLE)
+    target_link_libraries(lua_lib PUBLIC dl)
+endif()
+
+FetchContent_MakeAvailable(SDL2 SDL_ttf SDL_image SDL_mixer yyjson spdlog sol2)
+
+# SDL 2.30's PipeWire backend passes a wrong pointer type, and GCC 14+ made that an error.
+# Turn it back into a warning for SDL only, instead of for every C file in the project.
+if(NOT MSVC)
+    foreach(sdl_target SDL2 SDL2-static)
+        if(TARGET ${sdl_target})
+            target_compile_options(${sdl_target} PRIVATE $<$<COMPILE_LANGUAGE:C>:-Wno-error=incompatible-pointer-types>)
+        endif()
+    endforeach()
+endif()
+
+# sol2 3.3.0 has a broken template that is never used, and GCC 14+ reports it anyway.
+# INTERFACE: every target that links sol2 (and so includes its headers) gets the flag.
+include(CheckCXXCompilerFlag)
+check_cxx_compiler_flag(-Wtemplate-body HAS_WTEMPLATE_BODY)
+if(HAS_WTEMPLATE_BODY)
+    target_compile_options(sol2 INTERFACE -Wno-template-body)
+endif()
 
 
 add_subdirectory(src/engine)

@@ -1,9 +1,11 @@
 include(FetchContent)
 
-# 1. Download Google Test automatically
+# 1. Download Google Test automatically (pinned: 'main' could break the build at any time)
 FetchContent_Declare(
         googletest
-        URL https://github.com/google/googletest/archive/refs/heads/main.zip
+        URL https://github.com/google/googletest/archive/refs/tags/v1.17.0.zip
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+        SYSTEM
 )
 # For Windows: Prevent GTest from overriding parent settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
@@ -13,7 +15,12 @@ FetchContent_MakeAvailable(googletest)
 add_executable(AsteroidsTests
         SanityTest.cpp
         CollisionTest.cpp
+        SceneTest.cpp
+        ContextTest.cpp
+        ScriptingTest.cpp
+        LifeTest.cpp
 )
+asteroids_target_options(AsteroidsTests)
 
 # 3. Link dependencies
 # We link GTest and your 'Engine' library so we can test engine classes

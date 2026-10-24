@@ -1,16 +1,17 @@
 #pragma once
+#include <memory>
 #include "SDL_mixer.h"
 
-struct Mix_Chunk;
-
 namespace Engine::Assets {
-struct Sound {
-    ~Sound() {
-        if (m_sdl_chunk) {
-            Mix_FreeChunk(m_sdl_chunk);
-        }
+// Same pattern as Font. The hand-written destructor this replaces had no deleted copy,
+// so copying a Sound would have freed the chunk twice; unique_ptr can't be copied at all.
+struct ChunkDeleter {
+    void operator()(Mix_Chunk* chunk) const {
+        if (chunk) Mix_FreeChunk(chunk);
     }
+};
 
-    Mix_Chunk* m_sdl_chunk = nullptr;
+struct Sound {
+    std::unique_ptr<Mix_Chunk, ChunkDeleter> m_sdl_chunk;
 };
 }  // namespace Engine::Assets

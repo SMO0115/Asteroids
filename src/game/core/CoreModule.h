@@ -8,5 +8,3 @@
 #include "GameTypes.h"
 
 #include "components/Tags.h"
-
-#include "game/scripting/binding/ComponentBinding.cpp"

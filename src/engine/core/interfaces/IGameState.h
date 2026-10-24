@@ -17,8 +17,9 @@ namespace Engine::Core {
     public:
         virtual                                 ~IGameState()                                   = default;
 
-        virtual void                            onEnter() {}
-        virtual void                            onExit()  {}
+        // They get the Context, so a state can e.g. pause the audio when it starts
+        virtual void                            onEnter(Engine::Core::Context& /*ctx*/) {}
+        virtual void                            onExit(Engine::Core::Context& /*ctx*/)  {}
 
         virtual std::unique_ptr<IGameState>     handleInput(Engine::Core::Context& ctx)  = 0;
         virtual std::unique_ptr<IGameState>     update(float deltatime, Context& ctx)    = 0;

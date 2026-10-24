@@ -1,5 +1,6 @@
 #include "TimeManager.h"
-#include "pch.h"
+
+#include <SDL.h>
 
 
 namespace Engine::Core {

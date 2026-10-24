@@ -3,19 +3,25 @@
 //
 
 #include "CollisionSystem.h"
+
+#include <glm/geometric.hpp>
+#include <glm/gtx/rotate_vector.hpp>
+
 #include "ColliderComponent.h"
 #include "engine/core/CoreModule.h"
 #include "engine/events/EventBus.h"
 
-namespace Engine::Core {
+namespace Engine::Physics {
 
 struct ColliderCache {
-    Core::GameObject*         obj;
-    ColliderComponent*        col;
-    Core::TransformComponent* trans;
+    Core::GameObject*  obj;
+    ColliderComponent* col;
+    glm::vec2          center;  // circle center in the world
+    float              radius;  // already multiplied by the scale
 };
 
 void CollisionSystem::update(Core::Context& ctx) {
+
 
     // CHANGE 1: Remove 'const' and '&'.
     // MultiPoolView is lightweight (just pointers) and intended to be used by value.
@@ -36,11 +42,13 @@ void CollisionSystem::update(Core::Context& ctx) {
         // Check map ONCE per object, not N times
         // Note: Since 'obj' is a reference, use '.' to access members
         if (obj.hasComponent<ColliderComponent>() && obj.hasComponent<Core::TransformComponent>()) {
-            active_colliders.push_back({
-                &obj,                                          // Now valid (mutable pointer)
-                &obj.getComponent<ColliderComponent>(),        // Direct pointer
-                &obj.getComponent<Core::TransformComponent>()  // Direct pointer
-            });
+            ColliderComponent&              col   = obj.getComponent<ColliderComponent>();
+            const Core::TransformComponent& trans = obj.getComponent<Core::TransformComponent>();
+
+            // The world-space circle, once per object instead of once per pair. The offset turns with
+            // the object (the same rotation the sprite gets), so it stays e.g. on the ship's nose.
+            const glm::vec2 offset = glm::rotate(col.offset * trans.scale, glm::radians(trans.rotation));
+            active_colliders.push_back({&obj, &col, trans.position + offset, col.radius * trans.scale});
         }
     }
 
@@ -54,12 +62,13 @@ void CollisionSystem::update(Core::Context& ctx) {
             ColliderCache& cache_b = active_colliders[j];
 
             // Optimization: Bitwise check is extremely fast, do it first
-            bool a_hits_b = static_cast<int>(cache_a.col->mask & cache_b.col->layer) != 0;
-            bool b_hits_a = static_cast<int>(cache_b.col->mask & cache_a.col->layer) != 0;
+            bool a_hits_b = (cache_a.col->mask & cache_b.col->layer) != 0;
+            bool b_hits_a = (cache_b.col->mask & cache_a.col->layer) != 0;
 
             if (!a_hits_b && !b_hits_a) continue;
 
-            if (checkCollisionAABB_(*cache_a.trans, *cache_b.trans, cache_a.col->bounds, cache_b.col->bounds)) {
+            if (circlesOverlap(cache_a.center, cache_a.radius, cache_b.center, cache_b.radius)) {
+
                 if (a_hits_b) event_bus.publish<Events::CollisionEvent>(cache_a.obj, cache_b.obj);
                 if (b_hits_a) event_bus.publish<Events::CollisionEvent>(cache_b.obj, cache_a.obj);
             }
@@ -67,30 +76,12 @@ void CollisionSystem::update(Core::Context& ctx) {
     }
 }
 
-bool CollisionSystem::checkCollisionAABB_(const Core::TransformComponent& trans_a, const Core::TransformComponent& trans_b, const Core::Rect& obj_a,
-                                          const Core::Rect& obj_b) {
+bool CollisionSystem::circlesOverlap(glm::vec2 center_a, float radius_a, glm::vec2 center_b, float radius_b) {
 
-    // CHANGE 3: Apply the collider's local offset (obj_a.x / obj_a.y)
-    // If your collider is defined relative to the center, you MUST add this offset.
-
-
-    Core::Rect box_a = {
-        static_cast<int>(trans_a.position.x + (obj_a.x * trans_a.scale)),  // Apply Offset X
-        static_cast<int>(trans_a.position.y + (obj_a.y * trans_a.scale)),  // Apply Offset Y
-        static_cast<int>(trans_a.scale * obj_a.w),
-        static_cast<int>(trans_a.scale * obj_a.h),
-    };
-
-    Core::Rect box_b = {
-        static_cast<int>(trans_b.position.x + (obj_b.x * trans_b.scale)),  // Apply Offset X
-        static_cast<int>(trans_b.position.y + (obj_b.y * trans_b.scale)),  // Apply Offset Y
-        static_cast<int>(trans_b.scale * obj_b.w),
-        static_cast<int>(trans_b.scale * obj_b.h),
-    };
-
-    // Center-based AABB check (Assuming position is Center)
-    return (box_a.x - box_a.w / 2 < box_b.x + box_b.w / 2 && box_a.x + box_a.w / 2 > box_b.x - box_b.w / 2 && box_a.y - box_a.h / 2 < box_b.y + box_b.h / 2 &&
-            box_a.y + box_a.h / 2 > box_b.y - box_b.h / 2);
+    // Compare the SQUARED distance with the squared reach: same answer, but no square root needed
+    const glm::vec2 distance = center_b - center_a;
+    const float     reach    = radius_a + radius_b;
+    return glm::dot(distance, distance) < reach * reach;
 }
 
 }  // namespace Engine::Physics

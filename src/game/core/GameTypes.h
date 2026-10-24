@@ -12,9 +12,7 @@ namespace Game::Core {
     namespace SoundState {
         enum State : int {
             IDLE = 0,
-            WALK,
-            RUN,
-            JUMP
+            RUN
         };
     }
 
@@ -27,29 +25,18 @@ namespace Game::Core {
         };
     }
 
-    // 3. Emittor State
-    namespace EmittorState {
-        enum State : int {
-            IDLE = 0,
-            INVADER_A,
-            INVADER_B,
-            INVADER_C,
-            MISSILE,
-            PLAYER
+    // 3. Collision Layers: one bit each. The engine only sees a bit mask (Engine::Physics::CollisionMask);
+    // this is where the bits get their meaning. Lua uses these names (registered in ComponentBinding.cpp).
+    namespace CollisionLayer {
+        enum Layer : int {
+            NONE          = 0,
+            PLAYER        = 1 << 0,
+            ASTEROID      = 1 << 1,
+            PLAYER_BULLET = 1 << 2
         };
     }
 
-    // 4. Invader Type
-    namespace InvaderType {
-        enum Type : int {
-            I = 0,
-            INVADER_A,
-            INVADER_B,
-            INVADER_C
-        };
-    }
-
-    // 5. Game Pools (The most important one for your Scene)
+    // 4. Game Pools (The most important one for your Scene)
     namespace GamePools {
         enum ID : std::size_t {
             DEFAULT = 0,
@@ -57,11 +44,10 @@ namespace Game::Core {
             PLAYER,
             ENEMIES,
             BULLETS,
+            EFFECTS,  // explosion debris
             UI,
 
-            COUNT // Automatically 5, used for array sizing
+            COUNT // Automatically 7, used for array sizing
         };
     }
-
-    struct Entities {};
 }  // namespace Game::Core

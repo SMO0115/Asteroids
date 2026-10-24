@@ -1,63 +1,39 @@
 #include <gtest/gtest.h>
 #include <chrono>
 #include <iostream>
+#include <memory>
+#include <vector>
+
+#include "engine/core/Context.h"
+#include "engine/core/GameObject.h"
+#include "engine/core/Scene.h"
 #include "engine/core/components/TransformComponent.h"
+#include "engine/events/EngineEvents.h"
+#include "engine/events/EventBus.h"
+#include "engine/modules/physics/ColliderComponent.h"
 #include "engine/modules/physics/CollisionSystem.h"
-#include "engine/utils/Types.h"
 
 using namespace Engine;
+using Physics::CollisionSystem;
 
-class CollisionTest : public ::testing::Test {
-protected:
-    Core::CollisionSystem collisionSystem;
+// ---------------------------------------------------------------------------------
+// The math: circle vs circle
+// ---------------------------------------------------------------------------------
+TEST(CircleCollision, OverlappingCirclesCollide) { EXPECT_TRUE(CollisionSystem::circlesOverlap({100.f, 100.f}, 10.f, {105.f, 105.f}, 10.f)); }
 
-    // --- THE WRAPPER METHOD ---
-    // Since 'CollisionTest' is the friend, IT can call the private function.
-    // The tests below (which inherit from this class) will call this public helper.
-    bool checkCollisionHelper(const Core::TransformComponent& ta, const Core::TransformComponent& tb, const Core::Rect& ra, const Core::Rect& rb) {
-        return collisionSystem.checkCollisionAABB_(ta, tb, ra, rb);
-    }
-};
+TEST(CircleCollision, SeparatedCirclesDoNotCollide) { EXPECT_FALSE(CollisionSystem::circlesOverlap({100.f, 100.f}, 10.f, {300.f, 300.f}, 10.f)); }
 
-TEST_F(CollisionTest, DetectsCollisionUsingTransforms) {
-    Core::TransformComponent transA;
-    transA.position  = {100.0f, 100.0f};
-    Core::Rect rectA = {0, 0, 10, 10};
+TEST(CircleCollision, TouchingIsNotOverlapping) { EXPECT_FALSE(CollisionSystem::circlesOverlap({0.f, 0.f}, 10.f, {20.f, 0.f}, 10.f)); }
 
-    Core::TransformComponent transB;
-    transB.position  = {105.0f, 105.0f};
-    Core::Rect rectB = {0, 0, 10, 10};
-
-    // Use the helper, not the private function directly
-    EXPECT_TRUE(checkCollisionHelper(transA, transB, rectA, rectB));
+TEST(CircleCollision, BoxCornersNoLongerCount) {
+    // 15 px apart on both axes: two 20x20 boxes overlapped here, but the circles are 21.2 px apart
+    EXPECT_FALSE(CollisionSystem::circlesOverlap({0.f, 0.f}, 10.f, {15.f, 15.f}, 10.f));
 }
 
-TEST_F(CollisionTest, IgnoresSeparatedTransforms) {
-    Core::TransformComponent transA;
-    transA.position  = {100.0f, 100.0f};
-    Core::Rect rectA = {0, 0, 10, 10};
-
-    Core::TransformComponent transB;
-    transB.position  = {300.0f, 300.0f};
-    Core::Rect rectB = {0, 0, 10, 10};
-
-    EXPECT_FALSE(checkCollisionHelper(transA, transB, rectA, rectB));
-}
-
-TEST_F(CollisionTest, Benchmark_1MillionChecks) {
+TEST(CircleCollision, Benchmark_1MillionChecks) {
     // 1. Setup Data
-    Core::TransformComponent tA;
-    tA.position = {100.f, 100.f};
-    tA.rotation = 0.0f;
-    tA.scale    = 1.0f;
-
-    Core::TransformComponent tB;
-    tB.position = {105.f, 105.f};
-    tB.rotation = 0.0f;
-    tB.scale    = 1.0f;
-
-    Core::Rect rA = {0, 0, 10, 10};
-    Core::Rect rB = {0, 0, 10, 10};
+    const glm::vec2 a = {100.f, 100.f};
+    const glm::vec2 b = {105.f, 105.f};
 
     // 2. Start Timer
     auto start = std::chrono::high_resolution_clock::now();
@@ -66,7 +42,7 @@ TEST_F(CollisionTest, Benchmark_1MillionChecks) {
     int collisionsFound = 0;
     for (int i = 0; i < 1'000'000; ++i) {
         // We accumulate the result so the compiler doesn't optimize the loop away!
-        if (checkCollisionHelper(tA, tB, rA, rB)) {
+        if (CollisionSystem::circlesOverlap(a, 10.f, b, 10.f)) {
             collisionsFound++;
         }
     }
@@ -78,6 +54,101 @@ TEST_F(CollisionTest, Benchmark_1MillionChecks) {
     // 5. Report
     std::cout << "\n[   PERF   ] 1,000,000 Collision Checks took: " << duration.count() << "ms\n" << std::endl;
 
-    // Optional: Fail if it's too slow (e.g., slower than 100ms)
-    EXPECT_LT(duration.count(), 100);
+    // Only check the result, not the time: a timing assert fails randomly on a slow/busy CI machine
+    EXPECT_EQ(collisionsFound, 1'000'000);
+}
+
+// ---------------------------------------------------------------------------------
+// The whole system: layers, scale, rotated offset -> CollisionEvents
+// ---------------------------------------------------------------------------------
+class CollisionSystemTest : public ::testing::Test {
+protected:
+    static constexpr Physics::CollisionMask SHIP = 1 << 0;
+    static constexpr Physics::CollisionMask ROCK = 1 << 1;
+    static constexpr Physics::CollisionMask SHOT = 1 << 2;
+
+    Core::Context     ctx;
+    Core::Scene*      scene     = nullptr;
+    Events::EventBus* event_bus = nullptr;
+    CollisionSystem   collision_system;
+
+    void SetUp() override {
+        scene     = &ctx.registerService<Core::Scene>(1);
+        event_bus = &ctx.registerService<Events::EventBus>();
+    }
+
+    Core::GameObject& spawn(glm::vec2 position, float radius, Physics::CollisionMask layer, Physics::CollisionMask mask) {
+        auto object = std::make_unique<Core::GameObject>();
+
+        object->addComponent<Core::TransformComponent>().position = position;
+
+        auto& collider  = object->addComponent<Physics::ColliderComponent>();
+        collider.radius = radius;
+        collider.layer  = layer;
+        collider.mask   = mask;
+
+        scene->getPool(0).push_back(std::move(object));
+        return *scene->getPool(0).back();
+    }
+
+    const std::vector<Events::CollisionEvent>& events() const { return event_bus->get<Events::CollisionEvent>(); }
+};
+
+TEST_F(CollisionSystemTest, OverlapIsReportedFromBothSides) {
+    Core::GameObject& ship = spawn({0.f, 0.f}, 10.f, SHIP, ROCK);
+    Core::GameObject& rock = spawn({15.f, 0.f}, 10.f, ROCK, SHIP);
+
+    collision_system.update(ctx);
+
+    ASSERT_EQ(events().size(), 2u);
+    EXPECT_EQ(events()[0].from, &ship);
+    EXPECT_EQ(events()[0].to, &rock);
+    EXPECT_EQ(events()[1].from, &rock);
+    EXPECT_EQ(events()[1].to, &ship);
+}
+
+TEST_F(CollisionSystemTest, OverlapWithoutMatchingLayersIsIgnored) {
+    spawn({0.f, 0.f}, 10.f, SHIP, ROCK);
+    spawn({5.f, 0.f}, 10.f, SHOT, ROCK);  // they overlap, but neither cares about the other's layer
+
+    collision_system.update(ctx);
+
+    EXPECT_TRUE(events().empty());
+}
+
+TEST_F(CollisionSystemTest, ScaleGrowsTheCircle) {
+    Core::GameObject& big = spawn({0.f, 0.f}, 10.f, SHIP, ROCK);
+
+    big.getComponent<Core::TransformComponent>().scale = 3.f;  // radius 30
+    spawn({35.f, 0.f}, 10.f, ROCK, SHIP);                      // 35 < 30 + 10
+
+    collision_system.update(ctx);
+
+    EXPECT_EQ(events().size(), 2u);
+}
+
+TEST_F(CollisionSystemTest, OffsetTurnsWithTheObject) {
+    // The circle sits 30 px in front of the ship. Turned 90 degrees (clockwise on screen, like the
+    // sprite), "in front" points DOWN, so it must hit the rock below, not the one to the right.
+    Core::GameObject& ship = spawn({0.f, 0.f}, 5.f, SHIP, ROCK);
+
+    ship.getComponent<Physics::ColliderComponent>().offset = {30.f, 0.f};
+    ship.getComponent<Core::TransformComponent>().rotation = 90.f;
+
+    Core::GameObject& below = spawn({0.f, 30.f}, 5.f, ROCK, SHIP);
+    spawn({30.f, 0.f}, 5.f, ROCK, SHIP);
+
+    collision_system.update(ctx);
+
+    ASSERT_EQ(events().size(), 2u);
+    EXPECT_EQ(events()[0].to, &below);
+}
+
+TEST_F(CollisionSystemTest, InactiveObjectsDoNotCollide) {
+    spawn({0.f, 0.f}, 10.f, SHIP, ROCK);
+    spawn({5.f, 0.f}, 10.f, ROCK, SHIP).setActive(false);  // e.g. a bullet waiting in its pool
+
+    collision_system.update(ctx);
+
+    EXPECT_TRUE(events().empty());
 }

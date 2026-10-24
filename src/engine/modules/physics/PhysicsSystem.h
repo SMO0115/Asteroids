@@ -16,6 +16,6 @@ public:
     PhysicsSystem()  = default;
     ~PhysicsSystem() = default;
 
-    void update(Engine::Core::Context& ctx);
+    void update(Engine::Core::Context& ctx, float dt);
 };
 }  // namespace Engine::Physics

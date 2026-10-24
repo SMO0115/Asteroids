@@ -5,16 +5,11 @@
 #pragma once
 
 #include "engine/core/CoreModule.h"
-#include "game/events/GameEvents.h"
 
 #include <memory>
 
-namespace Engine            { class Application;            }
-namespace Engine::Core      { class GameObject;             }
 namespace Engine::Core      { class IGameState;             }
 namespace Engine::Core      { class IGame;                  }
-namespace Engine::Input     { class InputManager;           }
-namespace Engine::Graphics  { class RenderSystem;           }
 
 
 namespace Game {
@@ -28,16 +23,12 @@ public:
     bool update(float deltatime, Engine::Core::Context& ctx) override;
     void render(Engine::Core::Context& ctx) override;
 
-    // std::vector<std::unique_ptr<Engine::Core::GameObject>>& getGameObjects() { return m_objects;      }
-    // std::vector<std::unique_ptr<Engine::Core::GameObject>>& getUIObjects()   { return m_ui_objects;   }
-    // std::unique_ptr<Engine::Core::GameObject>&              getGameSession() { return m_game_session; }
-
+    // Empties the world and starts over: score, lives and waves back to the start
+    void startNewGame(Engine::Core::Context& ctx);
 
 private:
+    void changeState_(std::unique_ptr<Engine::Core::IGameState> new_state, Engine::Core::Context& ctx);
+
     std::unique_ptr<Engine::Core::IGameState>              m_state;
-    // std::vector<std::unique_ptr<Engine::Core::GameObject>> m_objects;
-    // std::vector<std::unique_ptr<Engine::Core::GameObject>> m_ui_objects;
-    // std::unique_ptr<Engine::Core::GameObject>              m_game_session;
 };
 }  // namespace Game
-    

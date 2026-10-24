@@ -8,7 +8,6 @@
 
 namespace Engine::Assets { class AssetManager; }
 namespace Engine::Core { class Context; }
-namespace Engine::Graphics { struct AnimationComponent; struct SpriteComponent; }
 
 namespace Engine::Graphics {
     class AnimationSystem {
@@ -16,7 +15,6 @@ namespace Engine::Graphics {
         AnimationSystem()  = default;
         ~AnimationSystem() = default;
 
-        void            update(Engine::Core::Context& ctx);
-        SpriteComponent getSprite(AnimationComponent& anim);
+        void            update(Engine::Core::Context& ctx, float dt);
     };
 }  // namespace Engine::Graphics

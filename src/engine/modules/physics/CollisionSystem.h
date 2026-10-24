@@ -4,13 +4,12 @@
 
 #pragma once
 
-#include <memory>
-#include <vector>
+#include <glm/vec2.hpp>
 #include "engine/events/EngineEvents.h"
 
-namespace Engine::Core { class GameObject; class TransformComponent; struct Rect; class Context; }  // namespace Engine::Core
+namespace Engine::Core { class Context; }  // namespace Engine::Core
 
-namespace Engine::Core {
+namespace Engine::Physics {
     class CollisionSystem {
     public:
         CollisionSystem()  = default;
@@ -18,8 +17,8 @@ namespace Engine::Core {
 
         void update(Core::Context& ctx);
 
-
-        bool checkCollisionAABB_(const Core::TransformComponent& trans_a, const Core::TransformComponent& trans_b, const Core::Rect& obj_a,
-                                 const Core::Rect& obj_b);
+        // Two circles overlap when their centers are closer than their radii added up.
+        // Static (it needs no state) and public, so the tests can call it directly.
+        static bool circlesOverlap(glm::vec2 center_a, float radius_a, glm::vec2 center_b, float radius_b);
     };
 }  // namespace Engine::Physics

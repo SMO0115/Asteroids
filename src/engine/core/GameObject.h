@@ -42,8 +42,17 @@ namespace Engine::Core {
         bool isActive() const { return m_isActive; }
         void setActive(bool isActive) { m_isActive = isActive; }
 
+        // Deferred destruction: the object is switched off right away, but it is only erased by
+        // Scene::removeDestroyed() at the end of the tick, when no event points at it anymore.
+        void destroy() {
+            m_isDestroyed = true;
+            m_isActive    = false;
+        }
+        bool isDestroyed() const { return m_isDestroyed; }
+
     private:
-        bool m_isActive = true;
+        bool m_isActive    = true;
+        bool m_isDestroyed = false;
         std::unordered_map<std::type_index, std::unique_ptr<BaseComponent>> m_components;
     };
 }

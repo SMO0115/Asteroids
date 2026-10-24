@@ -1,13 +1,15 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <optional>
 #include <string>
+#include <unordered_map>
 #include <cassert>
 #include <type_traits>
 
-namespace Engine::Core {
+#include "GameObject.h"
 
-    class GameObject; // Forward declaration
+namespace Engine::Core {
 
     using Pool = std::vector<std::unique_ptr<GameObject>>;
 
@@ -85,10 +87,10 @@ namespace Engine::Core {
     // ==========================================
     class Scene {
     public:
-        // Scene() = default;
         ~Scene() = default;
 
-        Scene(size_t poolCount = 128) {
+        // explicit: without it, any size_t silently converts to a Scene (e.g. 'Scene s = 5;')
+        explicit Scene(size_t poolCount = 128) {
             m_pools.resize(poolCount);
             m_poolNames.resize(poolCount, "Unnamed");
             for (auto& p : m_pools) p = std::make_unique<Pool>();
@@ -120,8 +122,12 @@ namespace Engine::Core {
             return view;
         }
 
+        // Pool names, so scripts can say "Enemies" instead of 3. The Scene is the ONLY place that
+        // knows them (there used to be a second copy in a SceneRegistry singleton).
         void registerName(size_t id, const std::string& name) {
-            if (id < m_poolNames.size()) m_poolNames[id] = name;
+            if (id >= m_poolNames.size()) return;
+            m_poolNames[id] = name;
+            m_poolIDs[name] = id;
         }
 
         const std::string& getName(size_t id) const {
@@ -130,8 +136,23 @@ namespace Engine::Core {
             return unknown;
         }
 
+        // std::nullopt for a name nobody registered (e.g. a typo like "Enemys" in Lua)
+        std::optional<size_t> getPoolID(const std::string& name) const {
+            auto it = m_poolIDs.find(name);
+            if (it == m_poolIDs.end()) return std::nullopt;
+            return it->second;
+        }
+
         void clear() {
             for (auto& p : m_pools) p->clear();
+        }
+
+        // Erase every object marked with GameObject::destroy(). Only call it when nobody holds a
+        // pointer or iterator into the pools: the engine does it at the very end of each tick.
+        void removeDestroyed() {
+            for (auto& pool : m_pools) {
+                std::erase_if(*pool, [](const std::unique_ptr<GameObject>& obj) { return obj->isDestroyed(); });
+            }
         }
 
         // Raw access (for debuggers/loggers)
@@ -141,6 +162,7 @@ namespace Engine::Core {
 
     private:
         std::vector<std::unique_ptr<Pool>> m_pools;
-        std::vector<std::string> m_poolNames;
+        std::vector<std::string> m_poolNames;                 // id -> name
+        std::unordered_map<std::string, size_t> m_poolIDs;   // name -> id
     };
 }

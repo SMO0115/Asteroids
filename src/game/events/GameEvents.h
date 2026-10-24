@@ -1,29 +1,25 @@
 //
-// Created by marcel on 11/16/25.
+// Created by smo0115 on 10/24/26.
 //
 
 #pragma once
-#include "glm/glm.hpp"
 
-#include "engine/events/EventBus.h"
-#include "engine/modules/physics/PhysicsModule.h"
-#include "game/core/GameTypes.h"
-
-namespace Engine::Core {
-class GameObject;
-}
+#include <glm/vec2.hpp>
 
 namespace Game::Events {
-struct EmitterEvent {
-    int                             emitter_animation_id;
-    Engine::Core::CollisionLayer layer;
-    Engine::Core::CollisionLayer mask;
-    glm::vec2                       position;
-    glm::vec2                       velocity;
+
+// The game's own events, on the engine's EventBus. AsteroidSystem publishes them; every system that
+// cares (score, respawn, sounds, explosions) reads them in the same tick. So AsteroidSystem doesn't
+// need to know who reacts, and adding a reaction doesn't touch AsteroidSystem.
+//
+// Values, no GameObject pointers: a reader doesn't have to worry whether the object still exists.
+
+struct AsteroidDestroyedEvent {
+    glm::vec2 position;
+    int       size;  // 3 = large, 2 = medium, 1 = small
 };
 
-struct DeathEvent {
-    Engine::Core::GameObject* object;
+struct ShipDestroyedEvent {
+    glm::vec2 position;
 };
-
 }  // namespace Game::Events

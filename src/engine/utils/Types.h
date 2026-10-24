@@ -8,11 +8,12 @@
 
 namespace Engine::Core {
     struct Rect {
-        int x, y, w, h;
+        int x = 0, y = 0, w = 0, h = 0;
     };
 
+    // a defaults to 255: with plain 'int a;', Color{255, 255, 255} meant *invisible* white
     struct Color {
-        int r, g, b, a;
+        int r = 0, g = 0, b = 0, a = 255;
     };
 }
 

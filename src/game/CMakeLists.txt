@@ -2,16 +2,16 @@ cmake_minimum_required(VERSION 3.20)
 project(Asteroids)
 
 # 1. Gather Sources
-# Note: If you add new files, you must "Reload CMake Project"
-file(GLOB_RECURSE GAME_SOURCES "*.cpp")
-file(GLOB_RECURSE GAME_HEADERS "*.h")
+# CONFIGURE_DEPENDS: the build re-checks the globs, so new files are picked up without a manual CMake reload
+file(GLOB_RECURSE GAME_SOURCES CONFIGURE_DEPENDS "*.cpp")
+file(GLOB_RECURSE GAME_HEADERS CONFIGURE_DEPENDS "*.h")
 
-# 2. Define the Executable
+# 2. Define the Executable (main.cpp is part of GAME_SOURCES)
 add_executable(Asteroids
-        main.cpp
         ${GAME_SOURCES}
         ${GAME_HEADERS}
 )
+asteroids_target_options(Asteroids)
 
 # 3. Link your Engine library
 target_link_libraries(Asteroids PRIVATE Engine)

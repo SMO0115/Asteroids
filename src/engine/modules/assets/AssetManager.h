@@ -55,6 +55,7 @@ namespace Engine::Assets {
 
         // LOOKUP (String -> Index)
         std::unordered_map<std::string, AssetID> m_texture_lookup;
+        std::unordered_map<std::string, AssetID> m_texture_path_lookup;  // file path -> ID, so a file is loaded only once
         std::unordered_map<std::string, AssetID> m_animation_lookup;
         std::unordered_map<std::string, AssetID> m_sound_lookup;
         std::unordered_map<std::string, AssetID> m_font_lookup; // Key example: "pixel_24"

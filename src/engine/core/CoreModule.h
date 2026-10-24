@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include "pch.h"
-
 #include "components/BaseComponent.h"
 #include "Application.h"
 #include "GameObject.h"
@@ -18,6 +16,3 @@
 #include "Log.h"
 
 #include "components/TransformComponent.h"
-
-
-#include "engine/scripting/bindings/ComponentBinding.cpp"

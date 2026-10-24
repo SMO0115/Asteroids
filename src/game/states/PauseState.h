@@ -14,12 +14,14 @@ public:
     PauseState(Asteroids& game);
     ~PauseState() override;
 
+    void                                      onEnter(Engine::Core::Context& ctx) override;
+    void                                      onExit(Engine::Core::Context& ctx) override;
+
     std::unique_ptr<Engine::Core::IGameState> handleInput(Engine::Core::Context& ctx) override;
     std::unique_ptr<Engine::Core::IGameState> update(float deltatime, Engine::Core::Context& ctx) override;
     void                                      render(Engine::Core::Context& ctx) override;
 
 private:
-    Asteroids&                                             m_game;
-    std::vector<std::unique_ptr<Engine::Core::GameObject>> m_pause;
+    Asteroids& m_game;
 };
 }  // namespace Game::State

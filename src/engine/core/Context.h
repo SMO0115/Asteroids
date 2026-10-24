@@ -31,6 +31,19 @@ namespace Engine::Core {
             m_services.resize(64);
         }
 
+        // Destroy services in REVERSE registration order, like local variables: a service may use
+        // the ones registered before it. E.g. the AssetManager frees textures and fonts, so it must
+        // go before the RenderSystem calls SDL_Quit/TTF_Quit. (Plain vector order did the opposite.)
+        ~Context() {
+            for (auto it = m_registration_order.rbegin(); it != m_registration_order.rend(); ++it) {
+                m_services[*it].reset();
+            }
+        }
+
+        // The context owns the services; a copy would make their lifetime unclear
+        Context(const Context&)            = delete;
+        Context& operator=(const Context&) = delete;
+
         // --- NEW: Variadic Register Function ---
         // usage: registerService<Scene>();
         // usage: registerService<AssetManager>(renderer_ptr);
@@ -50,6 +63,7 @@ namespace Engine::Core {
 
             // Store as shared_ptr<void> (keeps the custom deleter alive)
             m_services[id] = newService;
+            m_registration_order.push_back(id);
 
             return *newService;
         }
@@ -65,5 +79,6 @@ namespace Engine::Core {
 
     private:
         std::vector<std::shared_ptr<void>> m_services;
+        std::vector<size_t>                m_registration_order;  // service IDs, in registration order
     };
 }

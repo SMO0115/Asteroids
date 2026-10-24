@@ -18,6 +18,7 @@ namespace Engine::Graphics {
         std::map<State, Assets::AssetID>              animations_ids = {};
 
         State           current_state     = 0;
+        State           previous_state    = -1;  // state seen on the last update (-1 = none yet), to detect changes
         std::size_t     current_frame     = 0;
         float           current_duration  = 0.0f;
         float           speed             = 1.0f;

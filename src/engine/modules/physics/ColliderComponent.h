@@ -4,36 +4,24 @@
 
 #pragma once
 
+#include <cstdint>
+#include <glm/vec2.hpp>
+
 #include "../../core/components/BaseComponent.h"
-#include "engine/utils/Types.h"
 
-namespace Engine::Core {
-class GameObject;
-}
+namespace Engine::Physics {
 
-namespace Engine::Core {
-    enum class CollisionLayer : int {
+    // A set of collision layers, one bit per layer. The engine doesn't know what the bits MEAN:
+    // the game names them (Asteroids: PLAYER, ASTEROID, PLAYER_BULLET in game/core/GameTypes.h).
+    using CollisionMask = std::uint32_t;
 
-        NONE           = 0,
-        PLAYER         = 1 << 0,
-        INVADER        = 1 << 1,
-        PLAYER_BULLET  = 1 << 2,
-        INVADER_BULLET = 1 << 3,
-        WALL           = 1 << 4
-    };
-
-    inline CollisionLayer operator|(CollisionLayer a, CollisionLayer b) {
-        return static_cast<CollisionLayer>(static_cast<std::uint16_t>(a) | static_cast<std::uint16_t>(b));
-    }
-
-    inline CollisionLayer operator&(CollisionLayer a, CollisionLayer b) {
-        return static_cast<CollisionLayer>(static_cast<std::uint16_t>(a) & static_cast<std::uint16_t>(b));
-    }
-
+    // A circle collider. A circle looks the same at every rotation, so it fits spinning sprites
+    // (the old axis-aligned box didn't turn with the asteroid and stuck out past its corners).
     struct ColliderComponent : public Core::BaseComponent {
-        CollisionLayer layer = CollisionLayer::NONE;
-        CollisionLayer mask  = CollisionLayer::NONE;
+        CollisionMask layer = 0;  // the layer(s) this object is on
+        CollisionMask mask  = 0;  // the layers it collides with
 
-        Core::Rect bounds = {0, 0, 0, 0};
+        float     radius = 0.0f;          // in pixels, multiplied by TransformComponent::scale
+        glm::vec2 offset = {0.0f, 0.0f};  // circle center relative to the position; turns with the object
     };
 }  // namespace Engine::Physics

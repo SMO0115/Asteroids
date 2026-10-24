@@ -20,14 +20,16 @@ namespace Engine::Graphics {
         Assets::AssetID font_id   = 0;
         std::string     text      = "";
         Core::Color     color     =  {255, 255, 255, 255};
-        std::size_t     size      =  0;
-        bool            is_dirty  = true;
+        std::size_t     size      =  0;  // the font size: font_name + size -> font_id (resolveAssets)
 
         int x_offset = 0;
         int y_offset = 0;
 
-        UITextComponent(std::string text, std::string font, Core::Color color = {255, 255, 255 }, int x=0, int y=0)
-            : text(text), font_name(font), color(color), x_offset(x), y_offset(y) {}
+        // Members are initialized in DECLARATION order, so list them in that order (-Wreorder).
+        // Parameters get their own names so they don't shadow the members (-Wshadow), and the
+        // strings are taken by value and moved in: one copy instead of two.
+        UITextComponent(std::string text_value, std::string font, Core::Color text_color = {255, 255, 255, 255}, int x = 0, int y = 0)
+            : font_name(std::move(font)), text(std::move(text_value)), color(text_color), x_offset(x), y_offset(y) {}
 
         UITextComponent() = default;
     };

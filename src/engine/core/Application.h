@@ -35,7 +35,6 @@ namespace Engine {
         std::unique_ptr<Core::Context>                      m_context;
 
 
-        bool                                                m_is_running;
-        bool                                                m_quit_requested;
+        bool                                                m_is_running = false;
     };
 }

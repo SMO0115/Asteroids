@@ -3,50 +3,51 @@
 //
 
 #pragma once
-
-#pragma once
+#include <initializer_list>
 #include <string>
 #include <unordered_map>
-#include <iostream>
+#include <utility>
+
+#include "engine/core/Log.h"
 
 namespace Engine::Scripting {
 
+    // Turns names used in Lua/JSON ("IDLE", "PLAYER") into the game's enum values, per enum type
+    // ("AnimationState", "CollisionLayer"). The engine only asks; the GAME registers the names at
+    // startup. A normal object (a Context service), not a singleton.
     class StateRegistry {
     public:
-        // Singleton Access
-        static StateRegistry& Get() {
-            static StateRegistry instance;
-            return instance;
-        }
+        StateRegistry()  = default;
+        ~StateRegistry() = default;
+
+        StateRegistry(const StateRegistry&)            = delete;
+        StateRegistry& operator=(const StateRegistry&) = delete;
 
         // 1. Register a single value (e.g., "IDLE" -> 0 for "Animation")
-        bool registerState(const std::string& enumType, const std::string& stateName, int value) {
+        void registerState(const std::string& enumType, const std::string& stateName, int value) {
             m_registry[enumType][stateName] = value;
-            return true;
         }
 
         // 2. Register a whole batch (Helper)
-        bool registerBatch(const std::string& enumType, std::initializer_list<std::pair<std::string, int>> pairs) {
+        void registerBatch(const std::string& enumType, std::initializer_list<std::pair<std::string, int>> pairs) {
             for (const auto& [name, val] : pairs) {
                 m_registry[enumType][name] = val;
             }
-            return true;
         }
 
-        // 3. Retrieve (String -> Int)
-        int getState(const std::string& enumType, const std::string& stateName, int fallback = 0) {
-            if (m_registry.contains(enumType) && m_registry[enumType].contains(stateName)) {
-                return m_registry[enumType][stateName];
+        // 3. Retrieve (String -> Int). find() instead of operator[], which would insert missing keys
+        // (and so can't be used in a const function)
+        int getState(const std::string& enumType, const std::string& stateName, int fallback = 0) const {
+            if (auto type = m_registry.find(enumType); type != m_registry.end()) {
+                if (auto state = type->second.find(stateName); state != type->second.end()) return state->second;
             }
             // Warning: Helpful for debugging typos in Lua
-            std::cerr << "[StateRegistry] Warning: State '" << stateName << "' not found in '" << enumType << "'. Using default.\n";
+            ENGINE_WARN("[StateRegistry] State '{}' not found in '{}', using {}", stateName, enumType, fallback);
             return fallback;
         }
 
     private:
         // Map< "EnumTypeName", Map< "StateString", Value > >
         std::unordered_map<std::string, std::unordered_map<std::string, int>> m_registry;
-
-        StateRegistry() = default;
     };
 }

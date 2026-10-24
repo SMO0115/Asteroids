@@ -8,6 +8,7 @@ add_executable(Sandbox
         ${SANDBOX_SOURCES}
         ${SANDBOX_HEADERS}
 )
+asteroids_target_options(Sandbox)
 
 # 3. Link the Engine (Fixes 'No such file or directory' for headers)
 target_link_libraries(Sandbox PRIVATE Engine)

@@ -11,9 +11,9 @@
 namespace Engine::Assets {
 
     struct Animation {
-        AssetID                 texture_id;
+        AssetID                 texture_id = INVALID_ID;
         std::vector<Core::Rect> frames;
         std::vector<float>      durations;
-        bool                    loop;
+        bool                    loop       = true;
     };
 }  // namespace Engine::Assets
