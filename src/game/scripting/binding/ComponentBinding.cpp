@@ -9,6 +9,7 @@
 #include "game/core/components/Tags.h"
 #include "game/modules/asteroid/AsteroidComponent.h"
 #include "game/modules/player/ShipComponent.h"
+#include "game/modules/saucer/SaucerComponent.h"
 
 namespace Game::Scripting {
 
@@ -24,6 +25,12 @@ void registerGameComponents(Engine::Scripting::ComponentRegistry& components) {
     components.registerComponent("Asteroid", [](Engine::Core::GameObject& obj, const sol::table& t) {
         auto& asteroid = obj.addComponent<Asteroid::AsteroidComponent>();
         asteroid.size  = t.get_or("size", 3);
+    });
+
+    // Lua: Saucer = { small = true }
+    components.registerComponent("Saucer", [](Engine::Core::GameObject& obj, const sol::table& t) {
+        auto& saucer = obj.addComponent<Saucer::SaucerComponent>();
+        saucer.small = t.get_or("small", false);
     });
 
     // Lua: Ship = {}   (it always starts FLYING)
@@ -52,6 +59,8 @@ void registerGameStates(Engine::Scripting::StateRegistry& states) {
                                                {"PLAYER", Core::CollisionLayer::PLAYER},
                                                {"ASTEROID", Core::CollisionLayer::ASTEROID},
                                                {"PLAYER_BULLET", Core::CollisionLayer::PLAYER_BULLET},
+                                               {"SAUCER", Core::CollisionLayer::SAUCER},
+                                               {"SAUCER_BULLET", Core::CollisionLayer::SAUCER_BULLET},
                                            });
 }
 
@@ -65,6 +74,7 @@ void registerGamePools(Engine::Core::Scene& scene) {
     scene.registerName(Core::GamePools::PLAYER, "Player");
     scene.registerName(Core::GamePools::ENEMIES, "Enemies");
     scene.registerName(Core::GamePools::BULLETS, "Bullets");
+    scene.registerName(Core::GamePools::SAUCER_BULLETS, "SaucerBullets");
     scene.registerName(Core::GamePools::EFFECTS, "Effects");
     scene.registerName(Core::GamePools::UI, "UI");
 }

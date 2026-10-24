@@ -16,7 +16,7 @@
 #include "engine/utils/Random.h"
 #include "game/core/GameSession.h"
 #include "game/core/GameTypes.h"
-#include "game/modules/player/ShipComponent.h"
+#include "game/modules/player/PlayerSystem.h"
 
 namespace Game::Asteroid {
 
@@ -31,19 +31,6 @@ constexpr float SAFE_DISTANCE   = 200.0f;  // px: a new asteroid never appears t
 constexpr float BEAT_SLOWEST = 1.0f;   // seconds between beats when a wave starts ...
 constexpr float BEAT_SPEEDUP = 0.02f;  // ... a little less after every beat ...
 constexpr float BEAT_FASTEST = 0.25f;  // ... down to this (after ~40 beats, about 25 s)
-
-
-namespace {
-// Like the arcade, the heartbeat only plays while a ship is in play: it stops when the ship is
-// destroyed and goes on when the next one appears
-bool shipInPlay(Engine::Core::Context& ctx) {
-
-    const Engine::Core::Pool& player = ctx.get<Engine::Core::Scene>().getPool(Game::Core::GamePools::PLAYER);
-    if (player.empty()) return false;
-
-    return player[0]->getComponent<Player::ShipComponent>().status != Player::ShipComponent::Status::DESTROYED;
-}
-}  // namespace
 
 
 void WaveSystem::reset() {
@@ -64,7 +51,8 @@ void WaveSystem::update(Engine::Core::Context& ctx, float dt) {
 
     if (!sky_is_empty) {
         m_next_wave_timer = WAVE_DELAY;  // so the pause starts when the LAST asteroid goes
-        if (shipInPlay(ctx)) beat_(ctx, dt);
+        // Like the arcade, the heartbeat stops while the ship is destroyed, and goes on with the next one
+        if (Player::PlayerSystem::shipInPlay(ctx)) beat_(ctx, dt);
         return;
     }
 

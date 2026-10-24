@@ -19,6 +19,10 @@ namespace Game::Player {
 
         void update(Engine::Core::Context& ctx, float dt);
 
+        // Is there a ship in the game right now (flying, or in hyperspace), or is it destroyed?
+        // The heartbeat and the saucers only run while it is.
+        static bool shipInPlay(Engine::Core::Context& ctx);
+
     private:
         void fly_(Engine::Core::Context& ctx, Engine::Core::GameObject& player, ShipComponent& ship, float dt);
         void returnFromHyperspace_(Engine::Core::Context& ctx, Engine::Core::GameObject& player, ShipComponent& ship, float dt);

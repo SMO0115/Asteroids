@@ -10,10 +10,12 @@
 #include "RunState.h"
 
 #include "engine/core/Log.h"
+#include "engine/modules/audio/AudioModule.h"
 #include "engine/modules/graphics/RenderModule.h"
 #include "engine/modules/input/InputModule.h"
 #include "game/core/GameSession.h"
 #include "game/core/HighScore.h"
+#include "game/modules/saucer/SaucerSystem.h"
 #include "game/ui/Text.h"
 
 
@@ -25,6 +27,10 @@ GameOverState::~GameOverState() = default;
 
 
 void GameOverState::onEnter(Engine::Core::Context& ctx) {
+
+    // A saucer that's still flying leaves with the game, and so does its looping sound
+    Saucer::SaucerSystem::removeAll(ctx);
+    ctx.get<Engine::Audio::SoundSystem>().stopAll();
 
     const int score = ctx.get<Game::Core::GameSession>().score;
     m_new_record    = ctx.get<Game::Core::HighScore>().submit(score);

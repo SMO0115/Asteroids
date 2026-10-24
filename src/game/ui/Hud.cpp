@@ -4,7 +4,6 @@
 
 #include "Hud.h"
 
-#include <algorithm>
 #include <string>
 
 #include "Text.h"
@@ -38,9 +37,11 @@ void Hud::render(Engine::Core::Context& ctx) {
     m_score.font_id = asset_manager.getFontID(m_score.font_name, FONT_SIZE);
     renderer.drawText(m_score, asset_manager);
 
-    // The best score so far, top center like the arcade (the game's own score counts as soon as it's higher)
-    const int best = std::max(ctx.get<Game::Core::HighScore>().best(), session.score);
-    drawCenteredText(ctx, std::to_string(best), FONT_SIZE, MARGIN / 2);
+    // The high score, top center like the arcade: the best of the games BEFORE this one, and nothing
+    // until there is one. (It used to show max(best, score), so in a first game, or after beating the
+    // record, the same number was on screen twice.)
+    const int best = ctx.get<Game::Core::HighScore>().best();
+    if (best > 0) drawCenteredText(ctx, std::to_string(best), FONT_SIZE, MARGIN / 2);
 
     // 2. Lives, as small ships pointing up: the first frame of the ship's idle animation
     const Engine::Assets::Animation* ship = asset_manager.getAnimation(asset_manager.getAnimationID("player_idle"));

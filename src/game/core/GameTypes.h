@@ -32,7 +32,9 @@ namespace Game::Core {
             NONE          = 0,
             PLAYER        = 1 << 0,
             ASTEROID      = 1 << 1,
-            PLAYER_BULLET = 1 << 2
+            PLAYER_BULLET = 1 << 2,
+            SAUCER        = 1 << 3,
+            SAUCER_BULLET = 1 << 4
         };
     }
 
@@ -44,10 +46,11 @@ namespace Game::Core {
             PLAYER,
             ENEMIES,
             BULLETS,
+            SAUCER_BULLETS,
             EFFECTS,  // explosion debris
             UI,
 
-            COUNT // Automatically 7, used for array sizing
+            COUNT // Automatically 8, used for array sizing
         };
     }
 }  // namespace Game::Core

@@ -26,8 +26,10 @@
 
 #include "game/events/GameEvents.h"
 #include "game/modules/asteroid/AsteroidModule.h"
+#include "game/modules/combat/CombatSystem.h"
 #include "game/modules/effects/EffectsSystem.h"
 #include "game/modules/player/PlayerModule.h"
+#include "game/modules/saucer/SaucerModule.h"
 #include "game/scripting/binding/ComponentBinding.h"
 #include "game/states/MenuState.h"
 #include "game/ui/Hud.h"
@@ -52,6 +54,7 @@ bool Asteroids::init(Engine::Core::Context& ctx) {
     // Registered up front, so publishing them never has to create a queue in the middle of a tick
     auto& event_bus = ctx.get<Engine::Events::EventBus>();
     event_bus.registerEvent<Events::AsteroidDestroyedEvent>();
+    event_bus.registerEvent<Events::SaucerDestroyedEvent>();
     event_bus.registerEvent<Events::ShipDestroyedEvent>();
     event_bus.registerEvent<Engine::Events::PlaySoundEvent>();
 
@@ -60,7 +63,8 @@ bool Asteroids::init(Engine::Core::Context& ctx) {
     ctx.registerService<Game::Core::SessionSystem>();
     ctx.registerService<Game::UI::Hud>();
     ctx.registerService<Game::Player::PlayerSystem>();
-    ctx.registerService<Game::Asteroid::AsteroidSystem>();
+    ctx.registerService<Game::Combat::CombatSystem>();
+    ctx.registerService<Game::Saucer::SaucerSystem>();
     ctx.registerService<Game::Asteroid::WaveSystem>();
     ctx.registerService<Game::Effects::EffectsSystem>();
 
@@ -81,6 +85,7 @@ void Asteroids::startNewGame(Engine::Core::Context& ctx) {
 
     ctx.get<Game::Core::GameSession>().reset();
     ctx.get<Game::Asteroid::WaveSystem>().reset();
+    ctx.get<Game::Saucer::SaucerSystem>().reset();
 
     // Lua spawns the ship and the bullet pool; SpawnEntity resolves their asset names right away
     ctx.get<Engine::Scripting::ScriptManager>().call("StartGame");

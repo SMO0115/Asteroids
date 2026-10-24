@@ -21,6 +21,7 @@
 #include "game/core/GameTypes.h"
 #include "game/events/GameEvents.h"
 #include "game/modules/asteroid/AsteroidComponent.h"
+#include "game/modules/saucer/SaucerComponent.h"
 
 namespace Game::Player {
 
@@ -41,12 +42,13 @@ constexpr float SPAWN_ROTATION = -90.0f;  // degrees: nose up (the sprite itself
 
 
 namespace {
-// True if no asteroid's center is within 'radius' of 'point'
+// True if no asteroid's or saucer's center is within 'radius' of 'point'
 bool isAreaClear(Engine::Core::Context& ctx, glm::vec2 point, float radius) {
 
     for (const auto& object : ctx.get<Engine::Core::Scene>().getPool(Game::Core::GamePools::ENEMIES)) {
 
-        if (!object->isActive() || !object->hasComponent<Asteroid::AsteroidComponent>()) continue;
+        if (!object->isActive()) continue;
+        if (!object->hasComponent<Asteroid::AsteroidComponent>() && !object->hasComponent<Saucer::SaucerComponent>()) continue;
 
         const glm::vec2 position = object->getComponent<Engine::Core::TransformComponent>().position;
         if (glm::distance(position, point) < radius) return false;
@@ -64,7 +66,7 @@ void PlayerSystem::update(Engine::Core::Context& ctx, float dt) {
     auto& player = *player_pool[0];
     auto& ship   = player.getComponent<ShipComponent>();
 
-    // Hit in this tick (AsteroidSystem has already switched it off)
+    // Hit in this tick (the CombatSystem has already switched it off)
     if (!ctx.get<Engine::Events::EventBus>().get<Events::ShipDestroyedEvent>().empty()) {
         ship.status = ShipComponent::Status::DESTROYED;
         ship.timer  = RESPAWN_DELAY;
@@ -81,6 +83,15 @@ void PlayerSystem::update(Engine::Core::Context& ctx, float dt) {
             waitForRespawn_(ctx, player, ship, dt);
             break;
     }
+}
+
+
+bool PlayerSystem::shipInPlay(Engine::Core::Context& ctx) {
+
+    const Engine::Core::Pool& player = ctx.get<Engine::Core::Scene>().getPool(Game::Core::GamePools::PLAYER);
+    if (player.empty()) return false;
+
+    return player[0]->getComponent<ShipComponent>().status != ShipComponent::Status::DESTROYED;
 }
 
 

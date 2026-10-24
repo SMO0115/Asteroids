@@ -63,6 +63,16 @@ FetchContent_Declare(
         SYSTEM
 )
 
+# GLM (vector math). It used to be found only because Arch installs it in /usr/include: the CI
+# runner has no GLM, so the build failed there. Fetched like everything else, every machine
+# builds with the same version.
+FetchContent_Declare(
+        glm
+        GIT_REPOSITORY https://github.com/g-truc/glm.git
+        GIT_TAG        1.0.1
+        SYSTEM
+)
+
 FetchContent_Declare(
         spdlog
         GIT_REPOSITORY https://github.com/gabime/spdlog.git
@@ -92,6 +102,10 @@ set(SDL2MIXER_MOD     OFF CACHE BOOL "" FORCE)
 set(SDL2MIXER_MIDI    OFF CACHE BOOL "" FORCE)
 set(SDL2MIXER_WAVPACK OFF CACHE BOOL "" FORCE)
 
+# GLM is header-only for us: no compiled library, no tests
+set(GLM_BUILD_LIBRARY OFF CACHE BOOL "" FORCE)
+set(GLM_BUILD_TESTS   OFF CACHE BOOL "" FORCE)
+
 FetchContent_MakeAvailable(lua_source)
 
 # 1. Gather all C files
@@ -113,7 +127,7 @@ if(UNIX AND NOT APPLE)
     target_link_libraries(lua_lib PUBLIC dl)
 endif()
 
-FetchContent_MakeAvailable(SDL2 SDL_ttf SDL_image SDL_mixer yyjson spdlog sol2)
+FetchContent_MakeAvailable(SDL2 SDL_ttf SDL_image SDL_mixer yyjson glm spdlog sol2)
 
 # SDL 2.30's PipeWire backend passes a wrong pointer type, and GCC 14+ made that an error.
 # Turn it back into a warning for SDL only, instead of for every C file in the project.

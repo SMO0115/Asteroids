@@ -10,7 +10,7 @@ namespace Engine::Core { class Context; }
 
 namespace Game::Effects {
 
-    // Explosions: for every asteroid or ship destroyed in this tick, a "bang" and a burst of debris.
+    // Explosions: for every asteroid, saucer or ship destroyed in this tick, a "bang" and a burst of debris.
     // Purely cosmetic; it only reads events, so the rules work the same without it.
     class EffectsSystem {
     public:

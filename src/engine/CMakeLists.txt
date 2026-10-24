@@ -26,6 +26,7 @@ target_link_libraries(Engine PUBLIC
         SDL2_image::SDL2_image
         SDL2_mixer::SDL2_mixer
         yyjson                  # JSON (the animation files); nlohmann_json was linked too, but never used
+        glm::glm                # PUBLIC like the rest: the game and the tests include GLM through engine headers
         spdlog::spdlog
         sol2
         lua_lib

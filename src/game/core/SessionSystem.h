@@ -9,7 +9,7 @@ namespace Engine::Core { class Context; }
 namespace Game::Core {
 
     // The bookkeeping of the rules: reads this tick's game events and updates the GameSession
-    // (points per asteroid, a life lost per ship, an extra life every 10,000 points, with its sound)
+    // (points per asteroid and saucer, a life lost per ship, an extra life every 10,000 points, with its sound)
     class SessionSystem {
     public:
         SessionSystem()  = default;

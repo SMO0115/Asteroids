@@ -31,6 +31,12 @@ void EffectsSystem::update(Engine::Core::Context& ctx) {
         burst_(ctx, destroyed.position, PIECES[size], 150.0f, 0.8f);
     }
 
+    for (const auto& destroyed : event_bus.get<Events::SaucerDestroyedEvent>()) {
+
+        event_bus.publish<Engine::Events::PlaySoundEvent>("bangLarge");
+        burst_(ctx, destroyed.position, destroyed.small ? 10 : 16, 180.0f, 1.0f);
+    }
+
     // The ship: more pieces that fly farther and last longer, so the loss is easy to see
     for (const auto& destroyed : event_bus.get<Events::ShipDestroyedEvent>()) {
 

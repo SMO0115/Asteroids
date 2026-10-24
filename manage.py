@@ -177,16 +177,19 @@ def test_project():
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python manage.py [run|build|format]")
+        print("Usage: python manage.py [configure|build|run|test|format|analyze]")
         sys.exit(1)
 
     action = sys.argv[1]
-    if action == "run": run()
+    if action == "configure": configure()  # CI calls it; it used to be missing here
+    elif action == "run": run()
     elif action == "build": build()
     elif action == "format": format_code()
     elif action == "analyze": analyze_code()
     elif action == "test": test_project()
-    else: print("Unknown command")
+    else:
+        print(f"Unknown command: {action}")
+        sys.exit(1)  # fail loudly: with exit code 0, CI took a typo for success
 
 if __name__ == "__main__":
     main()

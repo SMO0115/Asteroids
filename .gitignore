@@ -1,4 +1,6 @@
 # CMake build files
+# manage.py's build folder (without this line, 'git add -A' tracked it again)
+/build/
 cmake-build-*/
 CMakeCache.txt
 CMakeFiles/

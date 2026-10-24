@@ -20,8 +20,10 @@
 #include "game/ui/Hud.h"
 
 #include "game/modules/asteroid/AsteroidModule.h"
+#include "game/modules/combat/CombatSystem.h"
 #include "game/modules/effects/EffectsSystem.h"
 #include "game/modules/player/PlayerModule.h"
+#include "game/modules/saucer/SaucerModule.h"
 
 
 namespace Game::State {
@@ -44,15 +46,16 @@ std::unique_ptr<Engine::Core::IGameState> RunState::handleInput(Engine::Core::Co
 
 std::unique_ptr<Engine::Core::IGameState> RunState::update(float deltatime, Engine::Core::Context& ctx) {
 
-    // Detect, then respond: the AsteroidSystem reacts to this tick's CollisionEvents
+    // Detect, then respond: the CombatSystem reacts to this tick's CollisionEvents
     ctx.get<Engine::Physics::CollisionSystem>().update(ctx);
-    ctx.get<Game::Asteroid::AsteroidSystem>().update(ctx);
+    ctx.get<Game::Combat::CombatSystem>().update(ctx);
 
-    // After the AsteroidSystem (it reacts to this tick's ship hit), but BEFORE the session and the
+    // After the CombatSystem (it reacts to this tick's ship hit), but BEFORE the session and the
     // effects: a failed hyperspace jump destroys the ship too, and that must cost a life and make a
     // bang in this same tick. (Events are cleared at the end of the tick, so a system that runs
     // before the publisher never sees the event.)
     ctx.get<Game::Player::PlayerSystem>().update(ctx, deltatime);
+    ctx.get<Game::Saucer::SaucerSystem>().update(ctx, deltatime);
 
     ctx.get<Game::Core::SessionSystem>().update(ctx);              // points and lives for this tick's hits
     ctx.get<Game::Effects::EffectsSystem>().update(ctx);           // bangs and debris for the same hits
@@ -92,6 +95,7 @@ void RunState::renderScene(Engine::Core::Context& ctx) {
     renderer.renderWorld(scene.getPool(Game::Core::GamePools::PLAYER), asset_manager);
     renderer.renderWorld(scene.getPool(Game::Core::GamePools::ENEMIES), asset_manager);
     renderer.renderWorld(scene.getPool(Game::Core::GamePools::BULLETS), asset_manager);
+    renderer.renderWorld(scene.getPool(Game::Core::GamePools::SAUCER_BULLETS), asset_manager);
     renderer.renderWorld(scene.getPool(Game::Core::GamePools::EFFECTS), asset_manager);
     renderer.renderUI(scene.getPool(Game::Core::GamePools::UI), asset_manager);
 }

@@ -67,7 +67,7 @@ function SpawnAsteroid(x, y, vx, vy, size)
         Collider = {
 
             layer = "ASTEROID",
-            mask = {"PLAYER", "PLAYER_BULLET"},
+            mask = {"PLAYER", "PLAYER_BULLET", "SAUCER", "SAUCER_BULLET"},  -- saucers crash into asteroids too
 
             radius = s.radius,
             offset = s.offset
@@ -123,7 +123,7 @@ function SpawnBullets()
             Collider = {
 
                 layer = "PLAYER_BULLET",
-                mask = {"ASTEROID"},
+                mask = {"ASTEROID", "SAUCER"},
 
                 radius = 4  -- the bright dot is 6 px; the rest of the 32 px sprite is glow
             }
@@ -177,7 +177,7 @@ function SpawnShip()
         Collider = {
 
             layer = "PLAYER",
-            mask = {"ASTEROID"},
+            mask = {"ASTEROID", "SAUCER", "SAUCER_BULLET"},
 
             -- The ship is a 53 x 35 px triangle; no circle fits it exactly. This one is moved a bit toward
             -- the nose, so the nose and the wing tips both stick out ~10 px: forgiving, like the arcade.
@@ -185,6 +185,97 @@ function SpawnShip()
             offset = { x = 4, y = -1 }
         }
     })
+end
+
+
+-- A flying saucer, coming in from the side with left-right speed vx. C++ (SaucerSystem) decides
+-- where, which one and when, and flies it; this says what a saucer is made of.
+function SpawnSaucer(x, y, vx, small)
+
+    SpawnEntity("Saucer", "Enemies", true, {
+
+        Saucer = { small = small },
+
+        Transform = {
+            x = x,
+            y = y,
+            scale = small and 0.5 or 1.0  -- Lua's "a and b or c" = C++'s a ? b : c (when b isn't false/nil)
+        },
+
+        Physics = {
+            velocity = { x=vx, y=0 }
+        },
+
+        Sprite = {},
+        Animation = {
+            current_state = "IDLE",
+            animations = {
+                ["IDLE"] = "saucer"
+            }
+        },
+
+        -- Its sound loops as long as it flies (the SoundSystem stops it when the saucer is switched off)
+        Sound = {
+            current_state = "IDLE",
+            is_looping = true,
+            sounds = {
+                ["IDLE"] = small and "saucerSmall" or "saucerBig"
+            }
+        },
+
+        Collider = {
+
+            layer = "SAUCER",
+            mask = {"PLAYER", "PLAYER_BULLET", "ASTEROID"},  -- not its own shots
+
+            -- The outline is 73 x 47 px; like the ship's, the circle lets the edges stick out a bit.
+            -- Multiplied by the scale, so the small saucer's is half as big.
+            radius = 28,
+            offset = { x = 0, y = -2 }
+        }
+    })
+end
+
+
+-- The saucers' shots: 2 slots for all saucers, like the arcade. No BulletTag: that marks the
+-- PLAYER's bullets, the ones that score.
+function SpawnSaucerBullets()
+
+    for i = 1,2,1
+    do
+        SpawnEntity("SaucerBullet", "SaucerBullets", false, {
+
+            Life = {
+                lifeTime = 0.0
+            },
+
+            Transform = {
+                x = 0,
+                y = 0,
+                scale = 1.0
+            },
+
+            Physics = {
+                velocity = { x=0, y=0 }
+            },
+
+            Sprite = {},
+            Animation = {
+                current_state = "IDLE",
+                animations = {
+                    ["IDLE"] = "bullet"
+                }
+            },
+
+            Collider = {
+
+                layer = "SAUCER_BULLET",
+                mask = {"PLAYER", "ASTEROID"},
+
+                radius = 4
+            }
+        })
+    end
 end
 
 
@@ -226,4 +317,5 @@ end
 function StartGame()
     SpawnShip()
     SpawnBullets()
+    SpawnSaucerBullets()
 end

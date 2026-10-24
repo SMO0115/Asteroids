@@ -15,6 +15,7 @@ loadAnimation("asteroid_small3", "assets/Sprites/asteroid_small3.json")
 loadAnimation("player_idle", "assets/Sprites/player_idle.json")
 loadAnimation("player_run", "assets/Sprites/player_run.json")
 loadAnimation("bullet", "assets/Sprites/bullet.json")
+loadAnimation("saucer", "assets/Sprites/saucer.json")                      -- 96 x 80; the small one is scaled to 0.5
 
 loadFont("pixel", "assets/Fonts/PixelifySans.ttf", 72)                   -- big labels ("PAUSED")
 loadFont("pixel", "assets/Fonts/PixelifySans.ttf", 32)                   -- HUD (score)
@@ -28,3 +29,5 @@ loadSound("bangSmall",  "assets/sounds/bangsmall/bangSmall.wav")
 loadSound("extraShip",  "assets/sounds/extraship/extraShip.wav")
 loadSound("beat1",      "assets/sounds/beat1/beat1.wav")            -- the "heartbeat": beat1, beat2, beat1, ...
 loadSound("beat2",      "assets/sounds/beat2/beat2.wav")
+loadSound("saucerBig",   "assets/sounds/saucerbig/saucerBig.wav")       -- loop while a saucer flies
+loadSound("saucerSmall", "assets/sounds/saucersmall/saucerSmall.wav")

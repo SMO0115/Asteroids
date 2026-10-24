@@ -26,6 +26,10 @@ void screenWrapper(Engine::Core::Context& ctx) {
         Engine::Graphics::SpriteComponent& sprite    = object.getComponent<Engine::Graphics::SpriteComponent>();
 
 
+        // Not animated yet (the AnimationSystem sets the size on its first update): with a size of 0,
+        // something that was just spawned outside the edge, like a saucer, would wrap at once
+        if (sprite.sourceRect.w == 0 || sprite.sourceRect.h == 0) continue;
+
         // Boundaries: the screen plus a sprite margin, so an object is fully off-screen before it wraps
         const float half_w = static_cast<float>(sprite.sourceRect.w) / 2.0f;
         const float half_h = static_cast<float>(sprite.sourceRect.h) / 2.0f;
